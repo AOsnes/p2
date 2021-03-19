@@ -4,7 +4,7 @@ export default class Navbar extends Component {
 
     render(){
         return (
-            <ul className="Navbar">
+            <ul className="Navbar" data-testid="Navbar">
                 <div className="NavContainer">
                     <li className="navItem">
                         <button className="navButton" href="#">Home</button>

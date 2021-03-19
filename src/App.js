@@ -1,12 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
 
 import Navbar from "./components/navbar.component";
+import ClassForm from "./components/classform.component";
 
 function App() {
   return (
     <div className="App">
-      <Navbar></Navbar>
+      <Navbar />
+      <ClassForm />
     </div>
   );
 }
