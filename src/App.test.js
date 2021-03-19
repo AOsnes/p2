@@ -9,6 +9,6 @@ test('app renders navbar', () => {
 
 test('app renders classform', () =>{
   render(<App />);
-  const linkElement = screen.getByText("yo");
+  const linkElement = screen.getByText("test");
   expect(linkElement).toBeInTheDocument();
 })
