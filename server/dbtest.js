@@ -10,8 +10,8 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('JaronCeller');
-        
-        
+
+
         const cursor = await findData(database, "Test", {} );
 
         if ((await cursor.count()) === 0) {
@@ -19,8 +19,8 @@ async function run() {
         }
         // replace console.dir with your callback to access individual elements
         await cursor.forEach(console.dir);
-        
-          
+
+
     }   finally {
         // Ensures that the client will close when you finish/error
         await client.close();
@@ -34,10 +34,3 @@ async function findData(db, collection, searchParams){
 }
         //const cursor = await doc.findOne({"name": "Asbjørn"});
         //console.log(cursor);
-
-        //const result = await doc.insertOne(testInsert);
-        //await database.command({ping: 1});
-        //console.dir(result.insertedCount);
-
-
-run().catch(console.dir);
