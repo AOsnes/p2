@@ -6,8 +6,8 @@ import ClassForm from "./components/classform.component";
 function App() {
   return (
     <div className="App">
-      <Navbar />
-      <ClassForm />
+      <Navbar></Navbar>
+      <ClassForm></ClassForm>
     </div>
   );
 }
