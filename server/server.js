@@ -1,4 +1,5 @@
 const express = require('express');
+
 const app = express();
 
 //TODO: lav dotenv fil
@@ -17,9 +18,11 @@ let requestTime = (req, res, next) => {
 app.use(requestTime);
 app.use(logger);
 
-app.get('/', (req, res) =>{
-    res.send('Hello world!')
-})
+
+//ROUTES
+const classesRouter = require('./routes/classes');
+app.use('/classes', classesRouter);
+
 
 app.listen(port, () =>{
     console.log(`Server is listening on port ${port}`)
