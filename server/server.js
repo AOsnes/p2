@@ -1,12 +1,14 @@
 const express = require('express');
-
 const app = express();
 
-//TODO: lav dotenv fil
+//TODO: Fix så db connection skal laves én gang 
+//https://expressjs.com/en/guide/database-integration.html
+
+//TODO: lav dotenv fil til process variabler
 const port = process.env.PORT || 5000
 
 let logger = (req, res, next) => {
-    console.log(`${req.protocol}://${req.get('host')}${req.originalUrl} requested at: ${req.requestTime} (DATE object)`);
+    console.log(`GOT: ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
     next();
 }
 
@@ -22,7 +24,6 @@ app.use(logger);
 //ROUTES
 const classesRouter = require('./routes/classes');
 app.use('/classes', classesRouter);
-
 
 app.listen(port, () =>{
     console.log(`Server is listening on port ${port}`)
