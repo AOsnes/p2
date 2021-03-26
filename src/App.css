@@ -68,3 +68,7 @@
 .loginButton:hover{
   opacity: 1;
 }
+
+#loginHeader{
+  text-align: center;
+}
