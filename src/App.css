@@ -1,38 +1,74 @@
-.App {
+.NavContainer{
+  grid-template-columns: auto auto;
+}
+
+.Navbar {
+  overflow: hidden;
+  list-style-type: none;
+  background-color: #333;
+
+}
+
+.navItem{
+  float: left;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.navButton{
+  background-color: #333;
+  border: none;
+  font-size: calc(10px + 1vmin);
+  color: white;
+}
+.navButton:hover{
+  background-color: grey;
+}
+
+.loginFieldset{
+  max-width:500px;
+  margin:auto;
+}
+
+.loginInputContainer {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.icon {
+  padding: 10px;
+  background: dodgerblue;
+  color: white;
+  min-width: 50px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.loginInput{
+  width: 100%;
+  padding: 10px;
+  outline: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.loginInput:focus{
+  border: 2px solid dodgerblue;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.loginButton{
+  background-color: dodgerblue;
   color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
 }
 
-.App-link {
-  color: #61dafb;
+.loginButton:hover{
+  opacity: 1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#loginHeader{
+  text-align: center;
 }
