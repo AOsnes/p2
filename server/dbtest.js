@@ -34,3 +34,33 @@ async function findData(db, collection, searchParams){
 }
         //const cursor = await doc.findOne({"name": "Asbjørn"});
         //console.log(cursor);
+
+async function getSchedule(){
+    try {
+        await client.connect();
+        const database = client.db('JaronCeller');
+
+
+
+
+    }   finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+
+
+}
+
+async function getUser(db, name){
+    const doc = db.collection("Users");
+    const result = await doc.findOne(name);
+    
+
+}
+
+
+
+run().catch(console.dir);
+
+
+
