@@ -13,7 +13,6 @@ export default class LoginForm extends Component {
     handleInputChange(event) {
         const target = event.target.name;
         const value = event.target.value;
-        console.log(value);
 
         this.setState({
             [target]: value
@@ -24,7 +23,6 @@ export default class LoginForm extends Component {
     handleSubmit(event){
         //TODO: fetch url should be in .env
         //TODO: handle response
-        console.log(this.state)
         fetch("http://localhost:5000/login",{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -35,7 +33,7 @@ export default class LoginForm extends Component {
     
     render(){
         return(
-            <form className="loginForm" onSubmit={this.handleSubmit}>
+            <form className="loginForm" data-testid="loginForm" onSubmit={this.handleSubmit}>
                 <fieldset className="loginFieldset">
                     <h2 id="loginHeader">Velkommen</h2>
                     <div className="loginInputContainer">
