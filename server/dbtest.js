@@ -1,5 +1,8 @@
 const { MongoClient } = require("mongodb");
+const express = require('express');
+const app = express();
 
+const port = process.env.PORT || 5000
 const uri = "mongodb+srv://sw2b220:sw2b220@cluster0.v3slc.mongodb.net/JaronCeller?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri, {useUnifiedTopology: true});
@@ -60,7 +63,7 @@ async function getUser(db, name){
 
 async function insertUsers(){
     try {
-        await client.connect();
+        
         const database = client.db('JaronCeller');
         const doc = database.collection("Users");
         const userInserts = [
@@ -77,9 +80,8 @@ async function insertUsers(){
 }
 
 
-async function login(username, password){
+module.exports = async function login(username, password){
     try {
-        await client.connect();
         const database = client.db('JaronCeller');
         const doc = database.collection("Users");
         const result = await doc.findOne({username, password});
@@ -94,7 +96,6 @@ async function login(username, password){
 
     }   finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
     }
 
 }
@@ -102,7 +103,16 @@ async function login(username, password){
 
 
 //insertUsers().catch(console.dir);
-let data = login("test", "Test").then(console.log).catch(console.dir);
 
+//ROUTES
+const classesRouter = require('./routes/classes');
+const loginRouter = require('./routes/login');
+app.use('/classes', classesRouter);
+app.use('/login', loginRouter);
 
+client.connect();
+
+app.listen(port, () =>{
+    console.log(`Server is listening on port ${port}`)
+})
 
