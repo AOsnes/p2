@@ -7,12 +7,13 @@ export default class LoginForm extends Component {
             <form className="loginForm">
                 <fieldset className="loginFieldset">
                     <h2 id="loginHeader">Velkommen</h2>
-                    <div class="loginInputContainer">
-                        <AiOutlineUser class="icon"/>
+                    <div className="loginInputContainer">
+                        <AiOutlineUser className="icon"/>
+
                         <input className="loginInput" type="text" placeholder="Brugernavn"/>
                     </div>
-                    <div class="loginInputContainer">
-                        <AiOutlineKey class="icon"/>
+                    <div className="loginInputContainer">
+                        <AiOutlineKey className="icon"/>
                         <input className="loginInput" type="password" placeholder="Adgangskode"/>
                     </div>
                     <input className="loginButton" type="submit" value="Log ind"/><br></br>
