@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AiOutlineUser, AiOutlineKey } from 'react-icons/ai'
 
 export default class LoginForm extends Component {
     render(){
@@ -7,11 +8,12 @@ export default class LoginForm extends Component {
                 <fieldset className="loginFieldset">
                     <h2 id="loginHeader">Velkommen</h2>
                     <div className="loginInputContainer">
-                        <i className="fa fa-user icon"></i>
+                        <AiOutlineUser className="icon"/>
+
                         <input className="loginInput" type="text" placeholder="Brugernavn"/>
                     </div>
-                    <div class="loginInputContainer">
-                        <i class="fa fa-key icon"></i>
+                    <div className="loginInputContainer">
+                        <AiOutlineKey className="icon"/>
                         <input className="loginInput" type="password" placeholder="Adgangskode"/>
                     </div>
                     <input className="loginButton" type="submit" value="Log ind"/><br></br>
