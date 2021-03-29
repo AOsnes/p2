@@ -10,33 +10,99 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('JaronCeller');
-        const doc = database.collection("Test");
-        
-        //let result = findData(doc);
-        const cursor = await doc.findOne({"name": "Asbjørn"});
-        console.log(cursor);
 
-        //const result = await doc.insertOne(testInsert);
-        //await database.command({ping: 1});
-        //console.dir(result.insertedCount);
-        /*if ((await cursor.count()) === 0) {
+
+        const cursor = await findData(database, "Test", {} );
+
+        if ((await cursor.count()) === 0) {
             console.log("No documents found!");
-          }
-          // replace console.dir with your callback to access individual elements
-          await cursor.forEach(console.dir);*/
-        
-          
+        }
+        // replace console.dir with your callback to access individual elements
+        await cursor.forEach(console.dir);
+
+
     }   finally {
         // Ensures that the client will close when you finish/error
         await client.close();
     }
-  }
+}
 
-async function findData(doc){
-    const result = await doc.find({name: "Asbjørn"});
+async function findData(db, collection, searchParams){
+    const doc = db.collection(collection);
+    const result = await doc.find(searchParams);
     return result;
+}
+        //const cursor = await doc.findOne({"name": "Asbjørn"});
+        //console.log(cursor);
+
+async function getSchedule(){
+    try {
+        await client.connect();
+        const database = client.db('JaronCeller');
+
+
+
+
+    }   finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+
+
+}
+
+async function getUser(db, name){
+    const doc = db.collection("Users");
+    const result = await doc.findOne(name);
+    
+
+}
+
+async function insertUsers(){
+    try {
+        await client.connect();
+        const database = client.db('JaronCeller');
+        const doc = database.collection("Users");
+        const userInserts = [
+            {"username": "test", "password": "test", "name":"Testy McTestFace", "role":"teacher", "class": ["sw2b2-20","sw2b2-21","sw2b2-22"]},
+            {"username": "arthur", "password": "password", "name":"Arthur", "role":"student", "class": ["sw2b2-20"]},
+        ];
+        const result = await doc.insertMany(userInserts);
+        console.dir(result.insertedCount);
+    }   finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+
+}
+
+
+async function login(username, password){
+    try {
+        await client.connect();
+        const database = client.db('JaronCeller');
+        const doc = database.collection("Users");
+        const result = await doc.findOne({username, password});
+        if (result === null) {
+            throw "Invalid username or password";
+        } else {
+            return {id: result._id, name: result.name, role: result.role, class: result.class};
+        } 
+        console.log(result);
+        //console.log(result._id, result.role, result.class[0]);
+
+
+    }   finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+
 }
 
 
 
-run().catch(console.dir);
+//insertUsers().catch(console.dir);
+let data = login("test", "Test").then(console.log).catch(console.dir);
+
+
+
