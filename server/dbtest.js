@@ -58,9 +58,51 @@ async function getUser(db, name){
 
 }
 
+async function insertUsers(){
+    try {
+        await client.connect();
+        const database = client.db('JaronCeller');
+        const doc = database.collection("Users");
+        const userInserts = [
+            {"username": "test", "password": "test", "name":"Testy McTestFace", "role":"teacher", "class": ["sw2b2-20","sw2b2-21","sw2b2-22"]},
+            {"username": "arthur", "password": "password", "name":"Arthur", "role":"student", "class": ["sw2b2-20"]},
+        ];
+        const result = await doc.insertMany(userInserts);
+        console.dir(result.insertedCount);
+    }   finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+
+}
 
 
-run().catch(console.dir);
+async function login(username, password){
+    try {
+        await client.connect();
+        const database = client.db('JaronCeller');
+        const doc = database.collection("Users");
+        const result = await doc.findOne({username, password});
+        if (result === null) {
+            throw "Invalid username or password";
+        } else {
+            return {id: result._id, name: result.name, role: result.role, class: result.class};
+        } 
+        console.log(result);
+        //console.log(result._id, result.role, result.class[0]);
+
+
+    }   finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+
+}
+
+
+
+//insertUsers().catch(console.dir);
+let data = login("test", "Test").then(console.log).catch(console.dir);
 
 
 
