@@ -1,5 +1,7 @@
 const { MongoClient } = require("mongodb");
+const bodyParser = require('body-parser')
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 const port = process.env.PORT || 5000
@@ -100,7 +102,20 @@ module.exports = async function login(username, password){
 
 }
 
+let logger = (req, res, next) => {
+    console.log(`GOT: ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
+    next();
+}
 
+let requestTime = (req, res, next) => {
+    req.requestTime = Date.now();
+    next();
+}
+
+app.use(bodyParser.json());
+app.use(cors());
+app.use(requestTime);
+app.use(logger);
 
 //insertUsers().catch(console.dir);
 
