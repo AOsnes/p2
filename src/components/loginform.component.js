@@ -6,8 +6,8 @@ export default class LoginForm extends Component {
             <form className="loginForm">
                 <fieldset className="loginFieldset">
                     <h2 id="loginHeader">Velkommen</h2>
-                    <div class="loginInputContainer">
-                        <i class="fa fa-user icon"></i>
+                    <div className="loginInputContainer">
+                        <i className="fa fa-user icon"></i>
                         <input className="loginInput" type="text" placeholder="Brugernavn"/>
                     </div>
                     <div class="loginInputContainer">
