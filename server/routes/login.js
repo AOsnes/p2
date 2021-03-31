@@ -1,13 +1,17 @@
 const router = require('express').Router();
-const login = require('../dbtest'); 
+const authenticate = require('../server'); 
 
 router.route('/').post( (req, res) => {
     //TODO: validate input
     //TODO: create response
     let username = req.body.username;
     let password = req.body.password;
-    let result = login(username, password).then(console.log).catch(console.dir);
-    res.end();
+    let result = authenticate(username, password).then(console.log).catch(console.dir);
+    
+    if (result != null){
+        //TODO: login the user
+    }
+    res.redirect('/');
 });
 
 
