@@ -20,10 +20,10 @@ export default class LoginForm extends Component {
     }
     
     
-    handleSubmit(event){
+    async handleSubmit(event){
         //TODO: fetch url should be in .env
         //TODO: handle response
-        fetch("http://localhost:5000/login",{
+        await fetch("http://localhost:5000/login",{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(this.state),
