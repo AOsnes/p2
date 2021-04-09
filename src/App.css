@@ -1,3 +1,7 @@
+body{
+  font-family: 'Work Sans';
+}
+
 .NavContainer{
   grid-template-columns: auto auto;
 }
@@ -5,25 +9,32 @@
 .Navbar {
   overflow: hidden;
   list-style-type: none;
-  background-color: #333;
-
+  background-color: #c4c4c4;
+  margin: 0;
+  padding: 0;
+  height: 50px;
 }
 
 .navItem{
   float: left;
   justify-content: center;
   align-items: center;
-
 }
 
 .navButton{
-  background-color: #333;
+  background-color: #c4c4c4;
   border: none;
   font-size: calc(10px + 1vmin);
-  color: white;
+  color: black;
+  height: 50px;
+  width: 100px;
 }
 .navButton:hover{
   background-color: grey;
+}
+
+#navLogo{
+  font-weight: bolder;
 }
 
 .loginFieldset{
@@ -38,7 +49,7 @@
   margin-bottom: 15px;
 }
 
-.icon {
+.loginIcon {
   padding: 10px;
   height: 24px;
   width: 24px;
@@ -72,5 +83,39 @@
 }
 
 #loginHeader{
+  text-align: center;
+}
+
+.sidebar{
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  background-color: #c4c4c4;
+  position: fixed;
+  height: 100%;
+}
+
+.sideButton{
+  width: 100%;
+  display: block;
+  padding: 10px;
+  margin: 0;
+  border: none;
+  background-color: #06142f;
+  color: white;
+  text-align:center;
+  opacity: 0.9;
+}
+
+.sideButton:hover{
+  opacity: 1;
+}
+
+.sideIcon{
+  padding: 10px;
+  height: 48px;
+  width: 48px;
+  color: white;
+  min-width: 50px;
   text-align: center;
 }

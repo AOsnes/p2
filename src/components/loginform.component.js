@@ -37,12 +37,11 @@ export default class LoginForm extends Component {
                 <fieldset className="loginFieldset">
                     <h2 id="loginHeader">Velkommen</h2>
                     <div className="loginInputContainer">
-                        <AiOutlineUser className="icon"/>
-
+                        <AiOutlineUser className="loginIcon"/>
                         <input className="loginInput" type="text" placeholder="Brugernavn" name="username" onChange={this.handleInputChange}/>
                     </div>
                     <div className="loginInputContainer">
-                        <AiOutlineKey className="icon"/>
+                        <AiOutlineKey className="loginIcon"/>
                         <input className="loginInput" type="password" placeholder="Adgangskode" name="password" onChange={this.handleInputChange}/>
                     </div>
                     <input className="loginButton" type="submit" value="Log ind"/><br></br>
