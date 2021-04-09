@@ -10,6 +10,12 @@ test('app renders navbar', () => {
     expect(linkElement).toBeInTheDocument();
 });
 
+test('app renders sidebar', ()=>{
+    render(<App />);
+    const linkElement = screen.getByTestId("sidebar");
+    expect(linkElement).toBeInTheDocument();
+});
+
 test('app renders classform', () => {
     render(<App />);
     const linkElement = screen.getByText("test");
