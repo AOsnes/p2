@@ -6,7 +6,7 @@ export default class LoginForm extends Component {
         super(props);
         this.state = {username: '', password: ''};
 
-        this.handleInputChange = this.handleInputChange.bind(this)
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -20,17 +20,27 @@ export default class LoginForm extends Component {
     }
     
     
-    async handleSubmit(event){
+    handleSubmit(event){
         //TODO: fetch url should be in .env
         //TODO: handle response
-        await fetch("http://localhost:5000/login",{
+        fetch("http://localhost:5000/login",{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(this.state),
+        })
+        .then(response => response.json())
+        .then(response => {
+            //CHECK IF WE GOT ID OR ERROR
+            if(response.id){
+                console.log("we in bois");
+                document.cookie = `id=${response.id};Secure=true`;
+                console.log(document.cookie);
+            }
+            else console.log("Sadge");
         });
         event.preventDefault();
     }
-    
+
     render(){
         return(
             <form className="loginForm" data-testid="loginForm" onSubmit={this.handleSubmit}>
