@@ -54,13 +54,19 @@ test('form value changed when user types', () => {
 });
 
 test('submits data when user presses submit', async () => {
-    window.HTMLFormElement.prototype.submit = () => {}
-    render(<LoginForm />)
+    window.HTMLFormElement.prototype.submit = () => {};
+
+    /* global.fetch = jest.fn(() => {
+        Promise.resolve({
+            json: () => Promise.resolve({id: "60608f0389177a0bb0679e78"})
+        })
+    }); */
+    render(<LoginForm />); 
     const usernameElement = screen.getByPlaceholderText("Brugernavn");
     const passwordElement = screen.getByPlaceholderText("Adgangskode");
     const submitElement = screen.getByDisplayValue("Log ind");
-    fireEvent.change(usernameElement, {target: {value: "test"}});
-    fireEvent.change(passwordElement, {target: {value: "test"}});
+    fireEvent.change(usernameElement, {target: {value: "sigurd"}});
+    fireEvent.change(passwordElement, {target: {value: "password"}});
     //TODO:: FIX THIS KEK:
-    //fireEvent.click(submitElement);
+    fireEvent.click(submitElement);
 });

@@ -21,6 +21,7 @@ export default class LoginForm extends Component {
     
     
     handleSubmit(event){
+        event.preventDefault();
         //TODO: fetch url should be in .env
         fetch("http://localhost:5000/login",{
             method: 'POST',
@@ -37,7 +38,7 @@ export default class LoginForm extends Component {
             }
             else console.log("Sadge");
         });
-        event.preventDefault();
+        
     }
 
     render(){
