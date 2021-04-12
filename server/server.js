@@ -18,7 +18,7 @@ module.exports = async function authenticate(username, password){
         const doc = database.collection("Users");
         const result = await doc.findOne({username, password});
         if (result === null) {
-            throw "Invalid username or password";
+            throw new Error("Invalid username or password");
         } else {
             return {id: result._id, name: result.name, role: result.role, class: result.class};
         }
