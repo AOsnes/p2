@@ -8,8 +8,9 @@ import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 
 class App extends React.Component{
+    static contextType = UserContext;
     render(){
-        const signedInUser = 'Teacher';
+        let signedInUser = this.context.role;
         return (
             <div className="App">
                 <Navbar/>
