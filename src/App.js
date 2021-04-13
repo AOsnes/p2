@@ -1,17 +1,27 @@
 import './App.css';
+import React from 'react';
+import {UserContext} from './UserContext';
 
 import Navbar from "./components/navbar.component";
 import ClassForm from "./components/classform.component";
 import LoginForm from "./components/loginform.component";
+import Sidebar from "./components/sidebar.component";
 
-function App() {
-  return (
-    <div className="App">
-      <Navbar></Navbar>
-      <ClassForm></ClassForm>
-      <LoginForm></LoginForm>
-    </div>
-  );
+class App extends React.Component{
+    static contextType = UserContext;
+    render(){
+        let signedInUser = this.context.role;
+        return (
+            <div className="App">
+                <Navbar/>
+                <UserContext.Provider value={signedInUser}>
+                    <Sidebar/>
+                </UserContext.Provider>
+                <LoginForm/>
+                <ClassForm/>
+            </div>
+        );
+    }
 }
 
 export default App;

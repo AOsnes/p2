@@ -7,10 +7,7 @@ export default class Navbar extends Component {
             <ul className="Navbar" data-testid="Navbar">
                 <div className="NavContainer">
                     <li className="navItem">
-                        <button className="navButton" href="#">Home</button>
-                    </li>
-                    <li className="navItem">
-                        <button className="navButton" href="#">Calendar</button>
+                        <button className="navButton" id="navLogo" href="#">Skema.dk</button>
                     </li>
                 </div>
             </ul>
