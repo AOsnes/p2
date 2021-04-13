@@ -148,11 +148,7 @@ async function insertLessons() {
 async function getSchedule(user) {
     try {
         //await client.connect();
-<<<<<<< Updated upstream
-        console.log(user.class + "," + user.role);
-=======
         console.log(user);
->>>>>>> Stashed changes
         const database = client.db('P2');
         const collection = database.collection("lessons");
         let start = new Date(2021, 3, 12);
@@ -161,19 +157,11 @@ async function getSchedule(user) {
         let cursor;
         let schedule;
         if (user.role === "teacher") {
-<<<<<<< Updated upstream
-            cursor = await collection.find({"class": {$in: user.class}, "teacherID": user._id, $and: [{"startTime": {$gte: start}}, {"startTime": {$lte: end}}]}, {sort: {startTime: 1}});
-            schedule = await cursor.toArray();
-            //cursor.close();
-        } else {
-            cursor = await collection.find({"class": {$in: user.class}, $and: [{"startTime": {$gte: start}}, {"startTime": {$lte: end}}]}, {sort: {startTime: 1}});
-=======
             cursor = await collection.find({ "teacherID": user._id.toString, $and: [{ "startTime": { $gte: start } }, { "startTime": { $lte: end } }] }, { sort: { startTime: 1 } }); //, $and: [{ "startTime": { $gte: start } }, { "startTime": { $lte: end } }] }, { sort: { startTime: 1 } 
             schedule = await cursor.toArray();
             //cursor.close();
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
->>>>>>> Stashed changes
             schedule = await cursor.toArray();
             //cursor.close();
         }
