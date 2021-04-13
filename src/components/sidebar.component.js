@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import {AiOutlineCalendar} from'react-icons/ai'
 import {FiBook} from 'react-icons/fi';
 import {BiEdit} from 'react-icons/bi';
@@ -10,10 +11,10 @@ export default class Sidebar extends Component {
             <ul className="sidebar" data-testid="sidebar">
                 <div className="sideContainer">
                     <li className="sideItem">
-                        <button className="sideButton" href="#"> <AiOutlineCalendar className="sideIcon"/> Skema</button>
+                        <Link className="sideButton" to="/skema"> <AiOutlineCalendar className="sideIcon"/>Skema</Link>
                     </li>
                     <li className="sideItem">
-                        <button className="sideButton" href="#"> <FiBook className="sideIcon"/>Afleveringer</button>
+                        <Link className="sideButton" to="/afleveringer"> <FiBook className="sideIcon"/>Afleveringer</Link>
                     </li>
 
                     <UserContext.Consumer>
@@ -21,7 +22,7 @@ export default class Sidebar extends Component {
                             if(user === 'teacher'){
                                 return(
                                         <li className="sideItem">
-                                        <button className="sideButton" href="#"> <BiEdit className="sideIcon"/> Lav Skema</button>
+                                            <Link className="sideButton" to="/skema/create"> <BiEdit className="sideIcon"/>Rediger Skema</Link>
                                         </li>
                                 );
                             }
