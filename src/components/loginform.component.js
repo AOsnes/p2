@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { AiOutlineUser, AiOutlineKey } from 'react-icons/ai'
+import { Redirect } from 'react-router';
 
 export default class LoginForm extends Component {
     constructor(props){
         super(props);
-        this.state = {username: '', password: ''};
+        this.state = {username: '', password: '', redirect: null};
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,6 +37,8 @@ export default class LoginForm extends Component {
                 document.cookie = `id=${response.id};Secure=true`;
                 document.cookie = `role=${response.role};Secure=true`;
                 console.log(document.cookie);
+                this.setState({redirect: "/skema"});
+                
             }
             else console.log("Sadge");
         });
@@ -43,6 +46,9 @@ export default class LoginForm extends Component {
     }
 
     render(){
+        if(this.state.redirect) {
+            return <Redirect to={this.state.redirect}/>
+        }
         return(
             <form className="loginForm" data-testid="loginForm" onSubmit={this.handleSubmit}>
                 <fieldset className="loginFieldset">
@@ -55,7 +61,7 @@ export default class LoginForm extends Component {
                         <AiOutlineKey className="loginIcon"/>
                         <input className="loginInput" type="password" placeholder="Adgangskode" name="password" onChange={this.handleInputChange}/>
                     </div>
-                    <input className="loginButton" type="submit" value="Log ind"/><br></br>
+                    <input disabled={!(this.state.username && this.state.password)} className="loginButton" type="submit" value="Log ind"/><br></br>
                 </fieldset>
             </form>
             

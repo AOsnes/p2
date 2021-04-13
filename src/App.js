@@ -1,9 +1,9 @@
 import './App.css';
 import React from 'react';
 import {UserContext} from './UserContext';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 import Navbar from "./components/navbar.component";
-import ClassForm from "./components/classform.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 
@@ -12,16 +12,44 @@ class App extends React.Component{
     render(){
         let signedInUser = this.context.role;
         return (
-            <div className="App">
-                <Navbar/>
-                <UserContext.Provider value={signedInUser}>
-                    <Sidebar/>
-                </UserContext.Provider>
-                <LoginForm/>
-                <ClassForm/>
-            </div>
+            <UserContext.Provider value={signedInUser}>
+                <Router>
+                    <Navbar/>
+                    
+                    <Switch>
+                        <Route path="/skema">
+                            <Skema/>
+                        </Route>
+                        <Route path="/afleveringer">
+                            <Afleveringer/>
+                        </Route>
+                        <Route path="/">
+                            <Login/>
+                        </Route>
+                    </Switch>
+                </Router>
+            </UserContext.Provider>
         );
     }
 }
+
+/* Betragt disee som components der render hele siden ved hver rute
+fx Login() bliver rendered når vi rammer "/" ruten */
+function Login(){
+    return <LoginForm/>
+}
+
+function Skema(){
+    return(
+        <Sidebar/>
+    )
+}
+
+function Afleveringer(){
+    return(
+        <Sidebar/>
+    )
+}
+
 
 export default App;
