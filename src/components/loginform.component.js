@@ -34,6 +34,7 @@ export default class LoginForm extends Component {
             if(response.id){
                 console.log("we in bois");
                 document.cookie = `id=${response.id};Secure=true`;
+                document.cookie = `role=${response.role};Secure=true`;
                 console.log(document.cookie);
             }
             else console.log("Sadge");
