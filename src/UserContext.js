@@ -1,16 +1,28 @@
 import React from'react';
 
-const cookieIdValue = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('id='))
-    .split('=')[1];
+function updateIdValue() {
+    let cookieIdValue = undefined;
+    if(document.cookie){
+        cookieIdValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('id='))
+            .split('=')[1];
+    }
+    return cookieIdValue
+}
 
-const cookieRoleValue = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('role='))
-    .split('=')[1];
+function updateRoleValue(){
+    let cookieRoleValue = undefined;
+    if(document.cookie){
+        cookieRoleValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('role='))
+            .split('=')[1];
+    }
+    return cookieRoleValue;
+}
 
 export const UserContext = React.createContext({
-    id: cookieIdValue,
-    role: cookieRoleValue
+    id: updateIdValue(),
+    role: updateRoleValue()
 });
