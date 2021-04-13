@@ -1,45 +1,70 @@
 body{
   font-family: 'Work Sans';
-}
-
-.headerContainer{
-  grid-template-columns: auto auto;
-}
-
-.header {
-  overflow: hidden;
-  list-style-type: none;
-  background-color: #c4c4c4;
-  margin: 0;
-  padding: 0;
-  height: 50px;
+  background-color: #F0F0F0;
+  color: #06142F;
 }
 
 .headerItem{
-  float: left;
-  justify-content: center;
-  align-items: center;
+  list-style-type: none;
+}
+
+.header {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  height: 100px;
+}
+
+.headerContainer{
+  display: grid;
+  grid-template-columns: auto auto 100px;
+}
+
+#headerLegalName{
+  text-align: right;
+  font-size: 1.777em;
+  vertical-align: middle;
+}
+
+#headerLegalName p{
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.headerImage{
+  position: absolute;
+  left: 22px;
+  top: 22px;
 }
 
 .headerButton{
-  background-color: #c4c4c4;
+  background-color: white;
   border: none;
+  padding: 22px;
   font-size: calc(10px + 1vmin);
-  color: black;
-  height: 50px;
-  width: 100px;
-}
-.navButton:hover{
-  background-color: grey;
+  height: 100px;
+  width: 290px;
+  text-align: right;
+  outline: inherit;
 }
 
-#navLogo{
+.headerButton:hover{
+  background-color: #F5F5F5;
+}
+
+#headerLogo{
   font-weight: bolder;
+  font-size: 38px;
 }
 
 .loginFieldset{
   max-width:500px;
   margin:auto;
+  background-color: white;
 }
 
 .loginInputContainer {
