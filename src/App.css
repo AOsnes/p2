@@ -2,11 +2,11 @@ body{
   font-family: 'Work Sans';
 }
 
-.NavContainer{
+.headerContainer{
   grid-template-columns: auto auto;
 }
 
-.Navbar {
+.header {
   overflow: hidden;
   list-style-type: none;
   background-color: #c4c4c4;
@@ -15,13 +15,13 @@ body{
   height: 50px;
 }
 
-.navItem{
+.headerItem{
   float: left;
   justify-content: center;
   align-items: center;
 }
 
-.navButton{
+.headerButton{
   background-color: #c4c4c4;
   border: none;
   font-size: calc(10px + 1vmin);
