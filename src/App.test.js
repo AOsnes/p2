@@ -4,9 +4,9 @@ import LoginForm from './components/loginform.component';
 
 afterEach(cleanup);
 
-test('app renders navbar', () => {
+test('app renders header', () => {
     render(<App />);
-    const linkElement = screen.getByTestId("Navbar");
+    const linkElement = screen.getByTestId("header");
     expect(linkElement).toBeInTheDocument();
 });
 

@@ -3,7 +3,7 @@ import React from 'react';
 import {UserContext} from './UserContext';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
-import Navbar from "./components/navbar.component";
+import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 
@@ -14,7 +14,7 @@ class App extends React.Component{
         return (
             <UserContext.Provider value={signedInUser}>
                 <Router>
-                    <Navbar/>
+                    <Header/>
                     
                     <Switch>
                         <Route path="/skema">
@@ -29,6 +29,7 @@ class App extends React.Component{
                     </Switch>
                 </Router>
             </UserContext.Provider>
+
         );
     }
 }
