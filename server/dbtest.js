@@ -82,30 +82,21 @@ async function insertUsers() {
 
 async function login(username, password) {
     try {
-        await client.connect();
+        //await client.connect();
         const database = client.db('P2');
         const doc = database.collection("users");
-        const result = await doc.findOne({username, password});
+        const result = await doc.findOne({username, password}, {projection: {name: 1, role: 1, class: 1}});
         if (result === null) {
             throw "Invalid username or password";
         } else {
-            return {
-                id: result._id,
-                name: result.name,
-                role: result.role,
-                class: result.class
-            };
+            return result;
         }
-        //console.log(result);
-        //console.log(result._id, result.role, result.class[0]);
-
 
     } finally {
         // Ensures that the client will close when you finish/error
         await client.close();
     }
 }
-let x = 1;
 
 async function insertLessons() {
     try {
@@ -113,20 +104,36 @@ async function insertLessons() {
         const database = client.db('P2');
         const doc = database.collection("lessons");
         const lessonInserts = [{
-                "subject": "Engelsk",
+                "subject": "Matematik",
                 "class": "sw2b2-20",
                 "teacherID": "60608f0389177a0bb0679e78",
-                "description": "Today we will speak English",
-                "startTime": new Date(2020, 3, 12, 9, 30),
-                "endTime": new Date(2020, 3, 12, 10, 15)
+                "description": "Bare lav avanceret lineær algebra i ikke har lært om lol",
+                "startTime": new Date(2021, 3, 12, 12, 00),
+                "endTime": new Date(2021, 3, 12, 12, 45)
             },
             {
                 "subject": "Dansk",
                 "class": "sw2b2-20",
                 "teacherID": "60608f0389177a0bb0679e78",
                 "description": "Læs bog",
-                "startTime": new Date(2020, 3, 12, 8, 45),
-                "endTime": new Date(2020, 3, 12, 9, 30)
+                "startTime": new Date(2021, 3, 12, 12, 45),
+                "endTime": new Date(2021, 3, 12, 13, 30)
+            },
+            {
+                "subject": "Engelsk",
+                "class": "sw2b2-20",
+                "teacherID": "60608f0389177a0bb0679e78",
+                "description": "Today we will speak English",
+                "startTime": new Date(2021, 3, 12, 9, 30),
+                "endTime": new Date(2021, 3, 12, 10, 15)
+            },
+            {
+                "subject": "Dansk",
+                "class": "sw2b2-20",
+                "teacherID": "60608f0389177a0bb0679e78",
+                "description": "Læs bog",
+                "startTime": new Date(2021, 3, 12, 8, 45),
+                "endTime": new Date(2021, 3, 12, 9, 30)
             },
         ];
         const result = await doc.insertMany(lessonInserts);
@@ -137,26 +144,32 @@ async function insertLessons() {
     }
 }
 
-async function getSchedule(){
+async function getSchedule(user){
     try {
-        await client.connect();
+        //await client.connect();
         const database = client.db('P2');
         const collection = database.collection("lessons");
-        let start = new Date(2020, 3, 5);
-        let end = new Date(2020, 3, 9);
+        let start = new Date(2021, 3, 12);
+        let end = new Date(2021, 3, 16);
         console.log(start + "," + end);
-        const cursor = await collection.find({"class": "sw2b2-20", $and: [{"startTime": {$gte : start}}, {"startTime": {$lte : end}}]}, {sort: {startTime: 1}}).toArray();
-        console.log(cursor);
 
-        //TODO: fix tid tilbage til lokal tid, fix søgeparameter efter dato og tid
-
-
-        /*
+        const cursor = await collection.find({"class": user.class, $and: [{"startTime": {$gte : start}}, {"startTime": {$lte : end}}]}, {sort: {startTime: 1}});
+        let schedule = await cursor.toArray();
+        cursor.close();
+        //TODO: fix søgeparameter efter dato og tid
+        
         if ((await cursor.count()) === 0) {
             console.log("No documents found!");
+            return schedule;
+        } else {
+            let date = new Date();
+            for (lesson of schedule){
+                lesson.startTime += date.getTimezoneOffset();
+                lesson.endTime += date.getTimezoneOffset();
+            }
+            return schedule;
         }
         // replace console.dir with your callback to access individual elements
-        await cursor.forEach(console.dir);*/
     } finally {
         // Ensures that the client will close when you finish/error
         await client.close();
@@ -167,7 +180,8 @@ async function getSchedule(){
 //insertUsers().catch(console.dir);
 //insertLessons().catch(console.dir);
 //let data = login("test", "test").then(console.log).catch(console.dir);
-//let data1 = login("arthur", "password").then(console.log).catch(console.dir);
+await client.connect();
+let data1 = login("arthur", "password").then(result => getSchedule(result)).catch(console.dir);
 
-getSchedule().catch(console.dir);
+//getSchedule({"class": "sw2b2-20"}).then(console.log).catch(console.dir);
 
