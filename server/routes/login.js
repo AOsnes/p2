@@ -6,9 +6,7 @@ router.route('/').post( (req, res) => {
     let password = req.body.password;
     authenticate(username, password)
     .then( result => {
-        //TODO:send which type the user is e.g
-        //res.send(result.type)
-        res.status(200).json({id: result.id});
+        res.status(200).json({id: result.id, role: result.role});
         res.end();
     })
     .catch( error => {
