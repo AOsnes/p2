@@ -18,9 +18,7 @@ export default class Sidebar extends Component {
 
                     <UserContext.Consumer>
                         {user => {
-                            /*console.log(user)*/
-                            /*Render "Lav Skema" if context.role is teacher*/
-                            if(user === 'teacher'){
+                            if(user === 'Teacher'){
                                 return(
                                         <li className="sideItem">
                                         <button className="sideButton" href="#"> <BiEdit className="sideIcon"/> Lav Skema</button>
