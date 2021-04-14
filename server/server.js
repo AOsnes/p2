@@ -4,10 +4,11 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const app = express();
+require('dotenv').config();
 
 
 const port = process.env.PORT || 5000
-const uri = "mongodb+srv://sw2b220:sw2b220@cluster0.v3slc.mongodb.net/JaronCeller?retryWrites=true&w=majority";
+const uri = process.env.URI;
 
 const client = new MongoClient(uri, {useUnifiedTopology: true});
 
