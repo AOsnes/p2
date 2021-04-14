@@ -37,7 +37,7 @@ export default class LoginForm extends Component {
                 document.cookie = `role=${response.role};Secure=true`;
                 this.setState({redirect: "/skema"});
             } else {
-                console.log("Sadge");
+                console.log(response);
             }
         });
     }

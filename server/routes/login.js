@@ -11,7 +11,7 @@ router.route('/').post( (req, res) => {
     })
     .catch( error => {
         //TODO: Af en eller anden grund smider den ikke error over i response, fix.
-        res.status(200).send(error);
+        res.status(200).send({error: error.toString()});
         res.end();
     });
 });
