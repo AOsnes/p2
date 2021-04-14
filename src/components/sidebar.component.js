@@ -21,7 +21,7 @@ export default class Sidebar extends Component {
                         {user => {
                             if(user === 'teacher'){
                                 return(
-                                        <li className="sideItem">
+                                        <li className="sideItem" data-testid="redigerSkema">
                                             <Link className="sideButton" to="/skema/create"> <BiEdit className="sideIcon"/>Rediger Skema</Link>
                                         </li>
                                 );

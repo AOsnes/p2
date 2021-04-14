@@ -1,6 +1,9 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
+import {BrowserRouter as Router} from "react-router-dom";
 import App from './App';
 import LoginForm from './components/loginform.component';
+import Sidebar from './components/sidebar.component';
+import {UserContext} from './UserContext';
 
 afterEach(cleanup);
 
@@ -10,11 +13,43 @@ test('app renders header', () => {
     expect(linkElement).toBeInTheDocument();
 });
 
-/* test('app renders sidebar', ()=>{
-    render(<Sidebar />);
+test('app renders sidebar', ()=>{
+    let signedInUser = 'student';
+    render(
+        <div>
+            <UserContext.Provider value={signedInUser}>
+                <Router>
+                    <Sidebar/>
+                </Router>
+            </UserContext.Provider>
+        </div>
+    );
     const linkElement = screen.getByTestId("sidebar");
+    const skemaElement = screen.getByText("Skema");
+    const afleveringerElement = screen.getByText("Afleveringer");
+
     expect(linkElement).toBeInTheDocument();
-}); */
+    expect(linkElement).toContainElement(skemaElement);
+    expect(linkElement).toContainElement(afleveringerElement);
+    expect(linkElement).not.toContain(screen.queryByText("Rediger Skema"));
+    /* Remove rendered screen and render a new screen with a new context */
+    cleanup(); 
+    signedInUser = 'teacher';
+    render(
+        <div>
+            <UserContext.Provider value={signedInUser}>
+                <Router>
+                    <Sidebar/>
+                </Router>
+            </UserContext.Provider>
+        </div>
+    );
+    const teacherLinkElement = screen.getByTestId("sidebar");
+    const teacherSkemaElement = screen.getByTestId("redigerSkema")
+    expect(teacherLinkElement).toBeInTheDocument();
+    expect(teacherLinkElement).toContainElement(teacherSkemaElement);
+});
+
 
 test('app renders loginform correctly', () => {
     render(<App />);

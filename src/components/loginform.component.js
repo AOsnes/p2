@@ -38,11 +38,10 @@ export default class LoginForm extends Component {
                 document.cookie = `role=${response.role};Secure=true`;
                 console.log(document.cookie);
                 this.setState({redirect: "/skema"});
-                
+            } else {
+                console.log("Sadge");
             }
-            else console.log("Sadge");
         });
-        
     }
 
     render(){

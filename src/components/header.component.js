@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
 export default class Header extends Component {
-    /* constructor(props){
+    constructor(props){
         super(props);
         this.standby = this.standby.bind(this);
     }
     standby() {
-        document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
-    } */
+        document.getElementById("headerProfilePicture").src="logo192.png";
+    }
 
     render(){
         return (
