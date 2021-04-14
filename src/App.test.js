@@ -11,7 +11,7 @@ test('app renders header', () => {
     render(<App />);
     const standby = jest.fn();
     const linkElement = screen.getByTestId("header");
-    const logoElement = document.getElementById("headerLogo");
+    const logoElement = screen.getByTestId("headerButton");
     const profilBilledeElement = screen.getByAltText("profilBillede");
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(logoElement);
