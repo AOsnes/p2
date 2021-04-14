@@ -9,11 +9,19 @@ afterEach(cleanup);
 
 test('app renders header', () => {
     render(<App />);
+    const standby = jest.fn();
     const linkElement = screen.getByTestId("header");
+    const logoElement = document.getElementById("headerLogo");
+    const profilBilledeElement = screen.getByAltText("profilBillede");
     expect(linkElement).toBeInTheDocument();
+    expect(linkElement).toContainElement(logoElement);
+    expect(linkElement).toContainElement(profilBilledeElement);
+    expect(standby).toBeCalledTimes(0); 
+    /* There wasnt an error loading the profile picture */
+    /* Might need to change in the future */
 });
 
-test('app renders sidebar', ()=>{
+test('sidebar renders correctly with context', ()=>{
     let signedInUser = 'student';
     render(
         <div>
@@ -74,28 +82,32 @@ test('form value changed when user types', () => {
     });
     const usernameElement = screen.getByPlaceholderText("Brugernavn");
     const passwordElement = screen.getByPlaceholderText("Adgangskode");
+    const loginElement = screen.getByDisplayValue("Log ind");
+    expect(loginElement).toHaveAttribute("disabled");
     fireEvent.change(usernameElement, {target: {value: "Sigurd"}});
     fireEvent.change(passwordElement, {target: {value: "hacked"}});
     expect(screen.getByTestId('loginForm')).toHaveFormValues({
         username: 'Sigurd',
         password: 'hacked',
     });
+    expect(loginElement).not.toHaveAttribute("disabled");
 });
 
 test('submits data when user presses submit', async () => {
     window.HTMLFormElement.prototype.submit = () => {};
-
-    /* global.fetch = jest.fn(() => {
+    global.fetch = jest.fn(() => {
+        return( 
         Promise.resolve({
             json: () => Promise.resolve({id: "60608f0389177a0bb0679e78"})
         })
-    }); */
-    render(<LoginForm />); 
+    )});
+
+    render(<Router><LoginForm /></Router>); 
     const usernameElement = screen.getByPlaceholderText("Brugernavn");
     const passwordElement = screen.getByPlaceholderText("Adgangskode");
     const submitElement = screen.getByDisplayValue("Log ind");
     fireEvent.change(usernameElement, {target: {value: "sigurd"}});
     fireEvent.change(passwordElement, {target: {value: "password"}});
-    //TODO:: FIX THIS KEK:
     fireEvent.click(submitElement);
+    /* Should test that cookie is set and that user is redirected */
 });

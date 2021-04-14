@@ -33,10 +33,8 @@ export default class LoginForm extends Component {
         .then(response => {
             //CHECK IF WE GOT ID OR ERROR
             if(response.id){
-                console.log("we in bois");
                 document.cookie = `id=${response.id};Secure=true`;
                 document.cookie = `role=${response.role};Secure=true`;
-                console.log(document.cookie);
                 this.setState({redirect: "/skema"});
             } else {
                 console.log("Sadge");
