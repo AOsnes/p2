@@ -190,7 +190,7 @@ async function getSchedule(user) {
 //insertLessons().catch(console.dir);
 //let data = login("test", "test").then(console.log).catch(console.dir);
 
-let data1 = login("test", "test").then(result => getSchedule(result)).then(console.log).catch(console.dir);
+login("test", "test").then(result => getSchedule(result)).then(console.log).catch(console.dir);
 
 //getSchedule({"class": "sw2b2-20"}).then(console.log).catch(console.dir);
 

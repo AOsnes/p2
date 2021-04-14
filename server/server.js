@@ -14,13 +14,13 @@ const client = new MongoClient(uri, {useUnifiedTopology: true});
 /* Returns user information if login success else return null */
 module.exports = async function authenticate(username, password){
     try {
-        const database = client.db('JaronCeller');
-        const doc = database.collection("Users");
-        const result = await doc.findOne({username, password});
+        const database = client.db('P2');
+        const doc = database.collection("users");
+        const result = await doc.findOne({username, password}, {projection: {name: 1, role: 1, class: 1}});
         if (result === null) {
             throw new Error("Invalid username or password");
         } else {
-            return {id: result._id, name: result.name, role: result.role, class: result.class};
+            return result;
         }
     } catch(error) {
         throw error;
