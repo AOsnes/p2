@@ -6,6 +6,7 @@ body{
 
 .headerItem{
   list-style-type: none;
+  height: 100px;
 }
 
 .header {
@@ -17,7 +18,7 @@ body{
 
 .headerContainer{
   display: grid;
-  grid-template-columns: auto auto 112.5px;
+  grid-template-columns: 290px auto 112.5px;
 }
 
 #headerLegalName{
@@ -47,24 +48,30 @@ body{
   top: 22px;
 }
 
+#headerLogoName{
+  position: relative;
+  left: 100px;
+  top: -38px;
+  margin: 0px;
+}
+
 .headerButton{
-  background-color: white;
+  position: relative;
   border: none;
-  padding: 22px;
-  font-size: calc(10px + 1vmin);
-  height: 100px;
-  width: 290px;
-  text-align: right;
-  outline: inherit;
+  padding-top: 22px;
+  padding-left: 290px;
+  height: 100%;
+  font-weight: bolder;
+  text-decoration: none;
+  font-size: 38px;
+  color: black;
+  top: 22px;
+  padding-bottom: 35.25px;
+  margin: none;
 }
 
 .headerButton:hover{
   background-color: #F5F5F5;
-}
-
-#headerLogo{
-  font-weight: bolder;
-  font-size: 38px;
 }
 
 .loginFieldset{
