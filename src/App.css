@@ -17,7 +17,7 @@ body{
 
 .headerContainer{
   display: grid;
-  grid-template-columns: auto auto 100px;
+  grid-template-columns: auto auto 112.5px;
 }
 
 #headerLegalName{
@@ -34,6 +34,12 @@ body{
   transform: translate(-50%, -50%);
 }
 
+#headerProfilePicture{
+  border-radius: 50%;
+  position: relative;
+  top: 12.5px;
+  left: 12.5px;
+}
 
 .headerImage{
   position: absolute;

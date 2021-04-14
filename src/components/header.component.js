@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
 export default class Header extends Component {
-    /* constructor(props){
+    constructor(props){
         super(props);
         this.standby = this.standby.bind(this);
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
-    } */
+    }
 
     render(){
         return (
@@ -20,10 +20,10 @@ export default class Header extends Component {
                         </button>
                     </li>
                     <li className="headerItem" id="headerLegalName">
-                        <p id="headerLegalNameText">id="headerLegalNameText"</p>
+                        <p id="headerLegalNameText">headerLegalNameText</p>
                     </li>
                     <li className="headerItem">
-                        <img id="headerProfilePicture" src="profilePicture.png" onError={this.standby} alt="profilBillede"></img>
+                        <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
                     </li>
                 </div>
             </ul>
