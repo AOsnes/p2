@@ -6,7 +6,7 @@ export default class Header extends Component {
         this.standby = this.standby.bind(this);
     }
     standby() {
-        document.getElementById("headerProfilePicture").src="logo192.png";
+        document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
     }
 
     render(){
@@ -20,10 +20,10 @@ export default class Header extends Component {
                         </button>
                     </li>
                     <li className="headerItem" id="headerLegalName">
-                        <p id="headerLegalNameText">id="headerLegalNameText"</p>
+                        <p id="headerLegalNameText">headerLegalNameText</p>
                     </li>
                     <li className="headerItem">
-                        <img id="headerProfilePicture" src="profilePicture.png" onError={this.standby} alt="profilBillede"></img>
+                        <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
                     </li>
                 </div>
             </ul>
