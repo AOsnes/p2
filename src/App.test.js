@@ -3,7 +3,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import App from './App';
 import LoginForm from './components/loginform.component';
 import Sidebar from './components/sidebar.component';
-import {UserContext} from './UserContext';
+import {UserContext, updateIdValue, updateRoleValue} from './UserContext';
 
 afterEach(cleanup);
 
@@ -110,4 +110,18 @@ test('submits data when user presses submit', async () => {
     fireEvent.change(passwordElement, {target: {value: "password"}});
     fireEvent.click(submitElement);
     /* Should test that cookie is set and that user is redirected */
+});
+
+test('finds the correct _id value in cookie', () => {
+    const cookie = "id=60608f0389177a0bb0679e78; role=teacher";
+    const extractedId = updateIdValue(cookie);
+    const expected = "60608f0389177a0bb0679e78"
+    expect(extractedId).toEqual(expect.stringMatching(expected));
+});
+
+test('finds the correct role value in cookie', () => {
+    const cookie = "id=60608f0389177a0bb0679e78; role=teacher";
+    const extractedId = updateRoleValue(cookie);
+    const expected = "teacher"
+    expect(extractedId).toEqual(expect.stringMatching(expected));
 });
