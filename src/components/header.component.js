@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 
 export default class Header extends Component {
     constructor(props){
@@ -8,6 +9,16 @@ export default class Header extends Component {
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
+    }
+
+    /* Vi skal finde ud af hvordan vi fanger ID her. 
+    Skal det være med document.cookie eller skal det være med context?*/
+    componentDidMount(){
+        fetch(`http://localhost:5000/userinfo/${123}`,{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(this.state),
+        })
     }
 
     render(){
