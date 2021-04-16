@@ -1,10 +1,11 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
 import { link } from 'fs-extra';
-import {BrowserRouter as Router} from "react-router-dom";
+import {BrowserRouter as Router, useLocation} from "react-router-dom";
 import App from './App';
 import Header from './components/header.component';
 import LoginForm from './components/loginform.component';
 import Sidebar from './components/sidebar.component';
+import NoMatchError from './components/noMatchError.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 
 afterEach(cleanup);
@@ -72,6 +73,21 @@ test('sidebar renders correctly with context', ()=>{
     expect(teacherLinkElement).toContainElement(teacherSkemaElement);
 });
 
+test('nomatcherror renders correctly', () => {
+    let path = "/skemas";
+    render(
+        <div>
+            <NoMatchError location={path}/>
+        </div>
+    );
+    const linkElement = screen.getByTestId('pageNotFoundContainer');
+    const pElement = screen.getByTestId('pageNotFound');
+    const expectedElementContent = "404: Page not found, could not find page: /skemas";
+
+    expect(linkElement).toBeInTheDocument();
+    expect(linkElement).toContainElement(pElement);
+    expect(pElement).toHaveTextContent(expectedElementContent);
+});
 
 test('app renders loginform correctly', () => {
     render(<App />);
