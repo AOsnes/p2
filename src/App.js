@@ -1,11 +1,12 @@
 import './App.css';
 import React from 'react';
 import {UserContext} from './UserContext';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, useLocation} from "react-router-dom";
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
+import NoMatchError from "./components/noMatchError.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -22,8 +23,11 @@ class App extends React.Component{
                         <Route path="/afleveringer">
                             <Afleveringer/>
                         </Route>
-                        <Route path="/">
+                        <Route exact path="/">
                             <Login/>
+                        </Route>
+                        <Route path="*">
+                            <NoMatch/>
                         </Route>
                     </Switch>
                 </Router>
@@ -58,6 +62,17 @@ function Afleveringer(){
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
+        </div>
+    )
+}
+
+function NoMatch(){
+    let location = useLocation();
+    console.log(123)
+    return(
+        <div>
+            <Header linkTo="/"/>
+            <NoMatchError location={location.pathname}/>
         </div>
     )
 }
