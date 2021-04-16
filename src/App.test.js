@@ -112,16 +112,32 @@ test('submits data when user presses submit', async () => {
     /* Should test that cookie is set and that user is redirected */
 });
 
-test('finds the correct _id value in cookie', () => {
-    const cookie = "id=60608f0389177a0bb0679e78; role=teacher";
-    const extractedId = updateIdValue(cookie);
+test('finds the correct id value in cookie', () => {
     const expected = "60608f0389177a0bb0679e78"
-    expect(extractedId).toEqual(expect.stringMatching(expected));
+    let extractedId;
+    const cookieStrings = [
+        "id=60608f0389177a0bb0679e78; role=teacher; Secure",
+        "role=teacher; id=60608f0389177a0bb0679e78; Secure",
+        "role=teacher; id=60608f0389177a0bb0679e78; ",
+        "foo; id=60608f0389177a0bb0679e78; bar"]
+    cookieStrings.forEach(cookie => {
+        extractedId = updateIdValue(cookie);
+        expect(extractedId).toEqual(expected);
+    });
+    
+    expect(extractedId).toEqual(expected);
 });
 
 test('finds the correct role value in cookie', () => {
-    const cookie = "id=60608f0389177a0bb0679e78; role=teacher";
-    const extractedId = updateRoleValue(cookie);
     const expected = "teacher"
-    expect(extractedId).toEqual(expect.stringMatching(expected));
+    let extractedId;
+    const cookieStrings = [
+        "id=60608f0389177a0bb0679e78; role=teacher; Secure",
+        "role=teacher; id=60608f0389177a0bb0679e78; Secure",
+        "role=teacher; id=60608f0389177a0bb0679e78; ",
+        "foo; role=teacher; bar"]
+    cookieStrings.forEach(cookie => {
+        extractedId = updateRoleValue(cookie);
+        expect(extractedId).toEqual(expected);
+    });
 });
