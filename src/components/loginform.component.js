@@ -23,7 +23,6 @@ export default class LoginForm extends Component {
     
     handleSubmit(event){
         event.preventDefault();
-        //TODO: fetch url should be in .env
         fetch("http://localhost:5000/login",{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
