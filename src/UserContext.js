@@ -1,9 +1,9 @@
 import React from'react';
 
-function updateIdValue() {
+export function updateIdValue(cookie) {
     let cookieIdValue = undefined;
-    if(document.cookie){
-        cookieIdValue = document.cookie
+    if(cookie){
+        cookieIdValue = cookie
             .split('; ')
             .find(row => row.startsWith('id='))
             .split('=')[1];
@@ -11,10 +11,10 @@ function updateIdValue() {
     return cookieIdValue
 }
 
-function updateRoleValue(){
+export function updateRoleValue(cookie){
     let cookieRoleValue = undefined;
-    if(document.cookie){
-        cookieRoleValue = document.cookie
+    if(cookie){
+        cookieRoleValue = cookie
             .split('; ')
             .find(row => row.startsWith('role='))
             .split('=')[1];
@@ -22,10 +22,10 @@ function updateRoleValue(){
     return cookieRoleValue;
 }
 
-function updateNameValue(){
+function updateNameValue(cookie){
     let cookieNameValue = undefined;
-    if(document.cookie){
-        cookieNameValue = document.cookie
+    if(cookie){
+        cookieNameValue = cookie
             .split('; ')
             .find(row => row.startsWith('name='))
             .split('=')[1];
@@ -34,7 +34,7 @@ function updateNameValue(){
 }
 
 export const UserContext = React.createContext({
-    id: updateIdValue(),
-    role: updateRoleValue(),
-    name: updateNameValue()
+    id: updateIdValue(document.cookie),
+    role: updateRoleValue(document.cookie),
+    name: updateNameValue(document.cookie)
 });

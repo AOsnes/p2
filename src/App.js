@@ -14,7 +14,6 @@ class App extends React.Component{
         return (
             <UserContext.Provider value={signedInUser}>
                 <Router>
-                    <Header/>
                     
                     <Switch>
                         <Route path="/skema">
@@ -37,18 +36,29 @@ class App extends React.Component{
 /* Betragt disee som components der render hele siden ved hver rute
 fx Login() bliver rendered når vi rammer "/" ruten */
 function Login(){
-    return <LoginForm/>
+    return (
+        <div>
+            <Header linkTo="/"/>
+            <LoginForm/>
+        </div>
+    )
 }
 
 function Skema(){
     return(
-        <Sidebar/>
+        <div>
+            <Header linkTo="/skema"/>
+            <Sidebar/>
+        </div>
     )
 }
 
 function Afleveringer(){
     return(
-        <Sidebar/>
+        <div>
+            <Header linkTo="/skema"/>
+            <Sidebar/>
+        </div>
     )
 }
 
