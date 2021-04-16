@@ -16,10 +16,9 @@ export default class Sidebar extends Component {
                     <li className="sideItem">
                         <Link className="sideButton" to="/afleveringer"> <FiBook className="sideIcon"/>Afleveringer</Link>
                     </li>
-
                     <UserContext.Consumer>
                         {user => {
-                            if(user === 'teacher'){
+                            if(user.role === 'teacher'){
                                 return(
                                         <li className="sideItem" data-testid="redigerSkema">
                                             <Link className="sideButton" to="/skema/create"> <BiEdit className="sideIcon"/>Rediger Skema</Link>
@@ -28,6 +27,7 @@ export default class Sidebar extends Component {
                             }
                         }}
                     </UserContext.Consumer>
+                    
                 </div>
             </ul>
         );
