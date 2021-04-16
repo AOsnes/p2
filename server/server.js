@@ -85,3 +85,96 @@ app.listen(port, () =>{
     console.log(`Server is listening on port ${port}`);
 });
 
+//Cursed crusty code to get the schedule:
+//This function queries lessons for a given user at a given interval and date
+async function getSchedule(user, date, days) {
+    try {
+        //await client.connect();
+        console.log(user);
+        const database = client.db('P2');
+        const collection = database.collection("lessons");
+        //Calculates the time interval using the passed date and amount of days
+        interval = getDateInterval(date, days);
+
+        let start = interval.start;
+        let end = interval.end;
+        let cursor;
+        let schedule;
+
+        //Determines the role of the user as each role needs a different query to the correct lessons.
+        if (user.role === "teacher") {
+            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "startTime": { $lte: end } }] }, { sort: { startTime: 1 } }); //, $and: [{ "startTime": { $gte: start } }, { "startTime": { $lte: end } }] }, { sort: { startTime: 1 } 
+            schedule = await cursor.toArray();
+        } else {
+            cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
+            schedule = await cursor.toArray();
+        }
+
+        //Checks if the query had any results. 
+        if ((await cursor.count()) === 0) {
+            console.log("No documents found!");
+            await cursor.close();
+            return schedule;
+        } else {
+            await cursor.close();
+            //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
+            for (lesson of schedule) {
+                lesson.startTime += date.getTimezoneOffset();
+                lesson.endTime += date.getTimezoneOffset();
+            }
+            return schedule;
+        }
+    } finally {
+        await client.close();
+    }
+}
+
+//Finds the time interval for the one day view and one week view. Defaults to the next monday if the date passed is a Saturday or Sunday
+function getDateInterval(date, days){
+    if (days === 1){
+        if (date.getDay() >= 1 && date.getDay() <= 5){
+            let interval = oneDayInterval(date);
+            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        } else {
+            date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
+            let interval = oneDayInterval(date);
+            console.log("Start: " + start + "\n" + "End: " + end);
+            return interval;
+        }
+    } else {
+        if (date.getDay() >= 1 && date.getDay() <= 5) {
+            let interval = fiveDayInterval(date);
+            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        } else {
+            date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
+            let interval = fiveDayInterval(date);
+            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        }
+    }
+}
+
+//Takes the passed date and creates an interval starting at 00:00:00 and ends at 23:59:59
+function oneDayInterval(date) {
+    let start = new Date(date.getTime());
+    start.setHours(0, 0, 0);
+    let end = new Date(date.getTime());
+    end.setHours(23, 59, 59);
+    return {start, end};
+}
+
+//Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
+function fiveDayInterval(date){
+    let start = new Date(date.getTime());
+    start.setDate(start.getDate() - (start.getDay() - 1));
+    start.setHours(0, 0, 0);
+    let end = new Date(date.getTime());
+    end.setDate(end.getDate() + (5 - end.getDay()));
+    end.setHours(23, 59, 59);
+    return {start, end}
+}
+
+
+
