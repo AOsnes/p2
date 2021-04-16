@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
+
 
 export default class Header extends Component {
     constructor(props){
@@ -8,16 +10,6 @@ export default class Header extends Component {
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
-    }
-
-    /* Vi skal finde ud af hvordan vi fanger ID her. 
-    Skal det være med document.cookie eller skal det være med context?*/
-    componentDidMount(){
-        fetch(`http://localhost:5000/userinfo/${123}`,{
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(this.state),
-        })
     }
 
     render(){
@@ -30,9 +22,23 @@ export default class Header extends Component {
                             <p id="headerLogoName">Skema.dk</p>
                         </Link>
                     </li>
-                    <li className="headerItem" id="headerLegalName">
-                        <p id="headerLegalNameText">headerLegalNameText</p>
-                    </li>
+                    <UserContext.Consumer>
+                        {user => {
+                                if(user.name){
+                                return(
+                                    <li className="headerItem" id="headerLegalName">
+                                    <p id="headerLegalNameText">{user.name}</p>
+                                </li>
+                                );
+                                } else{
+                                    return(
+                                        <li className="headerItem" id="headerLegalName">
+                                        <p id="headerLegalNameText"> </p>
+                                    </li>
+                                    );  
+                                }
+                        }}
+                    </UserContext.Consumer>
                     <li className="headerItem">
                         <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
                     </li>
