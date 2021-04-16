@@ -22,7 +22,7 @@ export function updateRoleValue(cookie){
     return cookieRoleValue;
 }
 
-function updateNameValue(cookie){
+export function updateNameValue(cookie){
     let cookieNameValue = undefined;
     if(cookie){
         cookieNameValue = cookie

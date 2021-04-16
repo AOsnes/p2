@@ -3,7 +3,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import App from './App';
 import LoginForm from './components/loginform.component';
 import Sidebar from './components/sidebar.component';
-import {UserContext, updateIdValue, updateRoleValue} from './UserContext';
+import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 
 afterEach(cleanup);
 
@@ -113,15 +113,22 @@ test('submits data when user presses submit', async () => {
 });
 
 test('finds the correct _id value in cookie', () => {
-    const cookie = "id=60608f0389177a0bb0679e78; role=teacher";
+    const cookie = "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace";
     const extractedId = updateIdValue(cookie);
     const expected = "60608f0389177a0bb0679e78"
     expect(extractedId).toEqual(expect.stringMatching(expected));
 });
 
 test('finds the correct role value in cookie', () => {
-    const cookie = "id=60608f0389177a0bb0679e78; role=teacher";
-    const extractedId = updateRoleValue(cookie);
+    const cookie = "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace";
+    const extractedRole = updateRoleValue(cookie);
     const expected = "teacher"
-    expect(extractedId).toEqual(expect.stringMatching(expected));
+    expect(extractedRole).toEqual(expect.stringMatching(expected));
+});
+
+test('finds the correct name value in cookie', () => {
+    const cookie = "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace";
+    const extractedName = updateNameValue(cookie);
+    const expected = "Testy McTestFace"
+    expect(extractedName).toEqual(expect.stringMatching(expected));
 });
