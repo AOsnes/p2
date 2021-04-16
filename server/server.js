@@ -94,7 +94,7 @@ async function getSchedule(user, date, days) {
         const database = client.db('P2');
         const collection = database.collection("lessons");
         //Calculates the time interval using the passed date and amount of days
-        interval = getDateInterval(date, days);
+        let interval = getDateInterval(date, days);
 
         let start = interval.start;
         let end = interval.end;
@@ -118,7 +118,7 @@ async function getSchedule(user, date, days) {
         } else {
             await cursor.close();
             //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
-            for (lesson of schedule) {
+            for (let lesson of schedule) {
                 lesson.startTime += date.getTimezoneOffset();
                 lesson.endTime += date.getTimezoneOffset();
             }
@@ -139,7 +139,7 @@ function getDateInterval(date, days){
         } else {
             date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
             let interval = oneDayInterval(date);
-            console.log("Start: " + start + "\n" + "End: " + end);
+            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
             return interval;
         }
     } else {
