@@ -36,7 +36,6 @@ exports.getUserinfo = async function getUserinfo(id){
         const database = client.db('P2');
         const doc = database.collection("users");
         const result = await doc.findOne({"_id": ObjectId(id)}, {projection: {name: 1, role: 1, class: 1}});
-        console.log(result)
         if (result === null) {
             throw new Error("No such id");
         } else {
@@ -47,50 +46,11 @@ exports.getUserinfo = async function getUserinfo(id){
     }
 }
 
-let logger = (req, res, next) => {
-    console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
-    next();
-}
-
-let requestTime = (req, res, next) => {
-    req.requestTime = Date.now();
-    next();
-}
-
-let restrict = (req, res, next) => {
-    if(req.session.user) {
-        next(); //We fine, user is authenticated
-    } else {
-        req.session.error = 'Access denied';
-        res.redirect('/'); //TODO: change?
-    }
-}
-
-app.use(bodyParser.json());
-app.use(cors());
-app.use(requestTime);
-app.use(logger);
-
-/* ROUTES */
-const classesRouter = require('./routes/classes');
-const loginRouter = require('./routes/login');
-const userinfoRouter = require('./routes/userinfo');
-app.use('/classes', classesRouter);
-app.use('/login', loginRouter);
-app.use('/userinfo', userinfoRouter);
-
-client.connect();
-
-app.listen(port, () =>{
-    console.log(`Server is listening on port ${port}`);
-});
-
 //Cursed crusty code to get the schedule:
 //This function queries lessons for a given user at a given interval and date
-async function getSchedule(user, date, days) {
+exports.getSchedule = async function getSchedule(user, date, days) {
     try {
-        //await client.connect();
-        console.log(user);
+        /* await client.connect(); */
         const database = client.db('P2');
         const collection = database.collection("lessons");
         //Calculates the time interval using the passed date and amount of days
@@ -112,9 +72,8 @@ async function getSchedule(user, date, days) {
 
         //Checks if the query had any results. 
         if ((await cursor.count()) === 0) {
-            console.log("No documents found!");
             await cursor.close();
-            return schedule;
+            throw new Error("No documents found!")
         } else {
             await cursor.close();
             //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
@@ -124,14 +83,14 @@ async function getSchedule(user, date, days) {
             }
             return schedule;
         }
-    } finally {
-        await client.close();
+    } catch(error){
+        throw error;
     }
 }
 
 //Finds the time interval for the one day view and one week view. Defaults to the next monday if the date passed is a Saturday or Sunday
 function getDateInterval(date, days){
-    if (days === 1){
+    if (days === '1'){
         if (date.getDay() >= 1 && date.getDay() <= 5){
             let interval = oneDayInterval(date);
             console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
@@ -176,5 +135,42 @@ function fiveDayInterval(date){
     return {start, end}
 }
 
+let logger = (req, res, next) => {
+    console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
+    next();
+}
 
+let requestTime = (req, res, next) => {
+    req.requestTime = Date.now();
+    next();
+}
 
+let restrict = (req, res, next) => {
+    if(req.session.user) {
+        next(); //We fine, user is authenticated
+    } else {
+        req.session.error = 'Access denied';
+        res.redirect('/'); //TODO: change?
+    }
+}
+
+app.use(bodyParser.json());
+app.use(cors());
+app.use(requestTime);
+app.use(logger);
+
+/* ROUTES */
+const classesRouter = require('./routes/classes');
+const loginRouter = require('./routes/login');
+const userinfoRouter = require('./routes/userinfo');
+const getScheduleRouter = require('./routes/getSchedule');
+app.use('/classes', classesRouter);
+app.use('/login', loginRouter);
+app.use('/userinfo', userinfoRouter);
+app.use('/getSchedule', getScheduleRouter);
+
+client.connect();
+
+app.listen(port, () =>{
+    console.log(`Server is listening on port ${port}`);
+});

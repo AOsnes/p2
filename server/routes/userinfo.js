@@ -3,7 +3,6 @@ const {getUserinfo} = require('../server');
 
 router.route('/:id').get( (req, res) => {
     let id = req.params.id
-    console.log(id)
     getUserinfo(id).then( result => {
         res.status(200).json({
             id: result._id,
