@@ -10,7 +10,7 @@ import Sidebar from "./components/sidebar.component";
 class App extends React.Component{
     static contextType = UserContext;
     render(){
-        let signedInUser = this.context.role;
+        let signedInUser = this.context;
         return (
             <UserContext.Provider value={signedInUser}>
                 <Router>

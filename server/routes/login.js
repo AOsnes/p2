@@ -6,7 +6,7 @@ router.route('/').post( (req, res) => {
     let password = req.body.password;
     authenticate(username, password)
     .then( result => {
-        res.status(200).json({id: result._id, role: result.role});
+        res.status(200).json({id: result._id, role: result.role, name: result.name});
         res.end();
     })
     .catch( error => {

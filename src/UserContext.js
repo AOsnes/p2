@@ -22,7 +22,19 @@ function updateRoleValue(){
     return cookieRoleValue;
 }
 
+function updateNameValue(){
+    let cookieNameValue = undefined;
+    if(document.cookie){
+        cookieNameValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('name='))
+            .split('=')[1];
+    }
+    return cookieNameValue;
+}
+
 export const UserContext = React.createContext({
     id: updateIdValue(),
-    role: updateRoleValue()
+    role: updateRoleValue(),
+    name: updateNameValue()
 });

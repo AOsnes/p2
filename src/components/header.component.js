@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { UserContext } from '../UserContext';
 
 export default class Header extends Component {
     constructor(props){
@@ -19,9 +20,23 @@ export default class Header extends Component {
                             Skema.dk
                         </button>
                     </li>
-                    <li className="headerItem" id="headerLegalName">
-                        <p id="headerLegalNameText">headerLegalNameText</p>
-                    </li>
+                    <UserContext.Consumer>
+                        {user => {
+                                if(user.name){
+                                return(
+                                    <li className="headerItem" id="headerLegalName">
+                                    <p id="headerLegalNameText">{user.name}</p>
+                                </li>
+                                );
+                                } else{
+                                    return(
+                                        <li className="headerItem" id="headerLegalName">
+                                        <p id="headerLegalNameText"> </p>
+                                    </li>
+                                    );  
+                                }
+                        }}
+                    </UserContext.Consumer>
                     <li className="headerItem">
                         <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
                     </li>
