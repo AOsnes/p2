@@ -7,6 +7,7 @@ import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
+import Skema from "./components/skema.component"
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -15,10 +16,9 @@ class App extends React.Component{
         return (
             <UserContext.Provider value={signedInUser}>
                 <Router>
-                    
                     <Switch>
                         <Route path="/skema">
-                            <Skema/>
+                            <Skemapage/>
                         </Route>
                         <Route path="/afleveringer">
                             <Afleveringer/>
@@ -32,7 +32,6 @@ class App extends React.Component{
                     </Switch>
                 </Router>
             </UserContext.Provider>
-
         );
     }
 }
@@ -48,11 +47,12 @@ function Login(){
     )
 }
 
-function Skema(){
+function Skemapage(){
     return(
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
+            <Skema/>
         </div>
     )
 }

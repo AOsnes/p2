@@ -164,3 +164,19 @@ body{
   min-width: 50px;
   text-align: center;
 }
+
+.skemaContainer{
+  position: absolute;
+  background-color:#E5E5E5;
+  top: 15%;
+  left: 15%;
+  width: 80%;
+  height: 80%;
+}
+
+.dayText{
+  
+}
+.center {
+  text-align: center;
+}
