@@ -42,7 +42,7 @@ test('sidebar renders correctly with context', ()=>{
     expect(linkElement).not.toContain(screen.queryByText("Rediger Skema"));
     /* Remove rendered screen and render a new screen with a new context */
     cleanup(); 
-    signedInUser = 'teacher';
+    signedInUser = {role: 'teacher', name: ' ', id: ' '};
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
