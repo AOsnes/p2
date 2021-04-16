@@ -117,9 +117,9 @@ test('finds the correct id value in cookie', () => {
     const expected = "60608f0389177a0bb0679e78"
     let extractedId;
     const cookieStrings = [
-        "id=60608f0389177a0bb0679e78; role=teacher; Secure",
-        "role=teacher; id=60608f0389177a0bb0679e78; Secure",
-        "role=teacher; id=60608f0389177a0bb0679e78; ",
+        "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
+        "role=teacher; id=60608f0389177a0bb0679e78; name=Testy McTestFace; Secure",
+        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
         "foo; id=60608f0389177a0bb0679e78; bar"]
     cookieStrings.forEach(cookie => {
         extractedId = updateIdValue(cookie);
@@ -133,9 +133,9 @@ test('finds the correct role value in cookie', () => {
     const expected = "teacher"
     let extractedRole;
     const cookieStrings = [
-        "id=60608f0389177a0bb0679e78; role=teacher; Secure",
-        "role=teacher; id=60608f0389177a0bb0679e78; Secure",
-        "role=teacher; id=60608f0389177a0bb0679e78; ",
+        "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
+        "role=teacher; id=60608f0389177a0bb0679e78; name=Testy McTestFace; Secure",
+        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
         "foo; role=teacher; bar"]
     cookieStrings.forEach(cookie => {
         extractedRole = updateRoleValue(cookie);
