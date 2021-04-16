@@ -22,7 +22,7 @@ test('app renders header', () => {
 });
 
 test('sidebar renders correctly with context', ()=>{
-    let signedInUser = 'student';
+    let signedInUser ={role: 'student', id: '', name: ''};
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
@@ -131,21 +131,28 @@ test('finds the correct id value in cookie', () => {
 
 test('finds the correct role value in cookie', () => {
     const expected = "teacher"
-    let extractedId;
+    let extractedRole;
     const cookieStrings = [
         "id=60608f0389177a0bb0679e78; role=teacher; Secure",
         "role=teacher; id=60608f0389177a0bb0679e78; Secure",
         "role=teacher; id=60608f0389177a0bb0679e78; ",
         "foo; role=teacher; bar"]
     cookieStrings.forEach(cookie => {
-        extractedId = updateRoleValue(cookie);
-        expect(extractedId).toEqual(expected);
+        extractedRole = updateRoleValue(cookie);
+        expect(extractedRole).toEqual(expected);
     });
 });
 
 test('finds the correct name value in cookie', () => {
-    const cookie = "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace";
-    const extractedName = updateNameValue(cookie);
     const expected = "Testy McTestFace"
-    expect(extractedName).toEqual(expect.stringMatching(expected));
+    let extractedName;
+    const cookieStrings = [
+        "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
+        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; Secure",
+        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
+        "foo; name=Testy McTestFace; bar"]
+    cookieStrings.forEach(cookie => {
+        extractedName = updateNameValue(cookie);
+        expect(extractedName).toEqual(expected);
+    });
 });
