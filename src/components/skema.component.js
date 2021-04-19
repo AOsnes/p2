@@ -1,41 +1,47 @@
 import React, { Component } from 'react';
+import { UserContext } from '../UserContext';
+import Skemabrik from './skemabrik.component';
 
 export default class Skema extends Component{
+    static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {id: '', date: '', view: 1};
-
+        this.state = {id: '', date: '', view: 1, skema:{}};
         this.getSchedule = this.getSchedule.bind(this);
     }
 
-    /* Skal ikke kaldes når der bliver trykket på en knap som der sker lige nu, 
-    dette er bare for at teste at om bliver lavet korrekt fetch, måske skal det bare
-    indkapsuleres i componentDidMount funcktionen */
-    getSchedule(){
-        let requestString
-        console.log(requestString)
+    getSchedule(requestString){
         fetch(`http://localhost:5000/getSchedule/${requestString}`,{
             method:'GET',
         })
+        .then(response => response.json())
+        .then(response => {
+            this.setState({skema: response});
+        });
+    };
+
+    componentDidMount(){
+        let user = this.context;
+        this.setState({
+            id: user.id,
+            date: new Date().toLocaleDateString(),
+            view: 1,
+        }, () =>{
+            let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
+            this.getSchedule(requestString)
+        })
     }
 
-
     render(){
+        if(!this.state.skema.length){
+            return null;
+        }
         return(
             <div className="skemaContainer">
-                {/* <UserContext.Consumer>
-                {user =>{
-                console.log("yep")
-                if(user.id){
-                    this.setState = user.id;
-                    this.state.date = new Date().toLocaleDateString();
-                    requestString = `/${user.id}/${date}/${this.state.view}`;
-                    console.log(requestString)
-                }
-            }}
-                </UserContext.Consumer> */}
                 <h1 className="dayText center">TODAY</h1>
-                {/* <button onClick={this.getSchedule}></button> */}
+                {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
             </div>
         )
     }
