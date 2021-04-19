@@ -1,21 +1,36 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
-import {BrowserRouter as Router} from "react-router-dom";
+import { link } from 'fs-extra';
+import {BrowserRouter as Router, useLocation} from "react-router-dom";
 import App from './App';
+import Header from './components/header.component';
 import LoginForm from './components/loginform.component';
 import Sidebar from './components/sidebar.component';
+import NoMatchError from './components/noMatchError.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 
 afterEach(cleanup);
 
-test('app renders header', () => {
-    render(<App />);
+test('header renders correctly with name', () => {
+    const signedInUser = {name: 'Testy McTestFace', role: '', id: ''}
+    render(
+        <div>
+            <UserContext.Provider value={signedInUser}>
+                <Router>
+                    <Header linkTo="/"/>
+                </Router>
+            </UserContext.Provider>
+        </div>
+    );
+
     const standby = jest.fn();
     const linkElement = screen.getByTestId("header");
     const logoElement = screen.getByTestId("headerButton");
     const profilBilledeElement = screen.getByAltText("profilBillede");
+
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(logoElement);
     expect(linkElement).toContainElement(profilBilledeElement);
+    expect(linkElement).toContainElement(screen.queryByText("Testy McTestFace"));
     expect(standby).toBeCalledTimes(0); 
     /* There wasnt an error loading the profile picture */
     /* Might need to change in the future */
@@ -58,6 +73,21 @@ test('sidebar renders correctly with context', ()=>{
     expect(teacherLinkElement).toContainElement(teacherSkemaElement);
 });
 
+test('nomatcherror renders correctly', () => {
+    let path = "/skemas";
+    render(
+        <div>
+            <NoMatchError location={path}/>
+        </div>
+    );
+    const linkElement = screen.getByTestId('pageNotFoundContainer');
+    const pElement = screen.getByTestId('pageNotFound');
+    const expectedElementContent = "404: Page not found, could not find page: /skemas";
+
+    expect(linkElement).toBeInTheDocument();
+    expect(linkElement).toContainElement(pElement);
+    expect(pElement).toHaveTextContent(expectedElementContent);
+});
 
 test('app renders loginform correctly', () => {
     render(<App />);

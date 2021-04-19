@@ -27,14 +27,14 @@ export default class Header extends Component {
                                 if(user.name){
                                 return(
                                     <li className="headerItem" id="headerLegalName">
-                                    <p id="headerLegalNameText">{user.name}</p>
-                                </li>
+                                        <p id="headerLegalNameText">{user.name}</p>
+                                    </li>
                                 );
                                 } else{
                                     return(
                                         <li className="headerItem" id="headerLegalName">
-                                        <p id="headerLegalNameText"> </p>
-                                    </li>
+                                            <p id="headerLegalNameText"> </p>
+                                        </li>
                                     );  
                                 }
                         }}

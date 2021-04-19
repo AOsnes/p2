@@ -51,7 +51,7 @@ body{
 #headerLogoName{
   position: relative;
   left: 100px;
-  top: -38px;
+  top: -34px;
   margin: 0px;
 }
 
@@ -66,8 +66,9 @@ body{
   font-size: 38px;
   color: black;
   top: 22px;
-  padding-bottom: 35.25px;
+  padding-bottom: 37.5px;
   margin: none;
+  line-height: 39.5px;
 }
 
 .headerButton:hover{
@@ -161,5 +162,21 @@ body{
   width: 48px;
   color: white;
   min-width: 50px;
+  text-align: center;
+}
+
+.skemaContainer{
+  position: absolute;
+  background-color:#E5E5E5;
+  top: 15%;
+  left: 15%;
+  width: 80%;
+  height: 80%;
+}
+
+.dayText{
+  
+}
+.center {
   text-align: center;
 }
