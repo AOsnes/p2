@@ -36,6 +36,7 @@ export default class LoginForm extends Component {
                 document.cookie = `role=${response.role};Secure=true`;
                 document.cookie = `name=${response.name};Secure=true`;
                 this.setState({redirect: "/skema"});
+                window.location.reload(false);
             } else {
                 console.log(response);
             }
