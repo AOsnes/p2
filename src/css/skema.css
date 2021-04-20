@@ -11,3 +11,22 @@
 .center {
     text-align: center;
 }
+
+.grid-item {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    font-size: 30px;
+    text-align: center;
+    border-left: none;
+    
+}
+
+.grid-container {
+    position: relative;
+    left: 5%;
+    width: 90%;
+    display: grid;
+    grid-template-columns: 120px auto;
+    padding: 10px;
+    padding-bottom: 40px;
+}
