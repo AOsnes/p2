@@ -42,8 +42,8 @@ export default class Header extends Component {
                                 } else{
                                     return(
                                         <li className="headerItem" id="headerLegalName">
-                                        <p id="headerLegalNameText"> </p>
-                                    </li>
+                                            <p id="headerLegalNameText"></p>
+                                        </li>
                                     );  
                                 }
                         }}
@@ -57,7 +57,7 @@ export default class Header extends Component {
                                     <li onClick={this.logoutHandler} className="logoutButton">Log ud</li>
                                 </ul>
                             </div>
-                        </Link>
+                        </div>
                     </li>
                 </div>
             </ul>

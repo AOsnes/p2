@@ -24,9 +24,10 @@ export default class Skema extends Component{
         let user = this.context;
         this.setState({
             id: user.id,
-            date: new Date().toLocaleDateString(),
+            date: new Date().toISOString(),
             view: 1,
         }, () =>{
+            console.log(this.state.date)
             let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
             this.getSchedule(requestString)
         })
@@ -42,7 +43,7 @@ export default class Skema extends Component{
         }
         return(
             <div className="skemaContainer">
-                <h1 className="dayText center">TODAY</h1>
+                <h1 className="dayText">TODAY</h1>
                 {this.state.skema.map((skemabrik) => {
                     return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
                 })}

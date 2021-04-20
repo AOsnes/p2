@@ -1,118 +1,20 @@
-.headerItem{
-    list-style-type: none;
-    height: 100px;
-}
-  
+/* General Header Style */
 .header {
     background-color: white;
     height: 100px;
 }
-  
+
 .headerContainer{
     display: grid;
     grid-template-columns: 290px auto 112.5px;
 }
-  
-/* Dropdown Button Styling */
-.dropdownButton {
-    height: 100px;
-    width: 100%;
-    background: #fff;
-    position: relative;
-    cursor: pointer;
-}
-  
-.dropdownArrow {
-    height: 0;
-    width: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #06142F;
-    position: relative;
-    top: 0px;
-    left: 65px;
-}
-  
-.dropdownButton:focus .dropdownArrow {
-    top: -10px;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #06142F;
-    border-top: 10px solid transparent;
-  
-}
-  
-.dropdownMenu {
+
+.headerItem{
     list-style-type: none;
-    display: none;
-    background: #555;
-    background: rgba(33, 33, 33, 0.9);
-    margin-top: 20px;
-    left: -300px;
-}
-  
-.dropdownButton:focus .dropdownMenu {
-    display: block;
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-}
-  
-.dropdownMenu ul li {
-    list-style-type: none;
-    display: block;
     height: 100px;
-    width: 400px;
-    font-size: 1.5em;
-    line-height: 2.5em;
-    padding: 20px;
-    color: #fff;
-    border-bottom: 2px solid #06142F;
 }
-  
-.dropdownMenu ul li:last-child {
-    border-bottom: none;
-}
-  
-.dropdownMenu ul li:focus {
-    background: #06142F;
-    color: #fff;
-}
-  
-.logoutButton {
-    position: relative;
-    text-align: center;
-}
-  
-/* Header Username */
-#headerLegalName{} /* DO NOT DELETE THIS */
-  
-#headerLegalName p{
-    font-size: 1.777em;
-    text-align: right;
-    position: relative;
-    top: 34px;
-}
-  
-#headerProfilePicture{
-    border-radius: 50%;
-    position: relative;
-    top: 12.5px;
-    left: 12.5px;
-}
-  
-.headerImage{
-    position: absolute;
-    left: 22px;
-    top: 22px;
-}
-  
-#headerLogoName{
-    position: relative;
-    left: 100px;
-    top: -34px;
-}
-  
+
+/* Logo */
 .headerButton{
     position: relative;
     border: none;
@@ -128,7 +30,104 @@
     margin: none;
     line-height: 39.5px;
 }
-  
+
 .headerButton:hover{
     background-color: #F5F5F5;
+}
+
+.headerImage{
+    position: absolute;
+    left: 22px;
+    top: 22px;
+}
+
+#headerLogoName{
+    position: relative;
+    left: 100px;
+    top: -34px;
+}
+
+/* Legal Name */
+#headerLegalNameText{
+    font-size: 1.777em;
+    text-align: right;
+    position: relative;
+    top: 34px;
+}
+
+/* Dropdown Function */
+.dropdownButton {
+    height: 100px;
+    width: 100%;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+}
+
+#headerProfilePicture{ /* Profile Picture */
+    border-radius: 50%;
+    position: relative;
+    top: 12.5px;
+    left: 12.5px;
+}
+
+.dropdownArrow {
+    height: 0;
+    width: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #06142F;
+    position: relative;
+    top: 0px;
+    left: 65px;
+}
+
+.dropdownButton:focus .dropdownArrow {
+    top: -10px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #06142F;
+    border-top: 10px solid transparent;
+}
+
+.dropdownMenu {
+    list-style-type: none;
+    display: none;
+    background: #555;
+    background: rgba(33, 33, 33, 0.9);
+    margin-top: 20px;
+    left: -300px;
+}
+
+.dropdownButton:focus .dropdownMenu {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+}
+
+.dropdownMenu ul li {
+    list-style-type: none;
+    display: block;
+    height: 100px;
+    width: 400px;
+    font-size: 1.5em;
+    line-height: 2.5em;
+    padding: 20px;
+    color: #fff;
+    border-bottom: 2px solid #06142F;
+}
+
+.dropdownMenu ul li:last-child {
+    border-bottom: none;
+}
+
+.dropdownMenu ul li:focus {
+    background: #06142F;
+    color: #fff;
+}
+
+.logoutButton {
+    position: relative;
+    text-align: center;
 }
