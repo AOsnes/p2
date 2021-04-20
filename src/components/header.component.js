@@ -39,15 +39,15 @@ export default class Header extends Component {
                         }}
                     </UserContext.Consumer>
                     <li className="headerItem">
-                        <Link className="dropdownButton">
+                        <div className="dropdownButton">
                             <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
-                            <div class="dropdownArrow"></div>
-                            <div class="dropdownMenu">
+                            <div className="dropdownArrow"></div>
+                            <div className="dropdownMenu">
                                 <ul>
-                                    <Link to="../123"><li className="logoutButton">Log Out</li></Link>
+                                    <Link to=""><li className="logoutButton">Log Out</li></Link>
                                 </ul>
                             </div>
-                        </Link>
+                        </div>
                     </li>
                 </div>
             </ul>

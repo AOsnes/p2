@@ -24,9 +24,10 @@ export default class Skema extends Component{
         let user = this.context;
         this.setState({
             id: user.id,
-            date: new Date().toLocaleDateString(),
+            date: new Date().toISOString(),
             view: 1,
         }, () =>{
+            console.log(this.state.date)
             let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
             this.getSchedule(requestString)
         })
