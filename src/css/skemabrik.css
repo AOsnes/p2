@@ -2,7 +2,7 @@
 .skemabrik{
     position: relative;
     width: 95%;
-    vertical-align: middle;
+    text-align: left;
     border: none;
     margin: none;
 }
