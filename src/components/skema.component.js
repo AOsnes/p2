@@ -43,10 +43,61 @@ export default class Skema extends Component{
         }
         return(
             <div className="skemaContainer">
-                <h1 className="dayText">TODAY</h1>
+
+
+                <h1 className="dayText">TODAY</h1> 
+
+                <div className="grid-container">
+                <div className="grid-item">08.00</div>
+                <div className="grid-item">
+
                 {this.state.skema.map((skemabrik) => {
                     return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
                 })}
+                </div>
+                <div className="grid-item">09.00</div>
+                <div className="grid-item">
+                    {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div>
+                <div className="grid-item">10:00</div>
+                <div className="grid-item">
+                {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div> 
+                <div className="grid-item">11.00</div>
+                <div className="grid-item">
+                {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div>
+                <div className="grid-item">12.00</div>
+                <div className="grid-item">
+                    {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div>
+                <div className="grid-item">13:00</div>
+                <div className="grid-item">
+                {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div>
+                <div className="grid-item">14.00</div>
+                <div className="grid-item">
+                    {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div>
+                <div className="grid-item">15:00</div>
+                <div className="grid-item">
+                {this.state.skema.map((skemabrik) => {
+                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                })}
+                </div> 
+            </div>
             </div>
         )
     }
