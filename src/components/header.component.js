@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
 
-
 export default class Header extends Component {
     constructor(props){
         super(props);
@@ -27,20 +26,28 @@ export default class Header extends Component {
                                 if(user.name){
                                 return(
                                     <li className="headerItem" id="headerLegalName">
-                                        <p id="headerLegalNameText">{user.name}</p>
-                                    </li>
+                                    <p id="headerLegalNameText">{user.name}</p>
+                                </li>
                                 );
                                 } else{
                                     return(
                                         <li className="headerItem" id="headerLegalName">
-                                            <p id="headerLegalNameText"> </p>
-                                        </li>
+                                        <p id="headerLegalNameText"> </p>
+                                    </li>
                                     );  
                                 }
                         }}
                     </UserContext.Consumer>
                     <li className="headerItem">
-                        <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
+                        <Link className="dropdownButton">
+                            <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
+                            <div class="dropdownArrow"></div>
+                            <div class="dropdownMenu">
+                                <ul>
+                                    <li className="logoutButton">Log Out</li>
+                                </ul>
+                            </div>
+                        </Link>
                     </li>
                 </div>
             </ul>
