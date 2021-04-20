@@ -1,0 +1,14 @@
+/* Body Style */
+body{
+  font-family: 'Work Sans';
+  background-color: #F0F0F0;
+  color: #06142F;
+}
+
+* { /* TODO: Fix this */
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}

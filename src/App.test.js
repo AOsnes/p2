@@ -38,7 +38,12 @@ test('header renders correctly with name', () => {
 });
 
 test('sidebar renders correctly with context', ()=>{
-    let signedInUser ={role: 'student', id: '', name: ''};
+    let signedInUser ={role: 'student', name: 'Sigurd', id: '123123'};
+    /* Mocking document.cookie, essentially setting the cookie to the return value of get */
+    Object.defineProperty(document, 'cookie', {
+        get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
+        set: jest.fn().mockImplementation(() => {}),
+      });
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
@@ -58,7 +63,7 @@ test('sidebar renders correctly with context', ()=>{
     expect(linkElement).not.toContain(screen.queryByText("Rediger Skema"));
     /* Remove rendered screen and render a new screen with a new context */
     cleanup(); 
-    signedInUser = {role: 'teacher', name: ' ', id: ' '};
+    signedInUser = {role: 'teacher', name: 'Sigurd', id: '123'};
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
