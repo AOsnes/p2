@@ -4,8 +4,11 @@ export default class Skemabrik extends Component {
     render(){
         let subject = this.props.skemabrik.subject;
         return(
-            <div className={subject}>
-                <p>{subject}</p>
+            <div className={`skemabrik ${subject}`}>
+                <p className="skemabrikText">
+                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt="Pause Logo"/>
+                    {subject}
+                </p>
             </div>
         )
     }
