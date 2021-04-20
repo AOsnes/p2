@@ -32,8 +32,8 @@ export default class Header extends Component {
                                 } else{
                                     return(
                                         <li className="headerItem" id="headerLegalName">
-                                        <p id="headerLegalNameText"> </p>
-                                    </li>
+                                            <p id="headerLegalNameText"></p>
+                                        </li>
                                     );  
                                 }
                         }}
