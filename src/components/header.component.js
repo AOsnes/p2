@@ -6,10 +6,20 @@ export default class Header extends Component {
     constructor(props){
         super(props);
         this.standby = this.standby.bind(this);
+        this.logoutHandler = this.logoutHandler.bind(this);
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
     }
+    
+    logoutHandler(){
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          deleteCookie(cookies[i].split("=")[0]);
+        }
+        window.location.reload(false);
+    }
+
 
     render(){
         return (
@@ -44,7 +54,7 @@ export default class Header extends Component {
                             <div className="dropdownArrow"></div>
                             <div className="dropdownMenu">
                                 <ul>
-                                    <Link to=""><li className="logoutButton">Log Out</li></Link>
+                                    <li onClick={this.logoutHandler} className="logoutButton">Log ud</li>
                                 </ul>
                             </div>
                         </div>
@@ -54,3 +64,14 @@ export default class Header extends Component {
         );
     }
 }
+
+ function setCookie(name, value, expirydays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (expirydays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = name + "=" + value + "; " + expires;
+ }
+ 
+ function deleteCookie(name){
+   setCookie(name,"",-1);
+ }
