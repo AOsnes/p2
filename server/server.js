@@ -45,8 +45,55 @@ exports.getUserinfo = async function getUserinfo(id){
         throw error;
     }
 }
+//Finds the time interval for the one day view and one week view. Defaults to the next monday if the date passed is a Saturday or Sunday
+exports.getDateInterval = function getDateInterval(date, days){
+    if (days === '1'){
+        if (date.getDay() >= 1 && date.getDay() <= 5){
+            let interval = oneDayInterval(date);
+            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        } else {
+            date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
+            let interval = oneDayInterval(date);
+            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        }
+    } else {
+        if (date.getDay() >= 1 && date.getDay() <= 5) {
+            let interval = fiveDayInterval(date);
+            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        } else {
+            date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
+            let interval = fiveDayInterval(date);
+            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
+            return interval;
+        }
+    }
+}
 
 //Cursed crusty code to get the schedule:
+//Takes the passed date and creates an interval starting at 00:00:00 and ends at 23:59:59
+exports.oneDayInterval = function oneDayInterval(date) {
+    let start = new Date(date.getTime());
+    start.setHours(0, 0, 0);
+    let end = new Date(date.getTime());
+    end.setHours(23, 59, 59);
+    return {start, end};
+}
+
+//Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
+exports.fiveDayInterval = function fiveDayInterval(date){
+    let start = new Date(date.getTime());
+    start.setDate(start.getDate() - (start.getDay() - 1));
+    start.setHours(0, 0, 0);
+    let end = new Date(date.getTime());
+    end.setDate(end.getDate() + (5 - end.getDay()));
+    end.setHours(23, 59, 59);
+    return {start, end}
+}
+
+
 //This function queries lessons for a given user at a given interval and date
 exports.getSchedule = async function getSchedule(user, date, days) {
     try {
@@ -86,53 +133,6 @@ exports.getSchedule = async function getSchedule(user, date, days) {
     } catch(error){
         throw error;
     }
-}
-
-//Finds the time interval for the one day view and one week view. Defaults to the next monday if the date passed is a Saturday or Sunday
-function getDateInterval(date, days){
-    if (days === '1'){
-        if (date.getDay() >= 1 && date.getDay() <= 5){
-            let interval = oneDayInterval(date);
-            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
-            return interval;
-        } else {
-            date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
-            let interval = oneDayInterval(date);
-            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
-            return interval;
-        }
-    } else {
-        if (date.getDay() >= 1 && date.getDay() <= 5) {
-            let interval = fiveDayInterval(date);
-            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
-            return interval;
-        } else {
-            date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
-            let interval = fiveDayInterval(date);
-            console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
-            return interval;
-        }
-    }
-}
-
-//Takes the passed date and creates an interval starting at 00:00:00 and ends at 23:59:59
-function oneDayInterval(date) {
-    let start = new Date(date.getTime());
-    start.setHours(0, 0, 0);
-    let end = new Date(date.getTime());
-    end.setHours(23, 59, 59);
-    return {start, end};
-}
-
-//Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
-function fiveDayInterval(date){
-    let start = new Date(date.getTime());
-    start.setDate(start.getDate() - (start.getDay() - 1));
-    start.setHours(0, 0, 0);
-    let end = new Date(date.getTime());
-    end.setDate(end.getDate() + (5 - end.getDay()));
-    end.setHours(23, 59, 59);
-    return {start, end}
 }
 
 let logger = (req, res, next) => {
