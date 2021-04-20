@@ -32,14 +32,14 @@ export default class Header extends Component {
                                 } else{
                                     return(
                                         <li className="headerItem" id="headerLegalName">
-                                        <p id="headerLegalNameText"> </p>
-                                    </li>
+                                            <p id="headerLegalNameText"></p>
+                                        </li>
                                     );  
                                 }
                         }}
                     </UserContext.Consumer>
                     <li className="headerItem">
-                        <div className="dropdownButton">
+                        <Link className="dropdownButton" to="#">
                             <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
                             <div className="dropdownArrow"></div>
                             <div className="dropdownMenu">
