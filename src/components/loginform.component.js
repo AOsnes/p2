@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AiOutlineUser, AiOutlineKey } from 'react-icons/ai'
 import { Redirect } from 'react-router';
+import { updateIdValue, updateNameValue, updateRoleValue } from '../UserContext';
 
 export default class LoginForm extends Component {
     constructor(props){
@@ -35,7 +36,6 @@ export default class LoginForm extends Component {
                 document.cookie = `id=${response.id};Secure=true`;
                 document.cookie = `role=${response.role};Secure=true`;
                 document.cookie = `name=${response.name};Secure=true`;
-                this.setState({redirect: "/skema"});
                 window.location.reload(false);
             } else {
                 console.log(response);
@@ -44,6 +44,11 @@ export default class LoginForm extends Component {
     }
 
     render(){
+        if(document.cookie){
+            if(updateIdValue(document.cookie) !== undefined && updateNameValue(document.cookie) !== undefined && updateRoleValue(document.cookie) !== undefined){
+                return <Redirect to={"/skema"}/>
+            }
+        }
         if(this.state.redirect) {
             return <Redirect push to={this.state.redirect}/>
         }

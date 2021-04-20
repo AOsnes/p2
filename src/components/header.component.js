@@ -6,10 +6,20 @@ export default class Header extends Component {
     constructor(props){
         super(props);
         this.standby = this.standby.bind(this);
+        this.logoutHandler = this.logoutHandler.bind(this);
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
     }
+    
+    logoutHandler(){
+        var cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          deleteCookie(cookies[i].split("=")[0]);
+        }
+        window.location.reload(false);
+    }
+
 
     render(){
         return (
@@ -32,19 +42,19 @@ export default class Header extends Component {
                                 } else{
                                     return(
                                         <li className="headerItem" id="headerLegalName">
-                                        <p id="headerLegalNameText"> </p>
-                                    </li>
+                                            <p id="headerLegalNameText"></p>
+                                        </li>
                                     );  
                                 }
                         }}
                     </UserContext.Consumer>
                     <li className="headerItem">
-                        <Link className="dropdownButton">
+                        <Link className="dropdownButton" to="#">
                             <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
-                            <div class="dropdownArrow"></div>
-                            <div class="dropdownMenu">
+                            <div className="dropdownArrow"></div>
+                            <div className="dropdownMenu">
                                 <ul>
-                                    <li className="logoutButton">Log Out</li>
+                                    <li onClick={this.logoutHandler} className="logoutButton">Log ud</li>
                                 </ul>
                             </div>
                         </Link>
@@ -54,3 +64,14 @@ export default class Header extends Component {
         );
     }
 }
+
+ function setCookie(name, value, expirydays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (expirydays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = name + "=" + value + "; " + expires;
+ }
+ 
+ function deleteCookie(name){
+   setCookie(name,"",-1);
+ }

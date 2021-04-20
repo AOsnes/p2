@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { BiEdit } from 'react-icons/bi';
 import { UserContext } from '../UserContext';
+import { Redirect } from 'react-router';
+import { updateIdValue, updateNameValue, updateRoleValue } from '../UserContext';
 
 export default class Sidebar extends Component {
     render() {
+        if(updateIdValue(document.cookie) === undefined || updateNameValue(document.cookie) === undefined || updateRoleValue(document.cookie) === undefined){
+            return <Redirect to={"/"}/>
+        }
         return (
             <ul className="sidebar" data-testid="sidebar">
                 <div className="sideContainer">

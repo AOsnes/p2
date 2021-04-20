@@ -1,4 +1,4 @@
-/*skema component styling*/
+/*  General Schedule Styling */
 .skemaContainer{
     position: relative;
     background-color:#E5E5E5;
@@ -7,11 +7,14 @@
     width: 80%;
     height: 80%;
 }
-  
-.center {
+
+/* Header Text */
+.dayText {
     text-align: center;
+
 }
 
+/* grid style */
 .grid-item {
     border: 1px solid rgba(0, 0, 0, 0.8);
     padding: 5px;
