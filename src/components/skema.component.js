@@ -34,7 +34,11 @@ export default class Skema extends Component{
 
     render(){
         if(!this.state.skema.length){
-            return null;
+            return(
+            <div className="skemaError center">
+                <p>There was an error loading your schedule</p>
+            </div>
+            );
         }
         return(
             <div className="skemaContainer">
