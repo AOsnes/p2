@@ -1,7 +1,8 @@
 const {MongoClient} = require("mongodb");
+require('dotenv').config();
 
 const uri = process.env.URI;
-
+console.log(uri);
 const client = new MongoClient(uri, {
     useUnifiedTopology: true
 });
@@ -51,7 +52,7 @@ async function login(username, password) {
 
     } finally {
         // Ensures that the client will close when you finish/error
-        //await client.close();
+        //await client.close()qqqq
     }
 }
 
@@ -65,32 +66,32 @@ async function insertLessons() {
                 "class": "sw2b2-21",
                 "teacherID": "60608f0389177a0bb0679e78",
                 "description": "Bare lav avanceret lineær algebra i ikke har lært om lol",
-                "startTime": new Date(2021, 3, 13, 12, 00),
-                "endTime": new Date(2021, 3, 13, 12, 45)
+                "startTime": new Date(2021, 3, 19, 12, 00),
+                "endTime": new Date(2021, 3, 19, 12, 45)
             },
             {
                 "subject": "Dansk",
                 "class": "sw2b2-22",
                 "teacherID": "60608f0389177a0bb0679e78",
                 "description": "Læs bog",
-                "startTime": new Date(2021, 3, 13, 12, 45),
-                "endTime": new Date(2021, 3, 13, 13, 30)
+                "startTime": new Date(2021, 3, 20, 12, 45),
+                "endTime": new Date(2021, 3, 20, 13, 30)
             },
             {
                 "subject": "Engelsk",
                 "class": "sw2b2-22",
                 "teacherID": "60608f0389177a0bb0679e78",
                 "description": "Today we will speak English",
-                "startTime": new Date(2021, 3, 13, 9, 30),
-                "endTime": new Date(2021, 3, 13, 10, 15)
+                "startTime": new Date(2021, 3, 21, 9, 30),
+                "endTime": new Date(2021, 3, 21, 10, 15)
             },
             {
                 "subject": "Dansk",
                 "class": "sw2b2-22",
                 "teacherID": "60608f0389177a0bb0679e78",
                 "description": "Læs bog",
-                "startTime": new Date(2021, 3, 13, 8, 45),
-                "endTime": new Date(2021, 3, 13, 9, 30)
+                "startTime": new Date(2021, 3, 22, 8, 45),
+                "endTime": new Date(2021, 3, 22, 9, 30)
             },
         ];
         const result = await doc.insertMany(lessonInserts);
@@ -212,10 +213,10 @@ console.log(nextDay);*/
 
 //login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
-let string = new Date().toLocaleDateString();
-console.log(string);
-let newDate = new Date(string);
-console.log(newDate);
+//let string = new Date().toLocaleDateString();
+//console.log(string);
+//let newDate = new Date(string);
+//console.log(newDate);
 
 //let date = new Date();
 //getDateInterval(date, 5);
