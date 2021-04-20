@@ -44,7 +44,7 @@ export default class Header extends Component {
                             <div class="dropdownArrow"></div>
                             <div class="dropdownMenu">
                                 <ul>
-                                    <li className="logoutButton">Log Out</li>
+                                    <Link to="../123"><li className="logoutButton">Log Out</li></Link>
                                 </ul>
                             </div>
                         </Link>
