@@ -2,7 +2,6 @@
 .skemaContainer{
     position: relative;
     background-color:#E5E5E5;
-    top: 15%;
     left: 15%;
     width: 80%;
     height: 80%;
@@ -11,20 +10,11 @@
 /* Header Text */
 .dayText {
     text-align: center;
-
 }
 
 /* grid style */
-.grid-item {
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 5px;
-    font-size: 30px;
-    text-align: center;
-    border-left: none;
-    
-}
 
-.grid-container {
+.gridContainer {
     position: relative;
     left: 5%;
     width: 90%;
@@ -32,4 +22,21 @@
     grid-template-columns: 120px auto;
     padding: 10px;
     padding-bottom: 40px;
+}
+
+.gridItem {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    font-size: 30px;
+    text-align: center;
+    border-left: none;
+}
+
+.gridLessonItem {
+    border-right: none;
+}
+
+/* Error Message */
+.skemaError{
+    text-align: center;
 }
