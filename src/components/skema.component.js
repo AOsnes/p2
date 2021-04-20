@@ -43,7 +43,7 @@ export default class Skema extends Component{
         }
         return(
             <div className="skemaContainer">
-                <h1 className="dayText center">TODAY</h1>
+                <h1 className="dayText">TODAY</h1>
                 {this.state.skema.map((skemabrik) => {
                     return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
                 })}
