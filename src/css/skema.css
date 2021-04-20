@@ -1,0 +1,13 @@
+/*skema component styling*/
+.skemaContainer{
+    position: relative;
+    background-color:#E5E5E5;
+    top: 15%;
+    left: 15%;
+    width: 80%;
+    height: 80%;
+}
+  
+.center {
+    text-align: center;
+}
