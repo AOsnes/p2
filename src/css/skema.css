@@ -1,4 +1,4 @@
-/* Schedule General Styling */
+/*  General Schedule Styling */
 .skemaContainer{
     position: relative;
     background-color:#E5E5E5;
@@ -8,6 +8,7 @@
     height: 80%;
 }
 
+/* Header Text */
 .dayText {
     text-align: center;
 }

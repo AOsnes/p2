@@ -1,4 +1,4 @@
-/*skemabrik styling*/
+/* General Skemabrik Style */
 .skemabrik{
     position: relative;
     left: 25%;
@@ -7,7 +7,8 @@
     border: none;
     margin: none;
 }
-  
+
+/* Text */
 .skemabrikText{
     position: relative;
     font-weight: bold;
@@ -16,11 +17,13 @@
     border: none;
     margin: none;
 }
-  
+
+/* Icon */
 .skemabrikIcon{
     width: 40px;
 }
-  
+
+/* Colours of Subjects */
 .Dansk{
     background-color: #FF4D4D;
 }
