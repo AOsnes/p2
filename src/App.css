@@ -4,6 +4,7 @@ body{
   color: #06142F;
 }
 
+/*Header styling*/
 .headerItem{
   list-style-type: none;
   height: 100px;
@@ -75,6 +76,7 @@ body{
   background-color: #F5F5F5;
 }
 
+/*Loginform styling*/
 .loginFieldset{
   max-width:500px;
   margin:auto;
@@ -129,6 +131,7 @@ body{
   text-align: center;
 }
 
+/*Sidebar styling*/
 .sidebar{
   margin: 0;
   padding: 0;
@@ -165,6 +168,7 @@ body{
   text-align: center;
 }
 
+/*skema component styling*/
 .skemaContainer{
   position: absolute;
   background-color:#E5E5E5;
@@ -179,4 +183,63 @@ body{
 }
 .center {
   text-align: center;
+}
+
+/*skemabrik styling*/
+.skemabrik{
+  position: relative;
+  left: 25%;
+  width: 60%;
+  vertical-align: middle;
+  border: none;
+  margin: none;
+}
+
+.skemabrikText{
+  position: relative;
+  font-weight: bold;
+  font-size: 37.9px;
+  color: #FFFFFF;
+  border: none;
+  margin: none;
+}
+
+.skemabrikIcon{
+  width: 40px;
+}
+
+.Dansk{
+  background-color: #FF4D4D;
+}
+
+.Matematik{
+  background-color: #3385FF;
+}
+
+.Engelsk{
+  background-color: #DD99FF;
+}
+
+.Religion{
+  background-color: #FF00B8;
+}
+
+.Historie{
+  background-color: #FFFF66;
+}
+
+.Billedkunst{
+  background-color: #FF944D;
+}
+
+.Idræt{
+  background-color: #00B3B3;
+}
+
+.N\/T{
+  background-color: #47D147;
+}
+
+.Pause{
+  background-color: #696969;
 }
