@@ -4,6 +4,14 @@ body{
   color: #06142F;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .headerItem{
   list-style-type: none;
   height: 100px;
@@ -11,8 +19,6 @@ body{
 
 .header {
   background-color: white;
-  margin: 0;
-  padding: 0;
   height: 100px;
 }
 
@@ -21,18 +27,84 @@ body{
   grid-template-columns: 290px auto 112.5px;
 }
 
-#headerLegalName{
-  text-align: right;
-  font-size: 1.777em;
-  vertical-align: middle;
+/* Dropdown Button Styling */
+.dropdownButton {
+  height: 100px;
+  width: 100%;
+  background: #fff;
+  position: relative;
+  cursor: pointer;
 }
 
-#headerLegalName p{
-  margin: 0;
+.dropdownArrow {
+  height: 0;
+  width: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #06142F;
   position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0px;
+  left: 65px;
+}
+
+.dropdownButton:focus .dropdownArrow {
+  top: -10px;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #06142F;
+  border-top: 10px solid transparent;
+
+}
+
+.dropdownMenu {
+  list-style-type: none;
+  display: none;
+  background: #555;
+  background: rgba(33, 33, 33, 0.9);
+  margin-top: 20px;
+  left: -300px;
+}
+
+.dropdownButton:focus .dropdownMenu {
+  display: block;
+  position: absolute;
+  top: 100%;
+}
+
+.dropdownMenu ul li {
+  list-style-type: none;
+  display: block;
+  height: 100px;
+  width: 400px;
+  font-size: 1.5em;
+  line-height: 2.5em;
+  padding: 20px;
+  color: #fff;
+  border-bottom: 2px solid #06142F;
+}
+
+.dropdownMenu ul li:last-child {
+  border-bottom: none;
+}
+
+.dropdownMenu ul li:focus {
+  background: #06142F;
+  color: #fff;
+}
+
+.logoutButton {
+  position: relative;
+  text-align: center;
+}
+
+/* Header Username */
+#headerLegalName{} /* DO NOT DELETE THIS */
+
+#headerLegalName p{
+  font-size: 1.777em;
+  text-align: right;
+  position: relative;
+  top: 34px;
 }
 
 #headerProfilePicture{
@@ -52,7 +124,6 @@ body{
   position: relative;
   left: 100px;
   top: -34px;
-  margin: 0px;
 }
 
 .headerButton{
@@ -140,6 +211,7 @@ body{
 
 .sideButton{
   width: 100%;
+  height: 100px;
   display: block;
   margin: 0;
   border: none;
@@ -174,9 +246,6 @@ body{
   height: 80%;
 }
 
-.dayText{
-  
-}
 .center {
   text-align: center;
 }
