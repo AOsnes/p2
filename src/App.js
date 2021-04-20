@@ -1,7 +1,13 @@
-import './App.css';
 import React from 'react';
 import {UserContext} from './UserContext';
 import {BrowserRouter as Router, Switch, Route, useLocation} from "react-router-dom";
+
+import './css/body.css';
+import './css/header.css';
+import './css/loginform.css';
+import './css/sidebar.css';
+import './css/skema.css';
+import './css/skemabrik.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";

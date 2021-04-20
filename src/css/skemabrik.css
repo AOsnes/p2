@@ -1,0 +1,58 @@
+/*skemabrik styling*/
+.skemabrik{
+    position: relative;
+    left: 25%;
+    width: 60%;
+    vertical-align: middle;
+    border: none;
+    margin: none;
+}
+  
+.skemabrikText{
+    position: relative;
+    font-weight: bold;
+    font-size: 37.9px;
+    color: #FFFFFF;
+    border: none;
+    margin: none;
+}
+  
+.skemabrikIcon{
+    width: 40px;
+}
+  
+.Dansk{
+    background-color: #FF4D4D;
+}
+  
+.Matematik{
+    background-color: #3385FF;
+}
+  
+.Engelsk{
+    background-color: #DD99FF;
+}
+  
+.Religion{
+    background-color: #FF00B8;
+}
+  
+.Historie{
+    background-color: #FFFF66;
+}
+  
+.Billedkunst{
+    background-color: #FF944D;
+}
+  
+.Idræt{
+    background-color: #00B3B3;
+}
+  
+.N\/T{
+    background-color: #47D147;
+}
+  
+.Pause{
+    background-color: #696969;
+}
