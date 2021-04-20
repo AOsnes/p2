@@ -45,7 +45,7 @@ export default class LoginForm extends Component {
 
     render(){
         if(this.state.redirect) {
-            return <Redirect to={this.state.redirect}/>
+            return <Redirect push to={this.state.redirect}/>
         }
         return(
             <form className="loginForm" data-testid="loginForm" onSubmit={this.handleSubmit}>

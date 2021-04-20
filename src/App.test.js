@@ -2,9 +2,10 @@ import {render, fireEvent, screen, cleanup} from '@testing-library/react';
 import { link } from 'fs-extra';
 import {BrowserRouter as Router, useLocation} from "react-router-dom";
 import App from './App';
+import Skema from './components/skema.component';
 import Header from './components/header.component';
-import LoginForm from './components/loginform.component';
 import Sidebar from './components/sidebar.component';
+import LoginForm from './components/loginform.component';
 import NoMatchError from './components/noMatchError.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 
@@ -131,6 +132,9 @@ test('submits data when user presses submit', async () => {
             json: () => Promise.resolve({id: "60608f0389177a0bb0679e78"})
         })
     )});
+    delete window.location;
+    window.location = { reload: jest.fn() };
+
 
     render(<Router><LoginForm /></Router>); 
     const usernameElement = screen.getByPlaceholderText("Brugernavn");
@@ -185,4 +189,11 @@ test('finds the correct name value in cookie', () => {
         extractedName = updateNameValue(cookie);
         expect(extractedName).toEqual(expected);
     });
+});
+
+test('skema component renders correctly', () => {
+    /* render(<Skema/>)
+    const linkElement = screen.getByText("There was an error loading your schedule");
+    expect(linkElement).toBeInTheDocument(); 
+    Bruh jeg magter ikke at skrive fetch mocks igen :)*/
 });
