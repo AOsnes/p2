@@ -8,7 +8,7 @@
     position: relative;
     top: 0%;
     display: grid;
-    grid-template-columns: 290px auto 112.5px;
+    grid-template-columns: 290px auto;
 }
 
 .headerItem{
@@ -49,12 +49,26 @@
     top: -34px;
 }
 
-/* Legal Name */
-#headerLegalNameText{
+/* Profile Container */
+.headerProfileContainer{
+    display: grid;
+    grid-template-columns: auto 112.5px;
+}
+
+/* Profile Name */
+#headerProfileName{
     font-size: 1.777em;
     text-align: right;
     position: relative;
     top: 34px;
+}
+
+/* Profile Picture */
+#headerProfilePicture{
+    border-radius: 50%;
+    position: relative;
+    top: 12.5px;
+    left: 12.5px;
 }
 
 /* Dropdown Function */
@@ -65,13 +79,6 @@
     position: relative;
     top: 0%;
     cursor: pointer;
-}
-
-#headerProfilePicture{ /* Profile Picture */
-    border-radius: 50%;
-    position: relative;
-    top: 12.5px;
-    left: 12.5px;
 }
 
 .dropdownArrow {
@@ -125,7 +132,6 @@
 .logoutButton {
     position: relative;
     text-align: center;
-    background-color: #0075FF;
     opacity: 1;
 }
 

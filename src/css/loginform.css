@@ -53,11 +53,11 @@
     border: none;
     cursor: pointer;
     width: 100%;
-    opacity: 0.9;
+    opacity: 1;
 }
   
 .loginButton:hover{
-    opacity: 1;
+    opacity: 0.9;
 }
 
 .loginButton:disabled{
