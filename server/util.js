@@ -1,5 +1,4 @@
-const ObjectId = require("mongodb").ObjectId
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 /* Returns user information if login success else return null */
 
 const uri = process.env.URI;
