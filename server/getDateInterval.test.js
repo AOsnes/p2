@@ -1,4 +1,4 @@
-import { getDateInterval} from './server';
+import { getDateInterval} from './util';
 
 test('getDateIntervalMonday1', () =>{
     let start = new Date(2021, 3, 19, 0, 0, 0);
