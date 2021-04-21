@@ -48,7 +48,6 @@ function Login(){
     return (
         <div>
             {/* TODO: Skal ikke render header, men en velkommen besked i stedet for */}
-            <Header linkTo="/"/>
             <LoginForm/>
         </div>
     )
