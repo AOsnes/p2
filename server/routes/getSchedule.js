@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getUserinfo, getSchedule} = require('../util').default;
+const {getUserinfo, getSchedule} = require('../util');
 
 router.route('/:id/:date/:days').get((req, res) =>{
     let id = req.params.id;
