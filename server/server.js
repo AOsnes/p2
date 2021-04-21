@@ -7,14 +7,13 @@ const fs = require('fs');
 const app = express();
 require('dotenv').config();
 
-
 const port = process.env.PORT || 5000
 const uri = process.env.URI;
 
 const client = new MongoClient(uri, {useUnifiedTopology: true});
 
 /* Returns user information if login success else return null */
-exports.authenticate = async function authenticate(username, password){
+async function authenticate(username, password){
     try {
         const database = client.db('P2');
         const doc = database.collection("users");
@@ -31,7 +30,7 @@ exports.authenticate = async function authenticate(username, password){
 
 /* If we already have the ID, we can use this function to get the information about the user
 information returned here MUST NOT be confidential! maybe very cursed :)*/
-exports.getUserinfo = async function getUserinfo(id){
+async function getUserinfo(id){
     try {
         const database = client.db('P2');
         const doc = database.collection("users");
@@ -46,7 +45,7 @@ exports.getUserinfo = async function getUserinfo(id){
     }
 }
 //Finds the time interval for the one day view and one week view. Defaults to the next monday if the date passed is a Saturday or Sunday
-exports.getDateInterval = function getDateInterval(date, days){
+function getDateInterval(date, days){
     if (days === '1'){
         if (date.getDay() >= 1 && date.getDay() <= 5){
             let interval = oneDayInterval(date);
@@ -74,7 +73,7 @@ exports.getDateInterval = function getDateInterval(date, days){
 
 //Cursed crusty code to get the schedule:
 //Takes the passed date and creates an interval starting at 00:00:00 and ends at 23:59:59
-exports.oneDayInterval = function oneDayInterval(date) {
+function oneDayInterval(date) {
     let start = new Date(date.getTime());
     start.setHours(0, 0, 0);
     let end = new Date(date.getTime());
@@ -83,7 +82,7 @@ exports.oneDayInterval = function oneDayInterval(date) {
 }
 
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
-exports.fiveDayInterval = function fiveDayInterval(date){
+function fiveDayInterval(date){
     let start = new Date(date.getTime());
     start.setDate(start.getDate() - (start.getDay() - 1));
     start.setHours(0, 0, 0);
@@ -95,7 +94,7 @@ exports.fiveDayInterval = function fiveDayInterval(date){
 
 
 //This function queries lessons for a given user at a given interval and date
-exports.getSchedule = async function getSchedule(user, date, days) {
+async function getSchedule(user, date, days) {
     try {
         /* await client.connect(); */
         const database = client.db('P2');
@@ -174,3 +173,5 @@ client.connect();
 app.listen(port, () =>{
     console.log(`Server is listening on port ${port}`);
 });
+
+module.exports = {authenticate, getUserinfo, oneDayInterval, fiveDayInterval, getDateInterval, getSchedule};
