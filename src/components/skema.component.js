@@ -56,14 +56,14 @@ export default class Skema extends Component{
     render(){
         if(!this.state.skema.length){
             return(
-                <div className="skemaError">
+                <div className="textCenter">
                     <p>There was an error loading your schedule</p>
                 </div>
             );
         }
         return(
             <div className="skemaContainer">
-                <h1 className="dayText">{this.state.viewText}</h1>
+                <h1 className="textCenter">{this.state.viewText}</h1>
 
                 <div className="gridContainer">
                     <div className="gridItem">08.00</div>

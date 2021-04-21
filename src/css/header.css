@@ -93,10 +93,10 @@
 .dropdownMenu {
     list-style-type: none;
     display: none;
-    background: #555;
-    background: rgba(33, 33, 33, 0.9);
+    background-color: #06142F;
     margin-top: 20px;
     left: -300px;
+    width: 290px;
 }
 
 .dropdownButton:focus .dropdownMenu {
@@ -130,4 +130,7 @@
 .logoutButton {
     position: relative;
     text-align: center;
+    background-color: #0075FF;
+    margin: 10%;
+    width: 250px;
 }

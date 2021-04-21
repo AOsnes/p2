@@ -7,11 +7,6 @@
     height: 80%;
 }
 
-/* Header Text */
-.dayText {
-    text-align: center;
-}
-
 /* grid style */
 
 .gridContainer {
@@ -34,9 +29,4 @@
 
 .gridLessonItem {
     border-right: none;
-}
-
-/* Error Message */
-.skemaError{
-    text-align: center;
 }
