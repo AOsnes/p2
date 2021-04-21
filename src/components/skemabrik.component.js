@@ -6,7 +6,7 @@ export default class Skemabrik extends Component {
         return(
             <div className={`skemabrik ${subject}`}>
                 <p className="skemabrikText">
-                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt="Pause Logo"/>
+                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo`}/>
                     {subject}
                 </p>
             </div>
