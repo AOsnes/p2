@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getUserinfo} = require('../server');
+const {getUserinfo} = require('../util');
 
 router.route('/:id').get( (req, res) => {
     let id = req.params.id

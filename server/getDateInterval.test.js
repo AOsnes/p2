@@ -1,4 +1,4 @@
-import { getDateInterval} from './server';
+import { getDateInterval} from './util';
 
 const oneDayInterval = jest.fn();
 

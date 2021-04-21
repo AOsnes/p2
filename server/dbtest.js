@@ -211,7 +211,7 @@ console.log(nextDay);*/
 
 
 
-//login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);

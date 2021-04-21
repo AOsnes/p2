@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {authenticate} = require('../server'); 
+const {authenticate} = require('../util'); 
 
 router.route('/').post( (req, res) => {
     let username = req.body.username;
