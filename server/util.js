@@ -1,4 +1,4 @@
-const { MongoClient, ObjectId } = require("mongodb");
+import { MongoClient, ObjectId } from "mongodb";
 /* Returns user information if login success else return null */
 
 const uri = process.env.URI;
@@ -126,4 +126,4 @@ async function getSchedule(user, date, days) {
     }
 }
 
-module.exports = {getSchedule, fiveDayInterval, oneDayInterval, getDateInterval, getUserinfo, authenticate}
+export default {getSchedule, fiveDayInterval, oneDayInterval, getDateInterval, getUserinfo, authenticate}
