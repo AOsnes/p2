@@ -85,7 +85,7 @@
     left: 65px;
 }
 
-.dropdownButton:focus .dropdownArrow {
+.showArrow {
     top: -10px;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -102,7 +102,7 @@
     left: -300px;
 }
 
-.dropdownButton:focus .dropdownMenu {
+.showMenu {
     display: block;
     position: absolute;
     z-index: 1;
