@@ -130,7 +130,7 @@
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "modulePaths": ["<rootDir>/server/", "<rootDir>"],
-    "moduleDirectories":["node_modules", "server"],
+    "moduleDirectories":["node_modules", "server/node_modules"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
