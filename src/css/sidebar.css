@@ -18,14 +18,14 @@
     background-color: #06142f;
     color: white;
     text-align:center;
-    opacity: 0.9;
+    opacity: 1;
     text-decoration: none;
     padding-top: 10px;
     padding-bottom: 10px;
 }
   
 .sideButton:hover{
-    opacity: 1;
+    opacity: 0.9;
 }
 
 /* Icons of Buttons */
