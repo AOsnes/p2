@@ -7,6 +7,8 @@ export default class Header extends Component {
         super(props);
         this.standby = this.standby.bind(this);
         this.logoutHandler = this.logoutHandler.bind(this);
+        this.toggleFocus = this.toggleFocus.bind(this);
+        this.unFocus = this.unFocus.bind(this);
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
@@ -20,6 +22,19 @@ export default class Header extends Component {
         window.location.reload(false);
     }
 
+    toggleFocus(){
+        document.getElementById("dropdownMenuId").classList.toggle("showMenu");
+        document.getElementById("dropdownArrowId").classList.toggle("showArrow");
+    }
+
+    unFocus() {
+        if (document.getElementById("dropdownArrowId").classList.contains('showArrow')) {
+            document.getElementById("dropdownArrowId").classList.remove('showArrow');
+        }
+        if (document.getElementById("dropdownMenuId").classList.contains('showMenu')) {
+            document.getElementById("dropdownMenuId").classList.remove('showMenu');
+        }
+    }
 
     render(){
         return (
@@ -49,10 +64,10 @@ export default class Header extends Component {
                         }}
                     </UserContext.Consumer>
                     <li className="headerItem">
-                        <Link className="dropdownButton" to="#">
+                        <Link className="dropdownButton" onClick={this.toggleFocus} onBlur={this.unFocus} to="#">
                             <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
-                            <div className="dropdownArrow"></div>
-                            <div className="dropdownMenu">
+                            <div className="dropdownArrow" id="dropdownArrowId"></div>
+                            <div className="dropdownMenu" id="dropdownMenuId">
                                 <ul>
                                     <li onClick={this.logoutHandler} className="logoutButton">Log ud</li>
                                 </ul>
