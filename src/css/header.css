@@ -97,9 +97,10 @@
     list-style-type: none;
     display: none;
     background-color: #06142F;
-    margin-top: 20px;
-    left: -300px;
+    margin-top: 21.75px;
+    height: 250px;
     width: 290px;
+    right: -20px;
 }
 
 .dropdownButton:focus .dropdownMenu {
@@ -112,30 +113,22 @@
 .dropdownMenu ul li {
     list-style-type: none;
     display: block;
-    height: 100px;
-    width: 400px;
+    margin: 10%;
+    margin-top: 60%;
+    width: 80%;
+    border-radius: 1%;
     font-size: 1.5em;
     line-height: 2.5em;
-    padding: 20px;
-    color: #fff;
-    border-bottom: 2px solid #06142F;
-}
-
-.dropdownMenu ul li:last-child {
-    border-bottom: none;
-}
-
-.dropdownMenu ul li:focus {
-    background: #06142F;
     color: #fff;
 }
-
-
 
 .logoutButton {
     position: relative;
     text-align: center;
     background-color: #0075FF;
-    margin: 10%;
-    width: 250px;
+    opacity: 1;
+}
+
+.logoutButton:hover{
+    opacity: 0.9;
 }
