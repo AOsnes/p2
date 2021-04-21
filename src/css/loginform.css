@@ -1,4 +1,9 @@
 /*General Loginform Style*/
+.loginForm{
+    margin-top: 18%;
+    margin-bottom: 18%;
+}
+
 .loginFieldset{
     max-width:500px;
     margin:auto;
@@ -15,6 +20,7 @@
 /* Header */
 #loginHeader{
     text-align: center;
+    margin: 15px;
 }
 
 /* Icons */

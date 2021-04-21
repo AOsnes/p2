@@ -5,6 +5,8 @@
 }
 
 .headerContainer{
+    position: relative;
+    top: 0%;
     display: grid;
     grid-template-columns: 290px auto 112.5px;
 }
@@ -61,6 +63,7 @@
     width: 100%;
     background: #fff;
     position: relative;
+    top: 0%;
     cursor: pointer;
 }
 
@@ -126,6 +129,8 @@
     background: #06142F;
     color: #fff;
 }
+
+
 
 .logoutButton {
     position: relative;
