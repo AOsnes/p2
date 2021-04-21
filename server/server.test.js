@@ -4,7 +4,7 @@
 //const uri = process.env.URI;
 //const client = new MongoClient(uri, {useUnifiedTopology: true});
 //const {getUserinfo, getSchedule, getDateInterval, oneDayInterval, fiveDayInterval} = require('./server');
-import {getUserinfo, getSchedule, oneDayInterval, fiveDayInterval, getDateInterval} from './server';
+import {getUserinfo, getSchedule, oneDayInterval, fiveDayInterval, getDateInterval} from './util';
 
 
 test('oneDayIntervalMonday', () =>{
@@ -77,12 +77,13 @@ test('fiveDayIntervalFriday', () =>{
     expect(fiveDayInterval(new Date (2021, 3, 23))).toEqual(expectedObject);
 })
 
+/* Same as above??!?
 test('fiveDayIntervalFriday', () =>{
     let start = new Date(2021, 3, 19, 0, 0, 0);
     let end = new Date(2021, 3, 23, 23, 59, 59);
     let expectedObject = {start, end};
     expect(fiveDayInterval(new Date (2021, 3, 23))).toEqual(expectedObject);
-})
+}) */
 
 
 test('getDateIntervalMonday1', () =>{
