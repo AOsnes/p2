@@ -4,7 +4,7 @@
 //const uri = process.env.URI;
 //const client = new MongoClient(uri, {useUnifiedTopology: true});
 //const {getUserinfo, getSchedule, getDateInterval, oneDayInterval, fiveDayInterval} = require('./server');
-import {getUserinfo, getSchedule, oneDayInterval, fiveDayInterval, getDateInterval} from './util';
+import {getUserinfo, getSchedule, oneDayInterval, fiveDayInterval, getDateInterval} from './server';
 
 
 test('oneDayIntervalMonday', () =>{
