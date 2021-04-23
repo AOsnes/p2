@@ -80,13 +80,13 @@ export default class Header extends Component {
     }
 }
 
- function setCookie(name, value, expirydays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (expirydays*24*60*60*1000));
-  var expires = "expires="+ d.toUTCString();
-  document.cookie = name + "=" + value + "; " + expires;
- }
- 
- function deleteCookie(name){
-   setCookie(name,"",-1);
- }
+function setCookie(name, value, expirydays) {
+    let d = new Date();
+    d.setTime(d.getTime() + (expirydays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + value + "; " + expires;
+}
+
+function deleteCookie(name) {
+    setCookie(name, "", -1);
+}

@@ -164,8 +164,6 @@ test('finds the correct id value in cookie', () => {
         extractedId = updateIdValue(cookie);
         expect(extractedId).toEqual(expected);
     });
-    
-    expect(extractedId).toEqual(expected);
 });
 
 test('finds the correct role value in cookie', () => {

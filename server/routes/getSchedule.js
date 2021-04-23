@@ -12,7 +12,7 @@ router.route('/:id/:date/:days').get((req, res) =>{
             res.end();
         })
         .catch(error => {
-            res.status(400).send({errpr: error.toString()});
+            res.status(400).send({error: error.toString()});
         });
     }).catch(error => {
         res.status(404).send({error: error.toString()});
