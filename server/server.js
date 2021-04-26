@@ -121,11 +121,6 @@ exports.getSchedule = async function getSchedule(user, date, days) {
             throw new Error("No documents found!")
         } else {
             await cursor.close();
-            //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
-            for (let lesson of schedule) {
-                lesson.startTime += date.getTimezoneOffset();
-                lesson.endTime += date.getTimezoneOffset();
-            }
             return schedule;
         }
     } catch(error){

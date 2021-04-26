@@ -4,14 +4,27 @@
     width: 95%;
     text-align: left;
     border: none;
-    margin: none;
+}
+/* Hovering on skemabrik */
+.skemabrik:hover{
+    cursor: pointer;
+    filter:brightness(80%);
 }
 
 /* Text */
-.skemabrikText{
+.skemabrikTitleText{
     position: relative;
     font-weight: bold;
-    font-size: 37.9px;
+    font-size: 2em;
+    color: #FFFFFF;
+    border: none;
+    margin: none;
+}
+
+.skemabrikDescriptionText{
+    position: relative;
+    font-weight: bold;
+    font-size: 1em;
     color: #FFFFFF;
     border: none;
     margin: none;
