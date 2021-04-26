@@ -193,6 +193,49 @@ function fiveDayInterval(date){
 }
 
 
+async function createLesson(id, className, subject, start, end, description, recurrences, interval){
+    try {
+        //await client.connect();
+        const database = client.db('P2');
+        const doc = database.collection("lessons");
+        let result;
+        if (recurrences > 1){
+            let lessonInserts = [];
+
+            for (let i = 0; i < recurrences; i++){
+                let start1 = new Date(start);
+                let end1 = new Date(end);
+                start1.setDate(start1.getDate() + i * interval);
+                end1.setDate(end1.getDate() + i * interval);
+
+                lessonInserts[i] = {
+                    "subject": subject,
+                    "class": className,
+                    "teacherID": id.toString(),
+                    "description": description,
+                    "startTime": start1,
+                    "endTime": end1,
+                }
+            }
+            //console.log(lessonInserts);
+
+            result = await doc.insertMany(lessonInserts);
+        } else {
+            result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
+        }
+        console.dir(result.insertedCount);
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+
+//TODO: Lav validering på at brugeren der laver en lesson er en lærer
+
+login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "CS", new Date(2021, 3, 23, 13, 0, 0), new Date(2021, 3, 23, 14, 30, 0), "Vi skal spille CS :)", 4, 7)).catch(console.dir);
+
+
+
 
 //insertUsers().catch(console.dir);
 //insertLessons().catch(console.dir);
@@ -211,14 +254,14 @@ console.log(nextDay);*/
 
 
 
-login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+//login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);
 //let newDate = new Date(string);
 //console.log(newDate);
 
-//let date = new Date();
+
 //getDateInterval(date, 5);
 
 
