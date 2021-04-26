@@ -219,13 +219,16 @@ async function createLesson(id, className, subject, start, end, description, rec
                 }
             }
             //console.log(lessonInserts);
-
-            result = await doc.insertMany(lessonInserts);
+            doc.insertMany(lessonInserts)
+            .then(result => console.log(result.insertedCount))
+            .catch(console.dir);
 
         } else {
             result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
+            doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+            .then(result => console.log(result.insertedCount))
+            .catch(console.dir);
         }
-        console.dir(result.insertedCount);
     } finally {
         // Ensures that the client will close when you finish/error
         await client.close();
@@ -251,7 +254,6 @@ async function deleteLesson(id){
         await client.connect();
         const database = client.db('P2');
         const doc = database.collection("lessons");
-        //const result = await doc.deleteOne({"_id": ObjectId.createFromHexString(id)});
         doc.deleteOne({"_id": ObjectId.createFromHexString(id)})
         .then(result => {console.log(result.deletedCount); if (result.deletedCount === 0) {throw new Error("No such lesson")}})
         .catch(console.dir);
