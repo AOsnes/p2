@@ -21,7 +21,6 @@ export default class Skema extends Component{
             view: 1,
             viewText: weekday
         }, () =>{
-            console.log(this.state.date)
             let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
             this.getSchedule(requestString)
         })
