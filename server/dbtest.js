@@ -1,8 +1,9 @@
 const {MongoClient} = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 require('dotenv').config();
 
 const uri = process.env.URI;
-console.log(uri);
+//console.log(uri);
 const client = new MongoClient(uri, {
     useUnifiedTopology: true
 });
@@ -220,6 +221,7 @@ async function createLesson(id, className, subject, start, end, description, rec
             //console.log(lessonInserts);
 
             result = await doc.insertMany(lessonInserts);
+
         } else {
             result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
         }
@@ -230,9 +232,46 @@ async function createLesson(id, className, subject, start, end, description, rec
     }
 }
 
+async function updateLesson(id, changes){
+    try {
+        await client.connect();
+        const database = client.db('P2');
+        const doc = database.collection("lessons");
+        const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
+        doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+        .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+        .catch(console.dir);
+    } catch(error) {
+        throw error;
+    }
+}
+
+async function deleteLesson(id){
+    try {
+        await client.connect();
+        const database = client.db('P2');
+        const doc = database.collection("lessons");
+        //const result = await doc.deleteOne({"_id": ObjectId.createFromHexString(id)});
+        doc.deleteOne({"_id": ObjectId.createFromHexString(id)})
+        .then(result => {console.log(result.deletedCount); if (result.deletedCount === 0) {throw new Error("No such lesson")}})
+        .catch(console.dir);
+
+    } catch(error) {
+        throw error;
+    }
+
+}
+
+
+
+
+
+
 //TODO: Lav validering på at brugeren der laver en lesson er en lærer
 
-login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "CS", new Date(2021, 3, 23, 13, 0, 0), new Date(2021, 3, 23, 14, 30, 0), "Vi skal spille CS :)", 4, 7)).catch(console.dir);
+//updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
+deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
+//login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "Religion", new Date(2021, 4, 3, 10, 45, 0), new Date(2021, 4, 3, 11, 30, 0), "Praise Allah! :)", 3, 7)).catch(console.dir);
 
 
 
