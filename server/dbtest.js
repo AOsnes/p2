@@ -230,8 +230,9 @@ async function createLesson(id, className, subject, start, end, description, rec
     }
 }
 
+//TODO: Lav validering på at brugeren der laver en lesson er en lærer
 
-login("test", "test").then(result => createLesson(result, "sw2b2-20", "Matematik", new Date(2021, 3, 22, 14, 0, 0), new Date(2021, 3, 22, 14, 45, 0), "Lav SLIAL >:(", 1, 7)).catch(console.dir);
+login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "CS", new Date(2021, 3, 23, 13, 0, 0), new Date(2021, 3, 23, 14, 30, 0), "Vi skal spille CS :)", 4, 7)).catch(console.dir);
 
 
 
@@ -259,15 +260,6 @@ console.log(nextDay);*/
 //console.log(string);
 //let newDate = new Date(string);
 //console.log(newDate);
-/*
-let date = new Date();
-for (let i = 0; i < 10; i++) {
-    let date1 = new Date(date);
-    date1.setDate(date1.getDate() + i * 7);
-
-    console.log(date1);
-}
-*/
 
 
 //getDateInterval(date, 5);
