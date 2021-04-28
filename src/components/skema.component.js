@@ -48,7 +48,7 @@ export default class Skema extends Component{
     }
 
     getSchedule(requestString){
-        fetch(`http://localhost:5000/getSchedule/${requestString}`,{
+        fetch(`http://localhost:5000/schedule/${requestString}`,{
             method:'GET',
         })
         .then(response => response.json())

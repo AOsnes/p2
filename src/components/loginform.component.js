@@ -27,7 +27,13 @@ export default class LoginForm extends Component {
         fetch("http://localhost:5000/login",{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(this.state),
+            body: JSON.stringify(this.state, (key, val) =>{
+                if(key === 'redirect'){
+                    return undefined
+                } else {
+                    return val
+                }
+            }),
         })
         .then(response => response.json())
         .then(response => {
@@ -36,6 +42,9 @@ export default class LoginForm extends Component {
                 document.cookie = `id=${response.id};Secure=true`;
                 document.cookie = `role=${response.role};Secure=true`;
                 document.cookie = `name=${response.name};Secure=true`;
+                this.setState({
+                    redirect: "/skema"
+                })
                 window.location.reload(false);
             } else {
                 console.log(response);
@@ -46,11 +55,8 @@ export default class LoginForm extends Component {
     render(){
         if(document.cookie){
             if(updateIdValue(document.cookie) !== undefined && updateNameValue(document.cookie) !== undefined && updateRoleValue(document.cookie) !== undefined){
-                return <Redirect to={"/skema"}/>
+                return <Redirect push to={this.state.redirect}/>
             }
-        }
-        if(this.state.redirect) {
-            return <Redirect push to={this.state.redirect}/>
         }
         return(
             <form className="loginForm" data-testid="loginForm" onSubmit={this.handleSubmit}>

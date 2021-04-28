@@ -74,7 +74,6 @@ function Afleveringer(){
 
 function NoMatch(){
     let location = useLocation();
-    console.log(123)
     return(
         <div>
             <Header linkTo="/"/>

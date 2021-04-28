@@ -12,7 +12,7 @@ router.route('/:id').get( (req, res) => {
         res.end();
     })
     .catch( error => {
-        res.status(200).send({error: error.toString()});
+        res.status(400).send({error: error.toString()});
         res.end();
     })
 })

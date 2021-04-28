@@ -10,7 +10,6 @@ router.route('/').post( (req, res) => {
         res.end();
     })
     .catch( error => {
-        //TODO: Af en eller anden grund smider den ikke error over i response, fix.
         res.status(400).send({error: error.toString()});
         res.end();
     });
