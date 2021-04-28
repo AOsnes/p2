@@ -1,8 +1,9 @@
 const {MongoClient} = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 require('dotenv').config();
 
 const uri = process.env.URI;
-console.log(uri);
+//console.log(uri);
 const client = new MongoClient(uri, {
     useUnifiedTopology: true
 });
@@ -193,6 +194,89 @@ function fiveDayInterval(date){
 }
 
 
+async function createLesson(id, className, subject, start, end, description, recurrences, interval){
+    try {
+        //await client.connect();
+        const database = client.db('P2');
+        const doc = database.collection("lessons");
+        let result;
+        if (recurrences > 1){
+            let lessonInserts = [];
+
+            for (let i = 0; i < recurrences; i++){
+                let start1 = new Date(start);
+                let end1 = new Date(end);
+                start1.setDate(start1.getDate() + i * interval);
+                end1.setDate(end1.getDate() + i * interval);
+
+                lessonInserts[i] = {
+                    "subject": subject,
+                    "class": className,
+                    "teacherID": id.toString(),
+                    "description": description,
+                    "startTime": start1,
+                    "endTime": end1,
+                }
+            }
+            //console.log(lessonInserts);
+            doc.insertMany(lessonInserts)
+            .then(result => console.log(result.insertedCount))
+            .catch(console.dir);
+
+        } else {
+            result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
+            doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+            .then(result => console.log(result.insertedCount))
+            .catch(console.dir);
+        }
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+
+async function updateLesson(id, changes){
+    try {
+        await client.connect();
+        const database = client.db('P2');
+        const doc = database.collection("lessons");
+        const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
+        doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+        .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+        .catch(console.dir);
+    } catch(error) {
+        throw error;
+    }
+}
+
+async function deleteLesson(id){
+    try {
+        await client.connect();
+        const database = client.db('P2');
+        const doc = database.collection("lessons");
+        doc.deleteOne({"_id": ObjectId.createFromHexString(id)})
+        .then(result => {console.log(result.deletedCount); if (result.deletedCount === 0) {throw new Error("No such lesson")}})
+        .catch(console.dir);
+
+    } catch(error) {
+        throw error;
+    }
+
+}
+
+
+
+
+
+
+//TODO: Lav validering på at brugeren der laver en lesson er en lærer
+
+//updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
+deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
+//login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "Religion", new Date(2021, 4, 3, 10, 45, 0), new Date(2021, 4, 3, 11, 30, 0), "Praise Allah! :)", 3, 7)).catch(console.dir);
+
+
+
 
 //insertUsers().catch(console.dir);
 //insertLessons().catch(console.dir);
@@ -211,14 +295,14 @@ console.log(nextDay);*/
 
 
 
-login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+//login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);
 //let newDate = new Date(string);
 //console.log(newDate);
 
-//let date = new Date();
+
 //getDateInterval(date, 5);
 
 

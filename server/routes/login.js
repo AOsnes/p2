@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {authenticate} = require('../util'); 
+const {authenticate} = require('../server'); 
 
 router.route('/').post( (req, res) => {
     let username = req.body.username;
@@ -11,7 +11,7 @@ router.route('/').post( (req, res) => {
     })
     .catch( error => {
         //TODO: Af en eller anden grund smider den ikke error over i response, fix.
-        res.status(200).send({error: error.toString()});
+        res.status(400).send({error: error.toString()});
         res.end();
     });
 });

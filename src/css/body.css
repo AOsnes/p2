@@ -10,7 +10,17 @@ body{
   padding: 0;
 }
 
-/* Text center */
+/* Text Center */
 .textCenter{
   text-align: center;
+}
+
+/* Teacher Styling */
+.teacher{
+  background-color: #00CC00;
+}
+
+/* Student Styling */
+.student{
+  background-color: #0075FF;
 }

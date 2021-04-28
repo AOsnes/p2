@@ -48,32 +48,28 @@ export default class Header extends Component {
                     </li>
                     <UserContext.Consumer>
                         {user => {
-                                if(user.name){
+                            if(user.name){
                                 return(
-                                    <li className="headerItem" id="headerLegalName">
-                                    <p id="headerLegalNameText">{user.name}</p>
-                                </li>
-                                );
-                                } else{
-                                    return(
-                                        <li className="headerItem" id="headerLegalName">
-                                            <p id="headerLegalNameText"></p>
+                                    <div className="headerProfileContainer">
+                                        <li className="headerItem">
+                                            <p id="headerProfileName">{user.name}</p>
                                         </li>
-                                    );  
-                                }
+                                        <li className="headerItem">
+                                            <Link className="dropdownButton" onClick={this.toggleFocus} onBlur={this.unFocus} to="#">
+                                                <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
+                                                <div className="dropdownArrow" id="dropdownArrowId"></div>
+                                                <div className="dropdownMenu" id="dropdownMenuId">
+                                                    <ul>
+                                                        <li onClick={this.logoutHandler} className={`logoutButton ${user.role}`}>Log ud</li>
+                                                    </ul>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    </div>
+                                );
+                            } 
                         }}
                     </UserContext.Consumer>
-                    <li className="headerItem">
-                        <Link className="dropdownButton" onClick={this.toggleFocus} onBlur={this.unFocus} to="#">
-                            <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
-                            <div className="dropdownArrow" id="dropdownArrowId"></div>
-                            <div className="dropdownMenu" id="dropdownMenuId">
-                                <ul>
-                                    <li onClick={this.logoutHandler} className="logoutButton">Log ud</li>
-                                </ul>
-                            </div>
-                        </Link>
-                    </li>
                 </div>
             </ul>
         );
@@ -90,3 +86,4 @@ function setCookie(name, value, expirydays) {
     let expires = "expires=" + d.toUTCString();
     document.cookie = name + "=" + value + "; " + expires;
 }
+
