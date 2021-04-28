@@ -76,6 +76,10 @@ export default class Header extends Component {
     }
 }
 
+function deleteCookie(name) {
+    setCookie(name, "", -1);
+}
+
 function setCookie(name, value, expirydays) {
     let d = new Date();
     d.setTime(d.getTime() + (expirydays * 24 * 60 * 60 * 1000));
@@ -83,6 +87,3 @@ function setCookie(name, value, expirydays) {
     document.cookie = name + "=" + value + "; " + expires;
 }
 
-function deleteCookie(name) {
-    setCookie(name, "", -1);
-}
