@@ -89,7 +89,7 @@ test('nomatcherror renders correctly', () => {
     );
     const linkElement = screen.getByTestId('pageNotFoundContainer');
     const pElement = screen.getByTestId('pageNotFound');
-    const expectedElementContent = "404: Page not found, could not find page: /skemas";
+    const expectedElementContent = "404: Siden blev ikke fundet, kunne ikke finde side: /skemas";
 
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(pElement);
