@@ -156,11 +156,11 @@ app.use(logger);
 const classesRouter = require('./routes/classes');
 const loginRouter = require('./routes/login');
 const userinfoRouter = require('./routes/userinfo');
-const getScheduleRouter = require('./routes/getSchedule');
+const scheduleRouter = require('./routes/schedule');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
-app.use('/getSchedule', getScheduleRouter);
+app.use('/schedule', scheduleRouter);
 
 client.connect()
 
