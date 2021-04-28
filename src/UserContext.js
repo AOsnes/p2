@@ -8,7 +8,7 @@ export function updateIdValue(cookie) {
                 .split('; ')
                 .find(row => row.startsWith('id='))
                 .split('=')[1];
-        } catch (e) {}
+        } catch (e) {console.log(e)}
     }
     return cookieIdValue
 }
@@ -21,7 +21,7 @@ export function updateRoleValue(cookie){
                 .split('; ')
                 .find(row => row.startsWith('role='))
                 .split('=')[1];
-        } catch (e) {}
+        } catch (e) {console.log(e)}
     }
     return cookieRoleValue;
 }
@@ -34,7 +34,7 @@ export function updateNameValue(cookie){
                 .split('; ')
                 .find(row => row.startsWith('name='))
                 .split('=')[1];
-        } catch (e) {}
+        } catch (e) {console.log(e)}
     }
     return cookieNameValue;
 }

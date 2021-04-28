@@ -26,12 +26,13 @@ test('header renders correctly with name', () => {
     const standby = jest.fn();
     const linkElement = screen.getByTestId("header");
     const logoElement = screen.getByTestId("headerButton");
-    const profilBilledeElement = screen.getByAltText("profilBillede");
+    const profilePictureElement = screen.getByAltText("profilBillede");
+    const profileNameElement = screen.queryByText("Testy McTestFace");
 
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(logoElement);
-    expect(linkElement).toContainElement(profilBilledeElement);
-    expect(linkElement).toContainElement(screen.queryByText("Testy McTestFace"));
+    expect(linkElement).toContainElement(profilePictureElement);
+    expect(linkElement).toContainElement(profileNameElement);
     expect(standby).toBeCalledTimes(0); 
     /* There wasnt an error loading the profile picture */
     /* Might need to change in the future */
