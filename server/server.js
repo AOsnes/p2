@@ -81,7 +81,7 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 }
 
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
-function fiveDayInterval(date){
+ let fiveDayInterval = exports.fiveDayInterval = function (date){
     let start = new Date(date.getTime());
     start.setDate(start.getDate() - (start.getDay() - 1));
     start.setHours(0, 0, 0);

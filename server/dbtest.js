@@ -14,18 +14,18 @@ async function insertUsers() {
         const database = client.db('P2');
         const doc = database.collection("users");
         const userInserts = [{
-                "username": "admin",
-                "password": "admin",
-                "name": "admin",
-                "role": "teacher",
-                "class": ["sw2b2-20", "sw2b2-21", "sw2b2-22"]
+                "username": "jaron",
+                "password": "celler",
+                "name": "Jaron Celler",
+                "role": "student",
+                "class": ["sw2b2-21"]
             },
             {
-                "username": "arthur",
+                "username": "brian",
                 "password": "password",
-                "name": "Arthur",
+                "name": "Brain",
                 "role": "student",
-                "class": ["sw2b2-20"]
+                "class": ["sw2b2-22"]
             },
         ];
         const result = await doc.insertMany(userInserts);
@@ -134,11 +134,6 @@ async function getSchedule(user, date, days) {
             return schedule;
         } else {
             await cursor.close();
-            //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
-            for (lesson of schedule) {
-                lesson.startTime += date.getTimezoneOffset();
-                lesson.endTime += date.getTimezoneOffset();
-            }
             return schedule;
         }
     } finally {
@@ -272,13 +267,13 @@ async function deleteLesson(id){
 //TODO: Lav validering på at brugeren der laver en lesson er en lærer
 
 //updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
-deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
+//deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
 //login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "Religion", new Date(2021, 4, 3, 10, 45, 0), new Date(2021, 4, 3, 11, 30, 0), "Praise Allah! :)", 3, 7)).catch(console.dir);
 
 
 
 
-//insertUsers().catch(console.dir);
+insertUsers().catch(console.dir);
 //insertLessons().catch(console.dir);
 //let data = login("test", "test").then(console.log).catch(console.dir);
 
