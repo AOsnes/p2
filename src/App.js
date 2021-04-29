@@ -77,8 +77,8 @@ function NoMatch(){
     return(
         <div>
             <Header linkTo="/"/>
-            <NoMatchError location={location.pathname}/>
             <Sidebar/>
+            <NoMatchError location={location.pathname}/>
         </div>
     )
 }
