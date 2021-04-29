@@ -69,6 +69,8 @@
     position: relative;
     top: 12.5px;
     left: 12.5px;
+    height: 75px;
+    width: 75px;
 }
 
 /* Dropdown Function */

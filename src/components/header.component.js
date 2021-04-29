@@ -56,7 +56,7 @@ export default class Header extends Component {
                                         </li>
                                         <li className="headerItem">
                                             <Link className="dropdownButton" onClick={this.toggleFocus} onBlur={this.unFocus} to="#">
-                                                <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede" width="75" height="75"></img>
+                                                <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede"></img>
                                                 <div className="dropdownArrow" id="dropdownArrowId"></div>
                                                 <div className="dropdownMenu" id="dropdownMenuId">
                                                     <ul>
