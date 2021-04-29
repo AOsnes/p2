@@ -8,6 +8,7 @@ export default class Skemabrik extends Component {
             showSkemabrikModal: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
+        this.disableModal = this.disableModal.bind(this);
     }
 
     /* Beregn hvor stor højde der skal være på elemented ud fra end time - start time,*/
@@ -33,6 +34,14 @@ export default class Skemabrik extends Component {
         return hhmm
     }
 
+    /* Called from the child component */
+    disableModal(){
+        this.setState({
+            showSkemabrikModal: false
+        })
+    }
+
+    /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal
@@ -43,18 +52,19 @@ export default class Skemabrik extends Component {
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
         const startTime = new Date(this.props.skemabrik.startTime);
-        const description = this.props.skemabrik.description;
         const style = {
             height: this.calculateHeight(startTime, endTime),
         }
         return([
-            <div key="time" className="gridItem">{this.toHHMM(startTime)}</div>,
-            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+            <div key="time" className="gridItem">{this.toHHMM(startTime)} 
+                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
+            </div>,
+            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
                 <p className="skemabrikTitleText">
                     <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                     {subject}
                 </p>
-                {this.state.showSkemabrikModal ? <SkemabrikModal details={description}/> : null}
+                
             </div>
             ]
         )
