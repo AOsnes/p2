@@ -1,0 +1,20 @@
+/* How the modal text looks like */
+.skemabrikModalText{
+    position: relative;
+    font-weight: bold;
+    font-size: 1em;
+    color: #FFFFFF;
+    border: none;
+    margin: none;
+}
+
+/* centering modal */
+.detailsModal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 33%;
+    height: 33%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+}

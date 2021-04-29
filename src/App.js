@@ -8,12 +8,14 @@ import './css/loginform.css';
 import './css/sidebar.css';
 import './css/skema.css';
 import './css/skemabrik.css';
+import './css/skemabrikModal.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
-import Skema from "./components/skema.component"
+import Skema from "./components/skema.component";
+import SkemabrikForm from "./components/skemabrikForm.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -28,6 +30,9 @@ class App extends React.Component{
                         </Route>
                         <Route path="/afleveringer">
                             <Afleveringer/>
+                        </Route>
+                        <Route path="/redigerSkema">
+                            <RedigerSkema/>
                         </Route>
                         <Route exact path="/">
                             <Login/>
@@ -68,6 +73,16 @@ function Afleveringer(){
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
+        </div>
+    )
+}
+
+function RedigerSkema(){
+    return(
+        <div>
+            <Header linkTo="/skema"/>
+            <Sidebar/>
+            <SkemabrikForm/>
         </div>
     )
 }

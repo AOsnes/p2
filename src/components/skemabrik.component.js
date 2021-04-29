@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import SkemabrikDetails from './skemabrikDetails.component';
+import SkemabrikModal from './skemabrikModal.component';
 
 export default class Skemabrik extends Component {
     constructor(props){
         super(props)
         this.state = {
-            showSkemabrikDetailsComponent: false,
+            showSkemabrikModal: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
     }
@@ -34,10 +34,10 @@ export default class Skemabrik extends Component {
     }
 
     onSkemaClick(e){
-        this.setState({
-            showSkemabrikDetailsComponent: true,
-        });
-    }
+        this.setState(prevState => ({
+            showSkemabrikModal: !prevState.showSkemabrikModal
+            }));
+        }
 
     render(){
         const subject = this.props.skemabrik.subject;
@@ -54,7 +54,7 @@ export default class Skemabrik extends Component {
                     <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                     {subject}
                 </p>
-                {this.state.showSkemabrikDetailsComponent ? <SkemabrikDetails details={description}/> : null}
+                {this.state.showSkemabrikModal ? <SkemabrikModal details={description}/> : null}
             </div>
             ]
         )
