@@ -6,7 +6,7 @@ import { updateIdValue, updateNameValue, updateRoleValue } from '../UserContext'
 export default class LoginForm extends Component {
     constructor(props){
         super(props);
-        this.state = {username: '', password: '', redirect: null};
+        this.state = {username: '', password: '', redirect: "/skema"};
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
