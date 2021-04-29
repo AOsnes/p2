@@ -8,12 +8,14 @@ import './css/loginform.css';
 import './css/sidebar.css';
 import './css/skema.css';
 import './css/skemabrik.css';
+import './css/afleveringer.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
 import Skema from "./components/skema.component"
+import Afleveringer from "./components/afleveringer.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -27,7 +29,7 @@ class App extends React.Component{
                             <Skemapage/>
                         </Route>
                         <Route path="/afleveringer">
-                            <Afleveringer/>
+                            <Afleveringerpage/>
                         </Route>
                         <Route exact path="/">
                             <Login/>
@@ -63,11 +65,12 @@ function Skemapage(){
     )
 }
 
-function Afleveringer(){
+function Afleveringerpage(){
     return(
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
+            <Afleveringer/>
         </div>
     )
 }
