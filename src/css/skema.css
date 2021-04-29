@@ -2,9 +2,10 @@
 .skemaContainer{
     position: relative;
     background-color:#E5E5E5;
-    left: 15%;
-    width: 80%;
+    left: 10%;
+    width: 85%;
     height: 80%;
+    margin-top: 3.5%;
 }
 
 /* grid style */
@@ -19,10 +20,12 @@
 }
 
 .gridItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid rgba(0, 0, 0, 0.8);
     padding: 5px;
     font-size: 30px;
-    text-align: center;
     border-left: none;
 }
 
