@@ -28,15 +28,6 @@
     -webkit-text-stroke: 1px black;
 }
 
-.skemabrikDescriptionText{
-    position: relative;
-    font-weight: bold;
-    font-size: 1.333em;
-    color: #FFFFFF;
-    border: none;
-    margin: none;
-}
-
 /* Icon */
 .skemabrikIcon{
     position: relative;
