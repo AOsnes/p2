@@ -2,6 +2,7 @@
 .header {
     background-color: white;
     height: 100px;
+    filter: drop-shadow(0 .125rem .25rem rgba(0,0,0,.075));
 }
 
 .headerContainer{

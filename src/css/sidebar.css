@@ -6,6 +6,7 @@
     background-color: #c4c4c4;
     position: fixed;
     height: 100%;
+    filter: drop-shadow(.125rem 0 .25rem rgba(0,0,0,.075));
 }
 
 /* Buttons */
