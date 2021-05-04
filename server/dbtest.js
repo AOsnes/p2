@@ -1,4 +1,4 @@
-const {MongoClient} = require("mongodb");
+const {MongoClient, GridFSBucket} = require("mongodb");
 const ObjectId = require("mongodb").ObjectId;
 require('dotenv').config();
 
@@ -260,7 +260,19 @@ async function deleteLesson(id){
 }
 
 
+async function saveFile(){
+    await client.connect();
+    const database = client.db('P2');
+    let bucket = new GridFSBucket(database);
+    
 
+
+}
+
+async function getFile(){
+
+
+}
 
 
 
@@ -273,7 +285,7 @@ async function deleteLesson(id){
 
 
 
-insertUsers().catch(console.dir);
+//insertUsers().catch(console.dir);
 //insertLessons().catch(console.dir);
 //let data = login("test", "test").then(console.log).catch(console.dir);
 
@@ -290,7 +302,7 @@ console.log(nextDay);*/
 
 
 
-//login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);
