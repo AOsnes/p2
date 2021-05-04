@@ -10,6 +10,7 @@ import './css/skema.css';
 import './css/skemabrik.css';
 import './css/skemabrikModal.css';
 import './css/afleveringer.css';
+import './css/skemabrikForm.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";

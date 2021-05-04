@@ -1,0 +1,25 @@
+/* TODO: Maybe change absolute position? 
+This just makes the form be in the middle for now */
+.opretSkemabrik{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    grid-template-columns: 70% auto;
+}
+
+.legend{
+    font-size: 2em;
+    font-weight: 900;
+}
+
+.inputText{
+    font-size: 1em;
+    font-weight: 900;
+    padding-right: 1em;
+}
+
+.wideOption{
+    grid-column: 1 / span 2;
+}
