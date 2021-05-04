@@ -30,7 +30,7 @@ export default class Sidebar extends Component {
                             if (user.role === 'teacher') {
                                 return (
                                     <li className="sideItem" data-testid="redigerSkema">
-                                        <Link className="sideButton" to="/skema/create"> <BiEdit className="sideIcon" />Rediger Skema</Link>
+                                        <Link className="sideButton" to="/redigerSkema"> <BiEdit className="sideIcon" />Rediger Skema</Link>
                                     </li>
                                 );
                             }

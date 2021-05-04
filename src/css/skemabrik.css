@@ -1,10 +1,14 @@
 /* General Skemabrik Style */
 .skemabrik{
     position: relative;
-    width: 95%;
-    text-align: left;
-    border: none;
+    width: 98.5%;
+    border: 1px solid black;
+    border-left: none;
+    border-right: none;
+    display: flex;
+    align-items: center;
 }
+
 /* Hovering on skemabrik */
 .skemabrik:hover{
     cursor: pointer;
@@ -13,25 +17,21 @@
 
 /* Text */
 .skemabrikTitleText{
+    display: flex;
+    align-items: center;
     position: relative;
-    font-weight: bold;
-    font-size: 2em;
-    color: #FFFFFF;
+    font-weight: 900;
+    font-size: 2.369em;
     border: none;
     margin: none;
-}
-
-.skemabrikDescriptionText{
-    position: relative;
-    font-weight: bold;
-    font-size: 1em;
-    color: #FFFFFF;
-    border: none;
-    margin: none;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
 }
 
 /* Icon */
 .skemabrikIcon{
+    position: relative;
     width: 40px;
 }
 

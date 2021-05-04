@@ -2,6 +2,7 @@
 .header {
     background-color: white;
     height: 100px;
+    filter: drop-shadow(0 .125rem .25rem rgba(0,0,0,.075));
 }
 
 .headerContainer{
@@ -69,6 +70,8 @@
     position: relative;
     top: 12.5px;
     left: 12.5px;
+    height: 75px;
+    width: 75px;
 }
 
 /* Dropdown Function */

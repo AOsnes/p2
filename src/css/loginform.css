@@ -6,21 +6,30 @@
 
 .loginFieldset{
     max-width:500px;
-    margin:auto;
+    margin: auto;
     background-color: white;
 }
 
 .loginInputContainer {
-    display: -ms-flexbox; /* IE10 */
+    display: -ms-flexbox;
     display: flex;
-    width: 100%;
+    width: 90%;
     margin-bottom: 15px;
+    padding-left: 5%;
 }
 
 /* Header */
-#loginHeader{
-    text-align: center;
+.loginHeader{
+    position: relative;
     margin: 15px;
+    left: 2%;
+    display: grid;
+    grid-template-columns: 48px auto;
+}
+
+.loginName{
+    position: relative;
+    top: 10px;
 }
 
 /* Icons */

@@ -8,12 +8,17 @@ import './css/loginform.css';
 import './css/sidebar.css';
 import './css/skema.css';
 import './css/skemabrik.css';
+import './css/skemabrikModal.css';
+import './css/afleveringer.css';
+import './css/skemabrikForm.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
-import Skema from "./components/skema.component"
+import Skema from "./components/skema.component";
+import SkemabrikForm from "./components/skemabrikForm.component";
+import Afleveringer from "./components/afleveringer.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -27,7 +32,10 @@ class App extends React.Component{
                             <Skemapage/>
                         </Route>
                         <Route path="/afleveringer">
-                            <Afleveringer/>
+                            <Afleveringerpage/>
+                        </Route>
+                        <Route path="/redigerSkema">
+                            <RedigerSkema/>
                         </Route>
                         <Route exact path="/">
                             <Login/>
@@ -63,11 +71,22 @@ function Skemapage(){
     )
 }
 
-function Afleveringer(){
+function Afleveringerpage(){
     return(
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
+            <Afleveringer/>
+        </div>
+    )
+}
+
+function RedigerSkema(){
+    return(
+        <div>
+            <Header linkTo="/skema"/>
+            <Sidebar/>
+            <SkemabrikForm/>
         </div>
     )
 }
@@ -77,8 +96,8 @@ function NoMatch(){
     return(
         <div>
             <Header linkTo="/"/>
-            <NoMatchError location={location.pathname}/>
             <Sidebar/>
+            <NoMatchError location={location.pathname}/>
         </div>
     )
 }
