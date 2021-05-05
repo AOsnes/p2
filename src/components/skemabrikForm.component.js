@@ -32,7 +32,6 @@ export default class SkemabrikForm extends Component{
                 }
             }),
         })
-        .then(response => response.json())
         .then(response =>{
             console.log(response);
         })
@@ -88,15 +87,13 @@ export default class SkemabrikForm extends Component{
                         <label className="inputText advancedText" htmlFor="advanced">Avanceret</label>
                         <input className="checkbox" type="checkbox" name="advanced" onChange={this.handleChange}></input>
                     </div>
-                    <select name="subject" onChange={this.handleChange}>
-                        <option selected disabled>Vælg et fag</option>
+                    <select defaultValue={fag[0]} name="subject" onChange={this.handleChange}>
                         {fag.map(fag => {
                             return <option key={fag} value={fag}>{fag}</option>
                         })}
                     </select>
                     <label className="inputText" htmlFor="class">Klasse</label>
-                    <select name="class" onChange={this.handleChange}>
-                        <option selected disabled>Vælg en klasse</option>
+                    <select defaultValue={tempClasses[0]} name="class" onChange={this.handleChange}>
                         {tempClasses.map(klasse =>{
                             return <option key={klasse} value={klasse}>{klasse}</option>
                         })}
