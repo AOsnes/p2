@@ -121,8 +121,8 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         if (lessonCount === 0) {
             throw new Error("No documents found!");
         } else {
-            return schedule;
-        }
+                return schedule;
+            }
     } catch(error){
         throw error;
     }
