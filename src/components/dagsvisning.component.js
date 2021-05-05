@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BiCheckbox } from 'react-icons/bi';
 
 export default class Dagsvisning extends Component {
 
