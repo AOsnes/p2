@@ -19,7 +19,6 @@
     width: 33%;
     height: 33%;
     transform: translate(-50%, -50%);
-    background-color: red;
     border-radius: 10px;
 }
 
@@ -34,6 +33,28 @@
     z-index: 1;
 }
 
+/* Skema details text */
+.detailsText{
+    width: 98%;
+    height: 55%;
+    overflow-y: auto;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar{
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
 /* Text left */
 .textLeft{
     float: left;
@@ -41,6 +62,18 @@
 /* Text Right */
 .textRight{
     float: right;
+}
+
+.didSubmitModal{
+    position: fixed;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    background-color: #B4B4B4;
+    color: #00E7A2;
+    padding: 0.1em;
+    font-size: 1.5em;
 }
 
 /* Blur schedule when modal is clicked */

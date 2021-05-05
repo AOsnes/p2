@@ -11,6 +11,7 @@ export default class Skemabrik extends Component {
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
+        this.toHHMM = this.toHHMM.bind(this);
     }
 
     /* Beregn hvor stor højde der skal være på elemented ud fra end time - start time,*/
@@ -70,9 +71,9 @@ export default class Skemabrik extends Component {
         if(this.context.role === "student"){
             return([
                 <div key="time" className="gridItem">{this.toHHMM(startTime)} 
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
-                </div>,
-                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
+                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
+            </div>,
+                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                     <p className="skemabrikTitleText">
                         <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                         {subject}
@@ -83,15 +84,17 @@ export default class Skemabrik extends Component {
             )
         }
         else if (this.context.role === "teacher"){
-            return(
-                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
-                <p className="skemabrikTitleText">
-                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                    {subject}
-                </p>
-                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
-                </div>
-            )
+                return(
+                    <div className={this.props.weekday}>
+                        <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
+                            <p className="skemabrikTitleText">
+                                <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                                {subject}
+                            </p>
+                            {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
+                        </div>
+                    </div>
+                )
         }
     }
 }
