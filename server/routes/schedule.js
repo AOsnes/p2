@@ -13,9 +13,11 @@ router.route('/:id/:date/:days').get((req, res) =>{
         })
         .catch(error => {
             res.status(404).send({error: error.toString()});
+            res.end();
         });
     }).catch(error => {
         res.status(400).send({error: error.toString()});
+        res.end();
     });
 });
 
