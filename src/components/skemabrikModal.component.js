@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
-import { UserContext } from "../UserContext";
 
 export default class SkemabrikModal extends Component{
     constructor(props){
@@ -21,14 +20,7 @@ export default class SkemabrikModal extends Component{
                 <div className="detailsModal">
                     <div onClick={this.handleClick} className="close">&#10006;</div>
                     <div className="skemabrikModalText textLeft">{details}</div>
-                    <UserContext.Consumer>
-                        {user => {
-                            if(user.role === 'teacher')
-                                return(
-                                    <p className="skemabrikModalText textRight"> Klasse: {classes}</p>
-                                )
-                        }}
-                    </UserContext.Consumer>
+                    <p className="skemabrikModalText textRight"> Klasse: {classes}</p>
                 </div>,
                 document.getElementById('root')
             )
