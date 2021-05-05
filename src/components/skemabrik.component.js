@@ -9,6 +9,7 @@ export default class Skemabrik extends Component {
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
+        this.toHHMM = this.toHHMM.bind(this);
     }
 
     /* Beregn hvor stor højde der skal være på elemented ud fra end time - start time,*/
@@ -59,9 +60,9 @@ export default class Skemabrik extends Component {
         }
         return([
             <div key="time" className="gridItem">{this.toHHMM(startTime)} 
-                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
+                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
             </div>,
-            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
+            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                 <p className="skemabrikTitleText">
                     <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                     {subject}

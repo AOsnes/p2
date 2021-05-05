@@ -19,7 +19,6 @@
     width: 33%;
     height: 33%;
     transform: translate(-50%, -50%);
-    background-color: red;
     border-radius: 10px;
 }
 
@@ -32,6 +31,28 @@
     text-align: right;
     margin-right: 0.25em;
     z-index: 1;
+}
+
+/* Skema details text */
+.detailsText{
+    width: 98%;
+    height: 55%;
+    overflow-y: auto;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar{
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
 /* Text left */
@@ -53,11 +74,10 @@
     color: #00E7A2;
     padding: 0.1em;
     font-size: 1.5em;
-/* Blur schedule when modal is clicked */
 }
 
+/* Blur schedule when modal is clicked */
 .blur-filter{
     -webkit-filter: blur(2px);
     filter: blur(2px);
-
 }
