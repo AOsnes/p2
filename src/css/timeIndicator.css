@@ -1,0 +1,9 @@
+/* CSS for the line */
+.timeIndicator {
+    background-color: red;
+    position: relative;
+    width: 95%;
+    height: 2px;
+    top: 10px;
+    margin: auto;
+}

@@ -12,6 +12,7 @@ import './css/modals.css';
 import './css/afleveringer.css';
 import './css/skemabrikForm.css';
 import './css/toggleknap.css';
+import './css/timeIndicator.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
