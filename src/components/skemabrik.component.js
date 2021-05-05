@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import SkemabrikDetails from './skemabrikDetails.component';
+import { UserContext } from '../UserContext';
 
 export default class Skemabrik extends Component {
+    static contextType = UserContext;
     constructor(props){
         super(props)
         this.state = {
@@ -39,6 +41,12 @@ export default class Skemabrik extends Component {
         });
     }
 
+    calculatePosition(date){
+        let deltaHours = date.getHours() - 8;
+        let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
+        return `${minutesPercentage}%`;
+    }
+
     render(){
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
@@ -46,17 +54,32 @@ export default class Skemabrik extends Component {
         const description = this.props.skemabrik.description;
         const style = {
             height: this.calculateHeight(startTime, endTime),
+            position: 'absolute',
+            top: this.calculatePosition(startTime),
         }
-        return([
-            <div key="time" className="gridItem">{this.toHHMM(startTime)}</div>,
-            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
-                <p className="skemabrikTitleText">
-                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                    {subject}
-                </p>
-                {this.state.showSkemabrikDetailsComponent ? <SkemabrikDetails details={description}/> : null}
-            </div>
-            ]
-        )
+        if(this.context.role === "student"){
+            return([
+                <div key="time" className="gridItemOneDay">{this.toHHMM(startTime)}</div>,
+                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                    <p className="skemabrikTitleText">
+                        <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                        {subject}
+                    </p>
+                    {this.state.showSkemabrikDetailsComponent ? <SkemabrikDetails details={description}/> : null}
+                </div>
+                ]
+            )
+        }
+        else if (this.context.role === "teacher"){
+            return(
+                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                    <p className="skemabrikTitleText">
+                        <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                        {subject}
+                    </p>
+                    {this.state.showSkemabrikDetailsComponent ? <SkemabrikDetails details={description}/> : null}
+                </div>
+            )
+        }
     }
 }

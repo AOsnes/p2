@@ -1,9 +1,9 @@
 /* General Skemabrik Style */
 .skemabrik{
-    position: relative;
     width: 95%;
     text-align: left;
     border: none;
+    z-index: 1;
 }
 /* Hovering on skemabrik */
 .skemabrik:hover{

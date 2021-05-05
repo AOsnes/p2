@@ -15,16 +15,28 @@ export default class Skema extends Component{
         /* Maybe a little bit of a cursed oneliner */
         let weekday = this.getWeekday(new Date().getDay());
         let user = this.context;
-        this.setState({
-            id: user.id,
-            date: new Date().toISOString(),
-            view: 1,
-            viewText: weekday
-        }, () =>{
-            let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
-            this.getSchedule(requestString)
-        })
-
+        if(this.context.role === "student"){
+            this.setState({
+                id: user.id,
+                date: new Date().toISOString(),
+                view: 1,
+                viewText: weekday
+            }, () =>{
+                let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
+                this.getSchedule(requestString)
+            })
+        }
+        else if(this.context.role === "teacher"){
+            this.setState({
+                id: user.id,
+                date: new Date().toISOString(),
+                view: 1,
+                viewText: weekday
+            }, () =>{
+                let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
+                this.getSchedule(requestString)
+            })
+        }
     }
     /* returns the name of the day depending, day parameter should come from Date.getDay method. */
     getWeekday(day){
@@ -41,7 +53,8 @@ export default class Skema extends Component{
                     case 6: weekday = "Lørdag"; break;
                     default: /* TODO: Something is straight up buggin yuh */ break;
                 } break;
-            case 5: /* TODO: Week view */ break;
+            case 5: /* TODO: Five day view */ 
+                break;
             default: /* TODO: something is straight up buggin yuh */ break;
         }
         return weekday;
@@ -57,6 +70,32 @@ export default class Skema extends Component{
         });
     };
 
+    fiveDaySchedule(weekday){
+        return(
+            <div className={weekday}>
+                {this.state.skema.map((skemabrik) => {
+                        return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                    })}
+                <div className="scheduleBordersHour scheduleBorderFirst"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHour"></div>
+                <div className="scheduleBordersHalfHour"></div>
+            </div>
+        )
+    }
+
     render(){
         if(!this.state.skema.length){
             return(
@@ -65,15 +104,49 @@ export default class Skema extends Component{
                 </div>
             );
         }
-        return(
-            <div className="skemaContainer">
-                <h1 className="textCenter">{this.state.viewText}</h1>
-                <div className="gridContainer">
-                    {this.state.skema.map((skemabrik) => {
-                        return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
-                    })}
+        if(this.context.role === "teacher"){
+            return(
+                <div className="skemaContainer">
+                    <h1 className="textCenter">{this.state.viewText}</h1>
+                    <div className="gridContainerFiveDay">
+                        <div className="gridItemContainer">
+                            <div className="gridItemFiveDayHour timeOne">8:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">9:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">10:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">11:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">12:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">13:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">14:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">15:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                        </div>
+                        {this.fiveDaySchedule("Mandag")}
+                        {this.fiveDaySchedule("Tirsdag")}
+                        {this.fiveDaySchedule("Onsdag")}
+                        {this.fiveDaySchedule("Torsdag")}
+                        {this.fiveDaySchedule("Fredag")}
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
+        else if(this.context.role === "student"){
+            return(
+                <div className="skemaContainer">
+                    <h1 className="textCenter">{this.state.viewText}</h1>
+                    <div className="gridContainerOneDay">
+                        {this.state.skema.map((skemabrik) => {
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
+                        })}
+                    </div>
+                </div>
+            )
+        }
     }
 }
