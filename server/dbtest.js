@@ -1,5 +1,7 @@
 const {MongoClient, GridFSBucket} = require("mongodb");
 const ObjectId = require("mongodb").ObjectId;
+let fs = require('fs');
+
 require('dotenv').config();
 
 const uri = process.env.URI;
@@ -128,13 +130,27 @@ async function getSchedule(user, date, days) {
         }
 
         //Checks if the query had any results. 
-        if ((await cursor.count()) === 0) {
+        let lessonCount = await cursor.count();
+        await cursor.close();
+        if (lessonCount === 0) {
             console.log("No documents found!");
-            await cursor.close();
+            
             return schedule;
         } else {
-            await cursor.close();
-            return schedule;
+            if (days !== 1){
+                let scheduleArrays = [];
+                for (let i = 0; i < 5; i++) {
+                    scheduleArrays[i] = [];
+                }
+                for (let i = 0; i < lessonCount; i++) {
+                    scheduleArrays[schedule[i].startTime.getDay() - 1].push(schedule[i]);
+                }
+                return scheduleArrays;
+
+
+            } else {
+                return schedule;
+            }
         }
     } finally {
         await client.close();
@@ -264,19 +280,27 @@ async function saveFile(){
     await client.connect();
     const database = client.db('P2');
     let bucket = new GridFSBucket(database);
-    
-
+    fs.createReadStream('../JaronCeller.png')
+    .pipe(bucket.openUploadStream('.jaronceller.png'))
+    .on('error', () => console.log("Lortet virker ikke >:c"))
+    .on('finish', () => console.log("SUCCess"));
 
 }
 
 async function getFile(){
-
+    await client.connect();
+    const database = client.db('P2');
+    let bucket = new GridFSBucket(database);
+    bucket.openDownloadStreamByName('.jaronceller.png')
+    .pipe(fs.createWriteStream('./jaronceller.png'))
+    .on('error', () => console.log("Lortet virker ikke >:c"))
+    .on('finish', () => console.log("SUCCess"));
 
 }
 
 
 
-//TODO: Lav validering på at brugeren der laver en lesson er en lærer
+//getFile().then(console.log("Pog"));
 
 //updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
 //deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
@@ -302,7 +326,7 @@ console.log(nextDay);*/
 
 
 
-login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+login("test", "test").then(result => getSchedule(result, new Date(2021, 4, 5), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);

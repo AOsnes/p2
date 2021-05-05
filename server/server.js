@@ -116,12 +116,23 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         }
 
         //Checks if the query had any results. 
-        if ((await cursor.count()) === 0) {
-            await cursor.close();
-            throw new Error("No documents found!")
+        let lessonCount = await cursor.count();
+        await cursor.close();
+        if (lessonCount === 0) {
+            throw new Error("No documents found!");
         } else {
-            await cursor.close();
-            return schedule;
+            if (days !== 1){
+                let scheduleArrays = [];
+                for (let i = 0; i < 5; i++) {
+                    scheduleArrays[i] = [];
+                }
+                for (let i = 0; i < lessonCount; i++) {
+                    scheduleArrays[schedule[i].startTime.getDay() - 1].push(schedule[i]);
+                }
+                return scheduleArrays;
+            } else {
+                return schedule;
+            }
         }
     } catch(error){
         throw error;
@@ -158,7 +169,6 @@ exports.createLesson = async function createLesson(id, className, subject, start
             .catch(console.dir);
 
         } else {
-            result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
             doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
             .then(result => console.log(result.insertedCount))
             .catch(console.dir);
