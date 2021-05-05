@@ -59,7 +59,8 @@ export default class Skemabrik extends Component {
             height: this.calculateHeight(startTime, endTime),
         }
         return([
-            <div key="time" className="gridItem">{this.toHHMM(startTime)} 
+            <div key="time" className="gridItem">
+                {this.toHHMM(startTime)} 
                 {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
             </div>,
             <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
