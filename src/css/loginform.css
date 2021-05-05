@@ -11,7 +11,7 @@
 }
 
 .loginInputContainer {
-    display: -ms-flexbox; /* IE10 */
+    display: -ms-flexbox;
     display: flex;
     width: 90%;
     margin-bottom: 15px;

@@ -133,7 +133,6 @@ exports.createLesson = async function createLesson(id, className, subject, start
         //await client.connect();
         const database = client.db('P2');
         const doc = database.collection("lessons");
-        let result;
         if (recurrences > 1){
             let lessonInserts = [];
 
@@ -153,19 +152,27 @@ exports.createLesson = async function createLesson(id, className, subject, start
                 }
             }
             //console.log(lessonInserts);
-            doc.insertMany(lessonInserts)
-            .then(result => console.log(result.insertedCount))
-            .catch(console.dir);
+            return doc.insertMany(lessonInserts)
+            .then(result => {
+                console.log(`Inserted: ${result.insertedCount} lessons`);
+                return `Inserted: ${result.insertedCount} lessons`
+            })
+            .catch(error => {
+                return error;
+            });
 
         } else {
-            result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
-            doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
-            .then(result => console.log(result.insertedCount))
-            .catch(console.dir);
+            return doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+            .then(result => {
+                console.log(`Inserted: ${result.insertedCount} lesson`);
+                return `Inserted: ${result.insertedCount} lesson`
+            })
+            .catch(error => {
+                throw error;
+            });
         }
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
+    } catch(error) {
+        throw error;
     }
 }
 
