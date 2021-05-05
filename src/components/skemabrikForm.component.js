@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { UserContext } from '../UserContext';
+import DidSubmitModal from './didSubmitModal.component';
 
 export default class SkemabrikForm extends Component{
     static contextType = UserContext;
@@ -12,9 +13,10 @@ export default class SkemabrikForm extends Component{
             endTime: '',
             subject: '',
             advanced: false,
-            klasser:[],
-            class:'',
-            description:'',
+            klasser: [],
+            class: '',
+            description: '',
+            didSubmit: false,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -33,7 +35,7 @@ export default class SkemabrikForm extends Component{
             }),
         })
         .then(response =>{
-            console.log(response);
+            this.setState({didSubmit: true});
         })
     }
 
@@ -57,24 +59,21 @@ export default class SkemabrikForm extends Component{
         this.setState({
             id: user.id,
         })
-        /* 
-        fetch("http://localhost:5000/class", {
+        fetch(`http://localhost:5000/classes/${user.id}`, {
             method: 'GET',
         })
         .then(response => response.json())
         .then(response =>{
-            TODO: Opdater state med den response vi får.
-            Der er ikke oprettet et endpoint endnu, så afventer.
-            this.setState({klasser: response.classes})
+            this.setState({klasser: response})
         })
-        */
     } 
 
     render(){
         const fag = ["Dansk", "Matematik", "Engelsk", "Religion", "Historie", "N/T", "Billedkunst", "Idræt", "Pause"]
-        const tempClasses = ["sw2b2-20", "sw2b2-21", "sw2b2-22"];
+        
         return(
             <form className="formContainer" onSubmit={this.handleSubmit}>
+                {this.state.didSubmit ? <DidSubmitModal/> : null}
                 <fieldset className="opretSkemabrik">
                     <label className="inputText" htmlFor="date">Vælg dag</label>
                     <input type="date" name="date" value={this.state.date} onChange={this.handleChange}></input>
@@ -93,8 +92,8 @@ export default class SkemabrikForm extends Component{
                         })}
                     </select>
                     <label className="inputText" htmlFor="class">Klasse</label>
-                    <select defaultValue={tempClasses[0]} name="class" onChange={this.handleChange}>
-                        {tempClasses.map(klasse =>{
+                    <select defaultValue={this.state.klasser[0]} name="class" onChange={this.handleChange}>
+                        {this.state.klasser.map(klasse =>{
                             return <option key={klasse} value={klasse}>{klasse}</option>
                         })}
                     </select>

@@ -1,7 +1,12 @@
 const router = require('express').Router();
 const {createLesson, getUserinfo} = require('../server'); 
-router.route('/').get((req, res) =>{
-    //TODO: Connect to mongodb respond with content
+
+router.route('/:id').get((req, res) =>{
+    let id = req.params.id;
+
+    getUserinfo(id).then(user =>{
+        res.status(200).send(user.class).end();
+    })
 });
 
 router.route('/').post((req, res) => {
