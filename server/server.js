@@ -122,14 +122,33 @@ exports.getSchedule = async function getSchedule(user, date, days) {
             throw new Error("No documents found!");
         } else {
             if (days != 1){
-                let scheduleArrays = [];
-                for (let i = 0; i < 5; i++) {
-                    scheduleArrays[i] = [];
+                let monday = [], tuesday = [], wednesday = [], thursday = [], friday = [];
+                let scheduleOb = {monday, tuesday, wednesday, thursday, friday};
+                
+                for (let i = 0; i < lessonCount; i++){
+                    switch (schedule[i].startTime.getDay()){
+                        case 1:
+                            scheduleOb.monday.push(schedule[i]);
+                            break;
+                        case 2:
+                            scheduleOb.tuesday.push(schedule[i]);
+                            break;
+                        case 3:
+                            scheduleOb.wednesday.push(schedule[i]);
+                            break;
+                        case 4:
+                            scheduleOb.thursday.push(schedule[i]);
+                            break;
+                        case 5:
+                            scheduleOb.friday.push(schedule[i]);
+                            break;
+                        default:
+                            console.log("Error");
+                            break;
+                    }
                 }
-                for (let i = 0; i < lessonCount; i++) {
-                    scheduleArrays[schedule[i].startTime.getDay() - 1].push(schedule[i]);
-                }
-                return scheduleArrays;
+                console.log(JSON.stringify(scheduleOb));
+                return scheduleOb;
             } else {
                 return schedule;
             }
