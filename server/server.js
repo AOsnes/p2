@@ -121,7 +121,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         if (lessonCount === 0) {
             throw new Error("No documents found!");
         } else {
-            if (days !== 1){
+            if (days != 1){
                 let scheduleArrays = [];
                 for (let i = 0; i < 5; i++) {
                     scheduleArrays[i] = [];
