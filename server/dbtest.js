@@ -136,11 +136,14 @@ async function getSchedule(user, date, days) {
             await cursor.close();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
             for (lesson of schedule) {
                 lesson.startTime += date.getTimezoneOffset();
                 lesson.endTime += date.getTimezoneOffset();
             }
+=======
+>>>>>>> parent of af6e1a5 (getSchedule now returns a 2d-array in 5 day view POG. No GridFS changes unpog)
 =======
 >>>>>>> parent of af6e1a5 (getSchedule now returns a 2d-array in 5 day view POG. No GridFS changes unpog)
 =======
@@ -319,7 +322,11 @@ console.log(nextDay);*/
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+=======
+login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+>>>>>>> parent of af6e1a5 (getSchedule now returns a 2d-array in 5 day view POG. No GridFS changes unpog)
 =======
 login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
 >>>>>>> parent of af6e1a5 (getSchedule now returns a 2d-array in 5 day view POG. No GridFS changes unpog)
