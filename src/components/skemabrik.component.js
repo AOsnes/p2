@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SkemabrikModal from './skemabrikModal.component';
 import { UserContext } from '../UserContext';
+import ReactDOM from 'react-dom';
 
 export default class Skemabrik extends Component {
     static contextType = UserContext;
@@ -8,6 +9,7 @@ export default class Skemabrik extends Component {
         super(props)
         this.state = {
             showSkemabrikModal: false,
+            isLoaded: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
@@ -59,6 +61,14 @@ export default class Skemabrik extends Component {
         return `${minutesPercentage}%`;
     }
 
+    componentDidMount(){
+        if(document.getElementsByClassName('gridContainerFiveDay')){
+            this.setState({
+                isLoaded: true,
+            })
+        }
+    }
+
     render(){
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
@@ -78,23 +88,25 @@ export default class Skemabrik extends Component {
                         <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                         {subject}
                     </p>
-                    
                 </div>
                 ]
             )
         }
-        else if (this.context.role === "teacher"){
-                return(
-                    <div className={this.props.weekday}>
-                        <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
-                            <p className="skemabrikTitleText">
-                                <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                                {subject}
-                            </p>
-                            {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
-                        </div>
-                    </div>
+        else if (this.context.role === "teacher" && this.state.isLoaded){
+                return( ReactDOM.createPortal(
+                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
+                        <p className="skemabrikTitleText">
+                            <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                            {subject}
+                        </p>
+                        {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
+                    </div>,
+                    document.getElementById(`${this.props.weekday}`)
                 )
+            )
+        }
+        else {
+            return null;
         }
     }
 }

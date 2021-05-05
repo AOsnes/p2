@@ -6,9 +6,10 @@ export default class Skema extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {id: '', date: '', view: 1, viewText: "",  skema:{}, isSorted: false};
+        this.state = {id: '', date: '', view: 1, viewText: "",  skema:{}, isLoaded: false};
         this.getSchedule = this.getSchedule.bind(this);
         this.getWeekday = this.getWeekday.bind(this);
+        this.scheduleBorders = this.scheduleBorders.bind(this);
     }
 
     componentDidMount(){
@@ -41,20 +42,15 @@ export default class Skema extends Component{
     /* returns the name of the day depending, day parameter should come from Date.getDay method. */
     getWeekday(day){
         let weekday = '';
-        switch(this.state.view){
-            case 1: /* One day view */ 
-                switch(day){
-                    case 0: weekday = "Søndag"; break;
-                    case 1: weekday = "Mandag"; break;
-                    case 2: weekday = "Tirsdag"; break;
-                    case 3: weekday = "Onsdag"; break;
-                    case 4: weekday = "Torsdag"; break;
-                    case 5: weekday = "Fredag"; break;
-                    case 6: weekday = "Lørdag"; break;
-                    default: /* TODO: Something is straight up buggin yuh */ break;
-                } break;
-            case 5: /* TODO: Week view */ break;
-            default: /* TODO: something is straight up buggin yuh */ break;
+        switch(day){
+            case 0: weekday = "Søndag"; break;
+            case 1: weekday = "Mandag"; break;
+            case 2: weekday = "Tirsdag"; break;
+            case 3: weekday = "Onsdag"; break;
+            case 4: weekday = "Torsdag"; break;
+            case 5: weekday = "Fredag"; break;
+            case 6: weekday = "Lørdag"; break;
+            default: /* TODO: Something is straight up buggin yuh */ break;
         }
         return weekday;
     }
@@ -65,19 +61,13 @@ export default class Skema extends Component{
         })
         .then(response => response.json())
         .then(response => {
-            this.setState({skema: response});
+            this.setState({skema: response},()=>{this.setState({isLoaded:true})});
         });
     };
 
-
-
-    fiveDaySchedule(weekday, day){
+    scheduleBorders(weekday){
         return(
-            <div className={weekday}>
-                {this.state.skema.map((skemabrik) => {
-                        return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}/>
-                    })}
-                {console.log(this.state)}
+            <div className={weekday} id={weekday}>
                 <div className="scheduleBordersHour scheduleBorderFirst"></div>
                 <div className="scheduleBordersHalfHour"></div>
                 <div className="scheduleBordersHour"></div>
@@ -99,14 +89,14 @@ export default class Skema extends Component{
     }
 
     render(){
-        if(!this.state.skema.length){
+        if(!this.state.isLoaded){
             return(
                 <div className="textCenter">
                     <p>There was an error loading your schedule</p>
                 </div>
             );
         }
-        if(this.context.role === "teacher"){
+        else if(this.context.role === "teacher"){
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
@@ -129,11 +119,15 @@ export default class Skema extends Component{
                             <div className="gridItemFiveDayHour">15:00</div>
                             <div className="gridItemFiveDayHalfHour"></div>
                         </div>
-                        {this.fiveDaySchedule("Mandag", 1)}
-                        {this.fiveDaySchedule("Tirsdag", 2)}
-                        {this.fiveDaySchedule("Onsdag", 3)}
-                        {this.fiveDaySchedule("Torsdag", 4)}
-                        {this.fiveDaySchedule("Fredag", 5)}
+                        {this.scheduleBorders("Mandag")}
+                        {this.scheduleBorders("Tirsdag")}
+                        {this.scheduleBorders("Onsdag")}
+                        {this.scheduleBorders("Torsdag")}
+                        {this.scheduleBorders("Fredag")}
+                        
+                        {this.state.skema.map((skemabrik) => { 
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())}/>
+                        })}
                     </div>
                 </div>
             )
