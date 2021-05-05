@@ -121,8 +121,8 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         if (lessonCount === 0) {
             throw new Error("No documents found!");
         } else {
-            return schedule;
-        }
+                return schedule;
+            }
     } catch(error){
         throw error;
     }
@@ -177,7 +177,6 @@ exports.updateLesson = async function updateLesson(id, changes){
         try {
             const database = client.db('P2');
             const doc = database.collection("lessons");
-            const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
             .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
             .catch(console.dir)
