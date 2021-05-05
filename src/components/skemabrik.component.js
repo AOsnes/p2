@@ -39,14 +39,16 @@ export default class Skemabrik extends Component {
         this.setState({
             showSkemabrikModal: false
         })
+        document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
     }
 
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal
-            }));
-        }
+        }));
+        this.state.showSkemabrikModal ?  document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter')
+    }
 
     render(){
         const subject = this.props.skemabrik.subject;
