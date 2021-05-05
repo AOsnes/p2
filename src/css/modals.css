@@ -2,10 +2,13 @@
 .skemabrikModalText{
     position: relative;
     font-weight: bold;
-    font-size: 1.333em;
+    font-size: 2.369em;
     color: #FFFFFF;
     border: none;
     margin: 10px;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
 }
 
 /* Centering modal */
@@ -50,4 +53,11 @@
     color: #00E7A2;
     padding: 0.1em;
     font-size: 1.5em;
+/* Blur schedule when modal is clicked */
+}
+
+.blur-filter{
+    -webkit-filter: blur(2px);
+    filter: blur(2px);
+
 }

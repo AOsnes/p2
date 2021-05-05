@@ -11,6 +11,7 @@ import './css/skemabrik.css';
 import './css/modals.css';
 import './css/afleveringer.css';
 import './css/skemabrikForm.css';
+import './css/toggleknap.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
@@ -19,6 +20,7 @@ import NoMatchError from "./components/noMatchError.component";
 import Skema from "./components/skema.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Afleveringer from "./components/afleveringer.component";
+import Dagsvisning from "./components/dagsvisning.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -66,6 +68,7 @@ function Skemapage(){
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
+            <Dagsvisning/>
             <Skema/>
         </div>
     )
