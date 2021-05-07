@@ -38,37 +38,37 @@
 
 /* Colours of Subjects */
 .Dansk{
-    background-color: #FF4D4D;
+    background-color: #FF4D4D !important;
 }
   
 .Matematik{
-    background-color: #3385FF;
+    background-color: #3385FF !important;
 }
   
 .Engelsk{
-    background-color: #DD99FF;
+    background-color: #DD99FF !important;
 }
   
 .Religion{
-    background-color: #FF00B8;
+    background-color: #FF00B8 !important;
 }
   
 .Historie{
-    background-color: #FFFF66;
+    background-color: #FFFF66 !important;
 }
   
 .Billedkunst{
-    background-color: #FF944D;
+    background-color: #FF944D !important;
 }
   
 .Idræt{
-    background-color: #00B3B3;
+    background-color: #00B3B3 !important;
 }
   
 .N\/T{
-    background-color: #47D147;
+    background-color: #47D147 !important;
 }
   
 .Pause{
-    background-color: #696969;
+    background-color: #696969 !important;
 }

@@ -15,6 +15,7 @@
 
 /* Centering modal */
 .detailsModal{
+    background-color: lightslategray;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -22,7 +23,7 @@
     height: 33%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    filter: drop-shadow(0 .125rem .25rem rgba(0,0,0,.075));
+    filter: drop-shadow(7.5px 7.5px 15px rgba(0,0,0,0.5));
 }
 
 /* Close button */
