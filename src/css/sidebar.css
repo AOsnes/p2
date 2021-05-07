@@ -4,7 +4,8 @@
     padding: 0;
     width: 100px;
     background-color: #c4c4c4;
-    position: fixed;
+    position: absolute;
+    top: 100px;
     height: 100%;
     filter: drop-shadow(.125rem 0 .25rem rgba(0,0,0,.075));
 }

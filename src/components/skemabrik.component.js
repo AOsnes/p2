@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import SkemabrikModal from './skemabrikModal.component';
+import { UserContext } from '../UserContext';
+import ReactDOM from 'react-dom';
 
 export default class Skemabrik extends Component {
+    static contextType = UserContext;
     constructor(props){
         super(props)
         this.state = {
             showSkemabrikModal: false,
+            isLoaded: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
@@ -51,26 +55,58 @@ export default class Skemabrik extends Component {
         this.state.showSkemabrikModal ?  document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter')
     }
 
+    calculatePosition(date){
+        let deltaHours = date.getHours() - 8;
+        let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
+        return `${minutesPercentage}%`;
+    }
+
+    componentDidMount(){
+        if(document.getElementsByClassName('gridContainerFiveDay')){
+            this.setState({
+                isLoaded: true,
+            })
+        }
+    }
+
     render(){
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
         const startTime = new Date(this.props.skemabrik.startTime);
         const style = {
             height: this.calculateHeight(startTime, endTime),
+            position: 'absolute',
+            top: this.calculatePosition(startTime),
         }
-        return([
-            <div key="time" className="gridItem">
-                {this.toHHMM(startTime)} 
+        if(this.context.role === "student"){
+            return([
+                <div key="time" className="gridItem">{this.toHHMM(startTime)} 
                 {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
             </div>,
-            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
-                <p className="skemabrikTitleText">
-                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                    {subject}
-                </p>
-                
-            </div>
-            ]
-        )
+                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                    <p className="skemabrikTitleText">
+                        <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                        {subject}
+                    </p>
+                </div>
+                ]
+            )
+        }
+        else if (this.context.role === "teacher" && this.state.isLoaded){
+                return( ReactDOM.createPortal(
+                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
+                        <p className="skemabrikTitleText">
+                            <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                            {subject}
+                        </p>
+                        {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
+                    </div>,
+                    document.getElementById(`${this.props.weekday}`)
+                )
+            )
+        }
+        else {
+            return null;
+        }
     }
 }
