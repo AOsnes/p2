@@ -20,6 +20,7 @@ export default class SkemabrikForm extends Component{
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.validateAll = this.validateAll.bind(this);
     }
 
     handleSubmit(event){
@@ -52,6 +53,16 @@ export default class SkemabrikForm extends Component{
                 [target]: value
             });
         }
+    }
+
+    validateAll(){
+        return !(this.state.id &&
+                this.state.date &&
+                this.state.startTime &&
+                this.state.endTime &&
+                this.state.subject &&
+                this.state.class &&
+                this.state.description);
     }
 
     componentDidMount(){
@@ -98,9 +109,9 @@ export default class SkemabrikForm extends Component{
                         })}
                     </select>
 
-                    <label className="inputText twoColumnWide" htmlFor="advanced">Beskrivelse:</label>
+                    <label className="inputText twoColumnWide" htmlFor="description">Beskrivelse:</label>
                     <textarea className="twoColumnWide" name="description" maxLength="512" onChange={this.handleChange}></textarea> 
-                    <input className="twoColumnWide" type="submit" name="submit" value="Opret"></input>
+                    <input disabled={this.validateAll()} className="twoColumnWide submitButton" type="submit" name="submit" value="Opret"></input>
 
                 </fieldset>
             </form>
