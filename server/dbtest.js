@@ -313,13 +313,67 @@ async function deleteLesson(id){
     });
 }
 
+async function createAssignment(id, lessonID, subject, description, dueDate, optionalFile){
+    return new Promise ((resolve, reject) => {
+        try {
+            //await client.connect();
+            const database = client.db('P2');
+            const doc = database.collection("assignments");
+            doc.insertOne({ "teacherID": id.toString(), "lessonID" : lessonID, "subject": subject, "description": description, "dueDate": dueDate, "fileID": optionalFile, })
+            .then(result => console.log(result.insertedCount))
+            .then(() => { resolve(); })
+            .catch(console.dir);
+        } finally {
+            // Ensures that the client will close when you finish/error
+            
+        }
+    });
+}
 
-async function saveFile(){
+async function updateAssignment(id, changes){
+    return new Promise ((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("assigments");
+            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .catch(console.dir)
+            .finally(() => {resolve();});
+        } catch(error) {
+            throw error;
+        }
+    });
+}
+
+async function deleteAssignment(id){
+    return new Promise((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("assigments");
+            doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
+            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
+            .catch(console.dir)
+            .finally(() => { resolve(); });
+        } catch (error) {
+            throw error;
+        }
+    });
+}
+
+
+
+
+
+
+
+
+async function saveFile(file, userID, documentID){
     await client.connect();
     const database = client.db('P2');
     let bucket = new GridFSBucket(database);
+    let fileID = new ObjectId();
     fs.createReadStream('../JaronCeller.png')
-    .pipe(bucket.openUploadStream('.jaronceller.png'))
+    .pipe(bucket.openUploadStreamWithId(fileID, "JaronCeller.png"))
     .on('error', () => console.log("Lortet virker ikke >:c"))
     .on('finish', () => console.log("SUCCess"));
 
@@ -338,6 +392,7 @@ async function getFile(){
 
 
 
+saveFile("Pog", "60608f0389177a0bb0679e79", "6094ff5ab402ab19a8417a1e").then(console.log("Pog")).catch(console.dir);
 //getFile().then(console.log("Pog"));
 
 //updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
@@ -364,7 +419,7 @@ console.log(nextDay);*/
 
 
 
-login("test", "test").then(result => getSchedule(result, new Date(2021, 4, 5), 5)).then(console.log).catch(console.dir);
+//login("test", "test").then(result => getSchedule(result, new Date(2021, 4, 5), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);
