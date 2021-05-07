@@ -1,6 +1,19 @@
-
-.toggleVisningKnap{
-position: relative;
-left: 90%;
-
-}
+.toggleVisning{
+    position: relative;
+    left: 90%;
+    left: 85%;
+    top: 50px;
+    }
+    
+.button {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+      }
