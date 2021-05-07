@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 import Skemabrik from './skemabrik.component';
+import TimeIndicator from './timeIndicator.component';
 
 export default class Skema extends Component{
     static contextType = UserContext;
@@ -100,6 +101,9 @@ export default class Skema extends Component{
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
+                    <div>
+                    <TimeIndicator/>
+                  </div>
                     <div className="gridContainerFiveDay">
                         <div className="gridItemContainer">
                             <div className="gridItemFiveDayHour timeOne">8:00</div>
