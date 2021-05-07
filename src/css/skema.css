@@ -12,10 +12,8 @@
 /* grid style */
 .gridContainerOneDay {
     position: relative;
-    left: 5%;
-    width: 90%;
     display: grid;
-    grid-template-columns: 10% auto;
+    grid-template-columns: 7.5% auto;
     padding: 0px 10px 0px 10px;
 }
 
@@ -37,7 +35,7 @@
 .gridContainerFiveDay {
     position: relative;
     display: grid;
-    grid-template-columns: 100px auto auto auto auto auto;
+    grid-template-columns: 7.5% auto auto auto auto auto;
     padding: 0px 10px 0px 10px;
 }
 
