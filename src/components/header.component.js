@@ -1,40 +1,17 @@
 import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
+import LogoutModal from "./logoutModal.component";
 
 export default class Header extends Component {
     constructor(props){
         super(props);
         this.standby = this.standby.bind(this);
-        this.logoutHandler = this.logoutHandler.bind(this);
-        this.toggleFocus = this.toggleFocus.bind(this);
-        this.unFocus = this.unFocus.bind(this);
+        
     }
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
-    }
-    
-    logoutHandler(){
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          deleteCookie(cookies[i].split("=")[0]);
-        }
-        window.location.reload(false);
-    }
-
-    toggleFocus(){
-        document.getElementById("dropdownMenuId").classList.toggle("showMenu");
-        document.getElementById("dropdownArrowId").classList.toggle("showArrow");
-    }
-
-    unFocus() {
-        if (document.getElementById("dropdownArrowId").classList.contains('showArrow')) {
-            document.getElementById("dropdownArrowId").classList.remove('showArrow');
-        }
-        if (document.getElementById("dropdownMenuId").classList.contains('showMenu')) {
-            document.getElementById("dropdownMenuId").classList.remove('showMenu');
-        }
-    }
+    }  
 
     render(){
         return (
@@ -55,15 +32,8 @@ export default class Header extends Component {
                                             <p id="headerProfileName">{user.name}</p>
                                         </li>
                                         <li className="headerItem">
-                                            <Link className="dropdownButton" onClick={this.toggleFocus} onBlur={this.unFocus} to="#">
-                                                <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede"></img>
-                                                <div className="dropdownArrow" id="dropdownArrowId"></div>
-                                                <div className="dropdownMenu" id="dropdownMenuId">
-                                                    <ul>
-                                                        <li onClick={this.logoutHandler} className={`logoutButton ${user.role}`}>Log ud</li>
-                                                    </ul>
-                                                </div>
-                                            </Link>
+                                            <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede"></img>
+                                            <LogoutModal/>
                                         </li>
                                     </div>
                                 );
@@ -75,15 +45,3 @@ export default class Header extends Component {
         );
     }
 }
-
-function deleteCookie(name) {
-    setCookie(name, "", -1);
-}
-
-function setCookie(name, value, expirydays) {
-    let d = new Date();
-    d.setTime(d.getTime() + (expirydays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = name + "=" + value + "; " + expires;
-}
-
