@@ -43,16 +43,19 @@ export default class Skemabrik extends Component {
     disableModal(){
         this.setState({
             showSkemabrikModal: false
+        }, () => {
+            document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
         })
-        document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
     }
 
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal
-        }));
-        this.state.showSkemabrikModal ?  document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter')
+        }), () => {
+            this.state.showSkemabrikModal ? document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
+        });
+        
     }
 
     calculatePosition(date){
@@ -78,11 +81,11 @@ export default class Skemabrik extends Component {
             position: 'absolute',
             top: this.calculatePosition(startTime),
         }
-        if(this.context.role === "student"){
+        if(this.props.isToggleOn === true){
             return([
-                <div key="time" className="gridItem">{this.toHHMM(startTime)} 
+                <div key="time" className="gridItem">{this.toHHMM(startTime)}
                 {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
-            </div>,
+                </div>,
                 <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                     <p className="skemabrikTitleText">
                         <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
@@ -92,14 +95,14 @@ export default class Skemabrik extends Component {
                 ]
             )
         }
-        else if (this.context.role === "teacher" && this.state.isLoaded){
+        else if (this.props.isToggleOn === false && this.state.isLoaded){
                 return( ReactDOM.createPortal(
                     <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
                         <p className="skemabrikTitleText">
                             <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                             {subject}
                         </p>
-                        {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
+                        {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={this.toHHMM}/> : null}
                     </div>,
                     document.getElementById(`${this.props.weekday}`)
                 )

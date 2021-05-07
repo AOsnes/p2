@@ -18,7 +18,7 @@ import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
-import Skema from "./components/skema.component";
+/*import Skema from "./components/skema.component";*/
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Afleveringer from "./components/afleveringer.component";
 import Dagsvisning from "./components/dagsvisning.component";
@@ -70,7 +70,7 @@ function Skemapage(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Dagsvisning/>
-            <Skema/>
+            {/*<Skema/>*/}
         </div>
     )
 }
