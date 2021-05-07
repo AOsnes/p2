@@ -1,5 +1,7 @@
-const {MongoClient} = require("mongodb");
+const {MongoClient, GridFSBucket} = require("mongodb");
 const ObjectId = require("mongodb").ObjectId;
+let fs = require('fs');
+
 require('dotenv').config();
 
 const uri = process.env.URI;
@@ -14,18 +16,18 @@ async function insertUsers() {
         const database = client.db('P2');
         const doc = database.collection("users");
         const userInserts = [{
-                "username": "admin",
-                "password": "admin",
-                "name": "admin",
-                "role": "teacher",
-                "class": ["sw2b2-20", "sw2b2-21", "sw2b2-22"]
+                "username": "jaron",
+                "password": "celler",
+                "name": "Jaron Celler",
+                "role": "student",
+                "class": ["sw2b2-21"]
             },
             {
-                "username": "arthur",
+                "username": "brian",
                 "password": "password",
-                "name": "Arthur",
+                "name": "Brain",
                 "role": "student",
-                "class": ["sw2b2-20"]
+                "class": ["sw2b2-22"]
             },
         ];
         const result = await doc.insertMany(userInserts);
@@ -128,17 +130,12 @@ async function getSchedule(user, date, days) {
         }
 
         //Checks if the query had any results. 
-        if ((await cursor.count()) === 0) {
+        let lessonCount = await cursor.count();
+        await cursor.close();
+        if (lessonCount === 0) {
             console.log("No documents found!");
-            await cursor.close();
             return schedule;
         } else {
-            await cursor.close();
-            //MongoDB stores dates in UTC. This loop converts the dates back to local time which is currently UTC + 2.
-            for (lesson of schedule) {
-                lesson.startTime += date.getTimezoneOffset();
-                lesson.endTime += date.getTimezoneOffset();
-            }
             return schedule;
         }
     } finally {
@@ -195,85 +192,110 @@ function fiveDayInterval(date){
 
 
 async function createLesson(id, className, subject, start, end, description, recurrences, interval){
-    try {
-        //await client.connect();
-        const database = client.db('P2');
-        const doc = database.collection("lessons");
-        let result;
-        if (recurrences > 1){
-            let lessonInserts = [];
-
-            for (let i = 0; i < recurrences; i++){
-                let start1 = new Date(start);
-                let end1 = new Date(end);
-                start1.setDate(start1.getDate() + i * interval);
-                end1.setDate(end1.getDate() + i * interval);
-
-                lessonInserts[i] = {
-                    "subject": subject,
-                    "class": className,
-                    "teacherID": id.toString(),
-                    "description": description,
-                    "startTime": start1,
-                    "endTime": end1,
+    return new Promise ((resolve, reject) => {
+        try {
+            //await client.connect();
+            const database = client.db('P2');
+            const doc = database.collection("lessons");
+            let result;
+            if (recurrences > 1){
+                let lessonInserts = [];
+    
+                for (let i = 0; i < recurrences; i++){
+                    let start1 = new Date(start);
+                    let end1 = new Date(end);
+                    start1.setDate(start1.getDate() + i * interval);
+                    end1.setDate(end1.getDate() + i * interval);
+    
+                    lessonInserts[i] = {
+                        "subject": subject,
+                        "class": className,
+                        "teacherID": id.toString(),
+                        "description": description,
+                        "startTime": start1,
+                        "endTime": end1,
+                    }
                 }
+                //console.log(lessonInserts);
+                doc.insertMany(lessonInserts)
+                .then(result => console.log(result.insertedCount))
+                .catch(console.dir);
+    
+            } else {
+                //result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
+                doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+                .then(result => console.log(result.insertedCount))
+                .catch(console.dir)
+                .finally(() => {resolve();});
             }
-            //console.log(lessonInserts);
-            doc.insertMany(lessonInserts)
-            .then(result => console.log(result.insertedCount))
-            .catch(console.dir);
-
-        } else {
-            result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
-            doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
-            .then(result => console.log(result.insertedCount))
-            .catch(console.dir);
+        } finally {
+            // Ensures that the client will close when you finish/error
+            
         }
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    });
 }
 
 async function updateLesson(id, changes){
-    try {
-        await client.connect();
-        const database = client.db('P2');
-        const doc = database.collection("lessons");
-        const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
-        doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
-        .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
-        .catch(console.dir);
-    } catch(error) {
-        throw error;
-    }
+    return new Promise ((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("lessons");
+            //const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
+            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .catch(console.dir)
+            .finally(() => {resolve();});
+        } catch(error) {
+            throw error;
+        }
+    });
 }
 
 async function deleteLesson(id){
-    try {
-        await client.connect();
-        const database = client.db('P2');
-        const doc = database.collection("lessons");
-        doc.deleteOne({"_id": ObjectId.createFromHexString(id)})
-        .then(result => {console.log(result.deletedCount); if (result.deletedCount === 0) {throw new Error("No such lesson")}})
-        .catch(console.dir);
+    return new Promise((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("lessons");
+            doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
+            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
+            .catch(console.dir)
+            .finally(() => { resolve(); });
+        } catch (error) {
+            throw error;
+        }
+    });
+}
 
-    } catch(error) {
-        throw error;
-    }
+
+async function saveFile(){
+    await client.connect();
+    const database = client.db('P2');
+    let bucket = new GridFSBucket(database);
+    fs.createReadStream('../JaronCeller.png')
+    .pipe(bucket.openUploadStream('.jaronceller.png'))
+    .on('error', () => console.log("Lortet virker ikke >:c"))
+    .on('finish', () => console.log("SUCCess"));
+
+}
+
+async function getFile(){
+    await client.connect();
+    const database = client.db('P2');
+    let bucket = new GridFSBucket(database);
+    bucket.openDownloadStreamByName('.jaronceller.png')
+    .pipe(fs.createWriteStream('./jaronceller.png'))
+    .on('error', () => console.log("Lortet virker ikke >:c"))
+    .on('finish', () => console.log("SUCCess"));
 
 }
 
 
 
-
-
-
-//TODO: Lav validering på at brugeren der laver en lesson er en lærer
+//getFile().then(console.log("Pog"));
 
 //updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
-deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
-//login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "Religion", new Date(2021, 4, 3, 10, 45, 0), new Date(2021, 4, 3, 11, 30, 0), "Praise Allah! :)", 3, 7)).catch(console.dir);
+//deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
+//login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "N/T", new Date(2021, 4, 5, 12, 45, 0), new Date(2021, 4, 5, 13, 30, 0), "I hate jews so much it's unreal. Love from Kazakhstan", 1, 7)).catch(console.dir);
 
 
 
@@ -295,7 +317,7 @@ console.log(nextDay);*/
 
 
 
-//login("test", "test").then(result => getSchedule(result, new Date(2021, 3, 16), 5)).then(console.log).catch(console.dir);
+login("test", "test").then(result => getSchedule(result, new Date(2021, 4, 5), 5)).then(console.log).catch(console.dir);
 //console.log(new Date().toLocaleDateString());
 //let string = new Date().toLocaleDateString();
 //console.log(string);

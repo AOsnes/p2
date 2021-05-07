@@ -3,6 +3,8 @@ import { link } from 'fs-extra';
 import {BrowserRouter as Router, useLocation} from "react-router-dom";
 import App from './App';
 import Skema from './components/skema.component';
+import Skemabrik from './components/skemabrik.component';
+import SkemabrikModal from './components/skemabrikModal.component'
 import Header from './components/header.component';
 import Sidebar from './components/sidebar.component';
 import LoginForm from './components/loginform.component';
@@ -11,6 +13,7 @@ import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './Us
 
 afterEach(cleanup);
 
+/* Tests for header */
 test('header renders correctly with name', () => {
     const signedInUser = {name: 'Testy McTestFace', role: '', id: ''}
     render(
@@ -38,8 +41,9 @@ test('header renders correctly with name', () => {
     /* Might need to change in the future */
 });
 
-test('sidebar renders correctly with context', ()=>{
-    let signedInUser ={role: 'student', name: 'Sigurd', id: '123123'};
+/* Tests for sidebar */
+test('sidebar renders correctly with context', () => {
+    let signedInUser = {role: 'student', name: 'Sigurd', id: '123123'};
     /* Mocking document.cookie, essentially setting the cookie to the return value of get */
     Object.defineProperty(document, 'cookie', {
         get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
@@ -80,7 +84,8 @@ test('sidebar renders correctly with context', ()=>{
     expect(teacherLinkElement).toContainElement(teacherSkemaElement);
 });
 
-test('nomatcherror renders correctly', () => {
+/* Test for noMatchError */
+test('noMatchError renders correctly', () => {
     let path = "/skemas";
     render(
         <div>
@@ -96,10 +101,11 @@ test('nomatcherror renders correctly', () => {
     expect(pElement).toHaveTextContent(expectedElementContent);
 });
 
+/* Tests for loginform */
 test('app renders loginform correctly', () => {
     render(<App />);
     const linkElement = screen.getByTestId('loginForm');
-    const h2element = screen.getByText("Velkommen");
+    const h2element = screen.getByText("Skema.dk");
     const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
     const adgangskodeElement = screen.getByPlaceholderText("Adgangskode");
     const loginElement = screen.getByDisplayValue("Log ind");
@@ -141,7 +147,6 @@ test('submits data when user presses submit', async () => {
     delete window.location;
     window.location = { reload: jest.fn() };
 
-
     render(<Router><LoginForm /></Router>); 
     const usernameElement = screen.getByPlaceholderText("Brugernavn");
     const passwordElement = screen.getByPlaceholderText("Adgangskode");
@@ -152,7 +157,7 @@ test('submits data when user presses submit', async () => {
     /* Should test that cookie is set and that user is redirected */
 });
 
-
+/* Tests for userContext */
 test('finds the correct id value in cookie', () => {
     const expected = "60608f0389177a0bb0679e78"
     let extractedId;
@@ -195,9 +200,34 @@ test('finds the correct name value in cookie', () => {
     });
 });
 
+/* Tests for skema */
 test('skema component renders correctly', () => {
     /* render(<Skema/>)
     const linkElement = screen.getByText("There was an error loading your schedule");
     expect(linkElement).toBeInTheDocument(); 
     Bruh jeg magter ikke at skrive fetch mocks igen :)*/
 });
+
+/* Tests for skemabrik */
+test('skemabrik component renders correctly', () => {
+    const skemabrik = {subject: 'Dansk', class: 'sw2b2-20', description: 'Læs en bog', startTime: '2021-04-23T10:30:00.000+00:00', endTime: '2021-04-23T12:30:00.000+00:00'}
+    render(
+        <Skemabrik skemabrik={skemabrik}/>
+    )
+
+    const skemabrikStartElement = screen.getByText('12:30');
+    const skemabrikSubjectElement = screen.getByText('Dansk');
+    const skemabrikSubjectLogo = screen.getByAltText('Dansk Logo');
+
+    expect(skemabrikStartElement).toBeInTheDocument;
+    expect(skemabrikSubjectElement).toBeInTheDocument;
+    expect(skemabrikSubjectLogo).toBeInTheDocument;
+    /* Test af disableModal og onSkemaClick mangler */
+});
+
+/* Tests for skemabrikModal */
+/*test('skemabrikModal component renders correctly', () => {
+    render(
+        <SkemabrikModal/>
+    )
+});*/

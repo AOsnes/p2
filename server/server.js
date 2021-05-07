@@ -81,7 +81,7 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 }
 
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
-function fiveDayInterval(date){
+ let fiveDayInterval = exports.fiveDayInterval = function (date){
     let start = new Date(date.getTime());
     start.setDate(start.getDate() - (start.getDay() - 1));
     start.setHours(0, 0, 0);
@@ -116,85 +116,91 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         }
 
         //Checks if the query had any results. 
-        if ((await cursor.count()) === 0) {
-            await cursor.close();
-            throw new Error("No documents found!")
+        let lessonCount = await cursor.count();
+        await cursor.close();
+        if (lessonCount === 0) {
+            throw new Error("No documents found!");
         } else {
-            await cursor.close();
             return schedule;
         }
+
     } catch(error){
         throw error;
     }
 }
 
 exports.createLesson = async function createLesson(id, className, subject, start, end, description, recurrences, interval){
-    try {
-        //await client.connect();
-        const database = client.db('P2');
-        const doc = database.collection("lessons");
-        let result;
-        if (recurrences > 1){
-            let lessonInserts = [];
-
-            for (let i = 0; i < recurrences; i++){
-                let start1 = new Date(start);
-                let end1 = new Date(end);
-                start1.setDate(start1.getDate() + i * interval);
-                end1.setDate(end1.getDate() + i * interval);
-
-                lessonInserts[i] = {
-                    "subject": subject,
-                    "class": className,
-                    "teacherID": id.toString(),
-                    "description": description,
-                    "startTime": start1,
-                    "endTime": end1,
+    return new Promise ((resolve, reject) => {
+        try {
+            //await client.connect();
+            const database = client.db('P2');
+            const doc = database.collection("lessons");
+            let result;
+            if (recurrences > 1){
+                let lessonInserts = [];
+    
+                for (let i = 0; i < recurrences; i++){
+                    let start1 = new Date(start);
+                    let end1 = new Date(end);
+                    start1.setDate(start1.getDate() + i * interval);
+                    end1.setDate(end1.getDate() + i * interval);
+    
+                    lessonInserts[i] = {
+                        "subject": subject,
+                        "class": className,
+                        "teacherID": id.toString(),
+                        "description": description,
+                        "startTime": start1,
+                        "endTime": end1,
+                    }
                 }
+                //console.log(lessonInserts);
+                doc.insertMany(lessonInserts)
+                .then(result => console.log(result.insertedCount))
+                .catch(console.dir);
+    
+            } else {
+                //result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
+                doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+                .then(result => console.log(result.insertedCount))
+                .catch(console.dir)
+                .finally(() => {resolve();});
             }
-            //console.log(lessonInserts);
-            doc.insertMany(lessonInserts)
-            .then(result => console.log(result.insertedCount))
-            .catch(console.dir);
-
-        } else {
-            result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
-            doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
-            .then(result => console.log(result.insertedCount))
-            .catch(console.dir);
+        } finally {
+            // Ensures that the client will close when you finish/error
+            
         }
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+    });
 }
 
 exports.updateLesson = async function updateLesson(id, changes){
-    try {
-        await client.connect();
-        const database = client.db('P2');
-        const doc = database.collection("lessons");
-        const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
-        doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
-        .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
-        .catch(console.dir);
-    } catch(error) {
-        throw error;
-    }
+    return new Promise ((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("lessons");
+            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .catch(console.dir)
+            .finally(() => {resolve();});
+        } catch(error) {
+            throw error;
+        }
+    });
 }
 
 exports.deleteLesson = async function deleteLesson(id){
-    try {
-        await client.connect();
-        const database = client.db('P2');
-        const doc = database.collection("lessons");
-        doc.deleteOne({"_id": ObjectId.createFromHexString(id)})
-        .then(result => {console.log(result.deletedCount); if (result.deletedCount === 0) {throw new Error("No such lesson")}})
-        .catch(console.dir);
-
-    } catch(error) {
-        throw error;
-    }
+    return new Promise((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("lessons");
+            doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
+            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
+            .catch(console.dir)
+            .finally(() => { resolve(); });
+        } catch (error) {
+            throw error;
+        }
+    });
 }
 
 let logger = (req, res, next) => {

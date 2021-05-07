@@ -33,3 +33,112 @@
 .gridLessonItem {
     border-right: none;
 }
+
+/*Five day css*/
+.gridContainerFiveDay {
+    position: relative;
+    display: grid;
+    grid-template-columns: 100px auto auto auto auto auto;
+    padding: 0px 10px 0px 10px;
+}
+
+.gridItemContainer {
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+}
+
+.gridItemFiveDayHour {
+    position: relative;
+    width: 100%;
+    padding-right: 5px;
+    font-size: 30px;
+    text-align: center;
+    height: 49px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.gridItemFiveDayHalfHour {
+    position: relative;
+    width: 100%;
+    padding-right: 5px;
+    font-size: 30px;
+    text-align: center;
+    height: 49px;
+    border: 1px dotted rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.timeOne {
+    border-top: none;
+    height: 50px;
+}
+
+.scheduleBordersHour {
+    position: relative;
+    height: 49px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.scheduleBordersHalfHour {
+    position: relative;
+    height: 49px;
+    border: 1px dotted rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.scheduleBorderFirst {
+    border-top: none;
+    height: 50px;
+}
+
+.Mandag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    background: white;
+}
+
+.Tirsdag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    background: grey;
+}
+
+.Onsdag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    background: white;
+}
+
+.Torsdag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    background: grey;
+}
+
+.Fredag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    background: white;
+}
