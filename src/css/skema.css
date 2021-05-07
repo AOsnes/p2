@@ -107,7 +107,6 @@
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
     height: 800px;
-    background: white;
 }
 
 .Tirsdag{
@@ -115,7 +114,6 @@
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
     height: 800px;
-    background: grey;
 }
 
 .Onsdag{
@@ -123,7 +121,6 @@
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
     height: 800px;
-    background: white;
 }
 
 .Torsdag{
@@ -131,7 +128,6 @@
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
     height: 800px;
-    background: grey;
 }
 
 .Fredag{
@@ -139,5 +135,4 @@
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
     height: 800px;
-    background: white;
 }
