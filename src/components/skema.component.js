@@ -17,28 +17,16 @@ export default class Skema extends Component{
         /* Maybe a little bit of a cursed oneliner */
         let weekday = this.getWeekday(new Date().getDay());
         let user = this.context;
-        if(this.context.role === "student"){
-            this.setState({
-                id: user.id,
-                date: new Date().toISOString(),
-                view: 1,
-                viewText: weekday
-            }, () =>{
-                let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
-                this.getSchedule(requestString)
-            })
-        }
-        else if(this.context.role === "teacher"){
-            this.setState({
-                id: user.id,
-                date: new Date().toISOString(),
-                view: 5,
-                viewText: weekday
-            }, () =>{
-                let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
-                this.getSchedule(requestString)
-            })
-        }
+
+        this.setState({
+            id: user.id,
+            date: new Date().toISOString(),
+            view: 5,
+            viewText: weekday
+        }, () =>{
+            let requestString = `${this.state.id}/${this.state.date}/${this.state.view}`;
+            this.getSchedule(requestString)
+        })
     }
     /* returns the name of the day depending, day parameter should come from Date.getDay method. */
     getWeekday(day){
@@ -97,7 +85,7 @@ export default class Skema extends Component{
                 </div>
             );
         }
-        else if(this.context.role === "teacher"){
+        else if(this.props.dayView === false){
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
@@ -130,13 +118,13 @@ export default class Skema extends Component{
                         {this.scheduleBorders("Fredag")}
                         
                         {this.state.skema.map((skemabrik) => { 
-                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())}/>
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.props.dayView}/>
                         })}
                     </div>
                 </div>
             )
         }
-        else if(this.context.role === "student"){
+        else if(this.props.dayView === true){
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
@@ -163,7 +151,7 @@ export default class Skema extends Component{
                         {this.state.skema.map((skemabrik) => {
                             let lessonDate = new Date(skemabrik.startTime).getDay();
                             if(lessonDate === new Date().getDay())
-                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} isToggleOn={this.props.isToggleOn} weekday={this.getWeekday(new Date().getDay())}/>
+                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.props.dayView} weekday={this.getWeekday(lessonDate)}/>
                             else
                                 return null;
                         })}

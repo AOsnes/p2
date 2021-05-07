@@ -43,16 +43,19 @@ export default class Skemabrik extends Component {
     disableModal(){
         this.setState({
             showSkemabrikModal: false
+        }, () => {
+            document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
         })
-        document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
     }
 
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal
-        }));
-        this.state.showSkemabrikModal ?  document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter')
+        }), () => {
+            this.state.showSkemabrikModal ? document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
+        });
+        
     }
 
     calculatePosition(date){
@@ -78,7 +81,7 @@ export default class Skemabrik extends Component {
             position: 'absolute',
             top: this.calculatePosition(startTime),
         }
-        if(this.props.isToggleOn === true && this.state.isLoaded){
+        if(this.props.dayView === true && this.state.isLoaded){
             return([
                 <div>
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
@@ -93,17 +96,19 @@ export default class Skemabrik extends Component {
                 document.getElementById(`${this.props.weekday}`))]
             )
         }
-        else if (this.context.role === "teacher" && this.state.isLoaded){
-                return( ReactDOM.createPortal(
-                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
+        else if (this.props.dayView === false && this.state.isLoaded){
+            return([
+                <div>
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={this.toHHMM}/> : null}
+                </div>,
+                ReactDOM.createPortal(
+                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                         <p className="skemabrikTitleText">
                             <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                             {subject}
                         </p>
-                        {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
-                    </div>,
-                    document.getElementById(`${this.props.weekday}`)
-                )
+                </div>,
+                document.getElementById(`${this.props.weekday}`))]
             )
         }
         else {
