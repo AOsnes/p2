@@ -39,8 +39,7 @@
     position: relative;
     display: grid;
     grid-template-columns: 100px auto auto auto auto auto;
-    padding: 10px;
-    padding-bottom: 40px;
+    padding: 0px 10px 0px 10px;
 }
 
 .gridItemContainer {

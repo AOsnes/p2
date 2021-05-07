@@ -101,9 +101,6 @@ export default class Skema extends Component{
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
-                    <div>
-                    <TimeIndicator/>
-                  </div>
                     <div className="gridContainerFiveDay">
                         <div className="gridItemContainer">
                             <div className="gridItemFiveDayHour timeOne">8:00</div>
@@ -132,6 +129,9 @@ export default class Skema extends Component{
                         {this.state.skema.map((skemabrik) => { 
                             return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())}/>
                         })}
+                        <div>
+                            <TimeIndicator/>
+                        </div>
                     </div>
                 </div>
             )
