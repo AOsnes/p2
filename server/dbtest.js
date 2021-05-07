@@ -134,56 +134,9 @@ async function getSchedule(user, date, days) {
         await cursor.close();
         if (lessonCount === 0) {
             console.log("No documents found!");
-            
             return schedule;
         } else {
-            if (days !== 1){
-                let monday = [], tuesday = [], wednesday = [], thursday = [], friday = [];
-                let scheduleOb = {monday, tuesday, wednesday, thursday, friday};
-                
-                for (let i = 0; i < lessonCount; i++){
-                    switch (schedule[i].startTime.getDay()){
-                        case 1:
-                            scheduleOb.monday.push(schedule[i]);
-                            break;
-                        case 2:
-                            scheduleOb.tuesday.push(schedule[i]);
-                            break;
-                        case 3:
-                            scheduleOb.wednesday.push(schedule[i]);
-                            break;
-                        case 4:
-                            scheduleOb.thursday.push(schedule[i]);
-                            break;
-                        case 5:
-                            scheduleOb.friday.push(schedule[i]);
-                            break;
-                        default:
-                            console.log("Error");
-                            break;
-                    }
-                }
-                console.log(JSON.stringify(scheduleOb));
-                return scheduleOb;
-
-                
-                /*
-                let scheduleArrays = [];
-                for (let i = 0; i < 5; i++) {
-                    scheduleArrays[i] = [];
-                }
-                for (let i = 0; i < lessonCount; i++) {
-                    scheduleArrays[schedule[i].startTime.getDay() - 1].push(schedule[i]);
-                }
-                scheduleArrays[0][0]
-                console.log(scheduleArrays);
-                console.log(JSON.stringify(scheduleArrays));
-                return scheduleArrays;
-                */
-
-            } else {
-                return schedule;
-            }
+            return schedule;
         }
     } finally {
         await client.close();
@@ -367,7 +320,7 @@ async function deleteAssignment(id){
 
 
 
-async function saveFile(file, userID, documentID){
+async function saveFile(file, collection, documentID){
     await client.connect();
     const database = client.db('P2');
     let bucket = new GridFSBucket(database);
@@ -376,7 +329,7 @@ async function saveFile(file, userID, documentID){
     .pipe(bucket.openUploadStreamWithId(fileID, "JaronCeller.png"))
     .on('error', () => console.log("Lortet virker ikke >:c"))
     .on('finish', () => console.log("SUCCess"));
-
+    return fileID;
 }
 
 async function getFile(){
