@@ -129,10 +129,29 @@ export default class Skema extends Component{
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
                     <div className="gridContainerOneDay">
+                        <div className="gridItemContainer">
+                            <div className="gridItemFiveDayHour timeOne">8:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">9:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">10:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">11:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">12:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">13:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">14:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemFiveDayHour">15:00</div>
+                            <div className="gridItemFiveDayHalfHour"></div>
+                        </div>
+                        {this.scheduleBorders(this.getWeekday(new Date().getDay()))}
                         {this.state.skema.map((skemabrik) => {
                             let lessonDate = new Date(skemabrik.startTime).getDay();
                             if(lessonDate === new Date().getDay())
-                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.props.dayView}/>
+                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.props.dayView} weekday={this.getWeekday(lessonDate)}/>
                             else
                                 return null;
                         })}

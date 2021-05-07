@@ -4,6 +4,8 @@
     position: absolute;
     width: calc(100% - 20px);
     height: 3px;
+    left: 10px;
     top: 0px;
     filter: drop-shadow(0.5px 1.5px 1px rgba(0,0,0,.575));
+    z-index: 2;
 }

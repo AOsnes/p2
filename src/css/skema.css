@@ -10,14 +10,11 @@
 }
 
 /* grid style */
-.gridContainer {
+.gridContainerOneDay {
     position: relative;
-    left: 5%;
-    width: 90%;
     display: grid;
-    grid-template-columns: 10% auto;
-    padding: 10px;
-    padding-bottom: 40px;
+    grid-template-columns: 7.5% auto;
+    padding: 0px 10px 0px 10px;
 }
 
 .gridItem {
@@ -38,7 +35,7 @@
 .gridContainerFiveDay {
     position: relative;
     display: grid;
-    grid-template-columns: 100px auto auto auto auto auto;
+    grid-template-columns: 7.5% auto auto auto auto auto;
     padding: 0px 10px 0px 10px;
 }
 
@@ -80,6 +77,8 @@
     height: 50px;
 }
 
+
+/*Schedule layout css */
 .scheduleBordersHour {
     position: relative;
     height: 49px;

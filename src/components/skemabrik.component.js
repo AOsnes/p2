@@ -65,7 +65,7 @@ export default class Skemabrik extends Component {
     }
 
     componentDidMount(){
-        if(document.getElementsByClassName('gridContainerFiveDay')){
+        if(document.getElementsByClassName('gridContainerFiveDay') || document.getElementsByClassName('gridContainerOneDay')){
             this.setState({
                 isLoaded: true,
             })
@@ -81,18 +81,19 @@ export default class Skemabrik extends Component {
             position: 'absolute',
             top: this.calculatePosition(startTime),
         }
-        if(this.props.dayView === true){
+        if(this.props.dayView === true && this.state.isLoaded){
             return([
-                <div key="time" className="gridItem">{this.toHHMM(startTime)}
-                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
+                <div>
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
                 </div>,
+                ReactDOM.createPortal(
                 <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                     <p className="skemabrikTitleText">
                         <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                         {subject}
                     </p>
-                </div>
-                ]
+                </div>,
+                document.getElementById(`${this.props.weekday}`))]
             )
         }
         else if (this.props.dayView === false && this.state.isLoaded){
