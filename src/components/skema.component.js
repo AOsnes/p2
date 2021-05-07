@@ -72,7 +72,7 @@ export default class Skema extends Component{
                 <div className="scheduleBordersHour"></div>
                 <div className="scheduleBordersHalfHour"></div>
                 <div className="scheduleBordersHour"></div>
-                <div className="scheduleBordersHalfHour"></div>
+                <div className="scheduleBordersHalfHour lastScheduleBlock"></div>
             </div>
         )
     }
@@ -92,22 +92,22 @@ export default class Skema extends Component{
                     <TimeIndicator/>
                     <div className="gridContainerFiveDay">
                         <div className="gridItemContainer">
-                            <div className="gridItemFiveDayHour timeOne">8:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">9:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">10:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">11:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">12:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">13:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">14:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">15:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemHour timeOne">8:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">9:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">10:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">11:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">12:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">13:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">14:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">15:00</div>
+                            <div className="gridItemHalfHour"></div>
                         </div>
                         {this.scheduleBorders("Mandag")}
                         {this.scheduleBorders("Tirsdag")}
@@ -129,22 +129,22 @@ export default class Skema extends Component{
                     <TimeIndicator/>
                     <div className="gridContainerOneDay">
                         <div className="gridItemContainer">
-                            <div className="gridItemFiveDayHour timeOne">8:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">9:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">10:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">11:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">12:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">13:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">14:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
-                            <div className="gridItemFiveDayHour">15:00</div>
-                            <div className="gridItemFiveDayHalfHour"></div>
+                            <div className="gridItemHour timeOne">8:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">9:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">10:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">11:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">12:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">13:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">14:00</div>
+                            <div className="gridItemHalfHour"></div>
+                            <div className="gridItemHour">15:00</div>
+                            <div className="gridItemHalfHour"></div>
                         </div>
                         {this.scheduleBorders(this.getWeekday(new Date().getDay()))}
                         {this.state.skema.map((skemabrik) => {
