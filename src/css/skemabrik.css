@@ -1,12 +1,12 @@
 /* General Skemabrik Style */
 .skemabrik{
     position: relative;
+    left: 0.75%;
     width: 98.5%;
-    border: 1px solid black;
-    border-left: none;
-    border-right: none;
     display: flex;
+    background: lightslategray;
     align-items: center;
+    border-radius: 5px;
     z-index: 1;
 }
 
