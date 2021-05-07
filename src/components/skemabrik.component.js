@@ -61,7 +61,7 @@ export default class Skemabrik extends Component {
     calculatePosition(date){
         let deltaHours = date.getHours() - 8;
         let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
-        return `${minutesPercentage}%`;
+        return `calc(${minutesPercentage}% + ${minutesPercentage ? "1px": "0px"})`;
     }
 
     componentDidMount(){
