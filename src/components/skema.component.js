@@ -130,8 +130,11 @@ export default class Skema extends Component{
                     <h1 className="textCenter">{this.state.viewText}</h1>
                     <div className="gridContainerOneDay">
                         {this.state.skema.map((skemabrik) => {
-                            if(true)
+                            let lessonDate = new Date(skemabrik.startTime).getDay();
+                            if(lessonDate === new Date().getDay())
                                 return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} isToggleOn={this.props.isToggleOn}/>
+                            else
+                                return null;
                         })}
                     </div>
                 </div>
