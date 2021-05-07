@@ -85,7 +85,7 @@ export default class Skema extends Component{
                 </div>
             );
         }
-        else if(this.props.isToggleOn === false){
+        else if(this.props.dayView === false){
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
@@ -118,13 +118,13 @@ export default class Skema extends Component{
                         {this.scheduleBorders("Fredag")}
                         
                         {this.state.skema.map((skemabrik) => { 
-                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())} isToggleOn={this.props.isToggleOn}/>
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.props.dayView}/>
                         })}
                     </div>
                 </div>
             )
         }
-        else if(this.props.isToggleOn === true){
+        else if(this.props.dayView === true){
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
@@ -132,7 +132,7 @@ export default class Skema extends Component{
                         {this.state.skema.map((skemabrik) => {
                             let lessonDate = new Date(skemabrik.startTime).getDay();
                             if(lessonDate === new Date().getDay())
-                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} isToggleOn={this.props.isToggleOn}/>
+                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.props.dayView}/>
                             else
                                 return null;
                         })}

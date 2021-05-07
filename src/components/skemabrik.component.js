@@ -81,7 +81,7 @@ export default class Skemabrik extends Component {
             position: 'absolute',
             top: this.calculatePosition(startTime),
         }
-        if(this.props.isToggleOn === true){
+        if(this.props.dayView === true){
             return([
                 <div key="time" className="gridItem">{this.toHHMM(startTime)}
                 {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
@@ -95,7 +95,7 @@ export default class Skemabrik extends Component {
                 ]
             )
         }
-        else if (this.props.isToggleOn === false && this.state.isLoaded){
+        else if (this.props.dayView === false && this.state.isLoaded){
                 return( ReactDOM.createPortal(
                     <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
                         <p className="skemabrikTitleText">
