@@ -36,6 +36,17 @@
     width: 40px;
 }
 
+.descriptionAlert{
+    position:absolute;
+    height: 1em;
+    width: 1em;
+    background-color: #F0BF13;
+    border-radius: 50%;
+    top: 10px;
+    right: 10px;
+    border: solid 1px black;
+}
+
 /* Colours of Subjects */
 .Dansk{
     background-color: #FF4D4D !important;

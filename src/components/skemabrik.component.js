@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SkemabrikModal from './skemabrikModal.component';
+import DescriptionAlert from './descriptionAlert.component';
 import { UserContext } from '../UserContext';
 import ReactDOM from 'react-dom';
 
@@ -10,6 +11,7 @@ export default class Skemabrik extends Component {
         this.state = {
             showSkemabrikModal: false,
             isLoaded: false,
+            read: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
@@ -51,7 +53,7 @@ export default class Skemabrik extends Component {
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
-            showSkemabrikModal: !prevState.showSkemabrikModal
+            showSkemabrikModal: !prevState.showSkemabrikModal,
         }), () => {
             this.state.showSkemabrikModal ? document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
         });
@@ -76,6 +78,7 @@ export default class Skemabrik extends Component {
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
         const startTime = new Date(this.props.skemabrik.startTime);
+        const description = this.props.skemabrik.description;
         const style = {
             height: this.calculateHeight(startTime, endTime),
             position: 'absolute',
@@ -92,6 +95,7 @@ export default class Skemabrik extends Component {
                         <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                         {subject}
                     </p>
+                    {description ? <DescriptionAlert/> : null}
                 </div>,
                 document.getElementById(`${this.props.weekday}`))]
             )
@@ -107,6 +111,7 @@ export default class Skemabrik extends Component {
                             <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                             {subject}
                         </p>
+                        {description ? <DescriptionAlert/> : null}
                 </div>,
                 document.getElementById(`${this.props.weekday}`))]
             )
