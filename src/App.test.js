@@ -30,7 +30,7 @@ test('header renders correctly with name', () => {
     const linkElement = screen.getByTestId("header");
     const logoElement = screen.getByTestId("headerButton");
     const profilePictureElement = screen.getByAltText("profilBillede");
-    const profileNameElement = screen.queryByText("Testy McTestFace");
+    const profileNameElement = screen.getByText("Testy McTestFace");
 
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(logoElement);
@@ -109,6 +109,7 @@ test('app renders loginform correctly', () => {
     const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
     const adgangskodeElement = screen.getByPlaceholderText("Adgangskode");
     const loginElement = screen.getByDisplayValue("Log ind");
+    
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(h2element);
     expect(linkElement).toContainElement(brugernavnElement);
@@ -210,24 +211,45 @@ test('skema component renders correctly', () => {
 
 /* Tests for skemabrik */
 test('skemabrik component renders correctly', () => {
-    const skemabrik = {subject: 'Dansk', class: 'sw2b2-20', description: 'Læs en bog', startTime: '2021-04-23T10:30:00.000+00:00', endTime: '2021-04-23T12:30:00.000+00:00'}
-    render(
-        <Skemabrik skemabrik={skemabrik}/>
-    )
+    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
+    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '', startTime: '', endTime: ''}
+    render([
+        <div id="Mandag" data-testid="Mandag"/>,
+        <div id="Tirsdag" data-testid="Tirsdag"/>,
+        <div id="Onsdag" data-testid="Onsdag"/>,
+        <div id="Torsdag" data-testid="Torsdag"/>,
+        <div id="Fredag" data-testid="Fredag"/>,
+        <Skemabrik skemabrik={skemabrikDansk} dayView={true} weekday="Mandag"/>,
+        <Skemabrik skemabrik={skemabrikMatematik} dayView={false} weekday="Onsdag"/>
+    ])
 
-    const skemabrikStartElement = screen.getByText('12:30');
-    const skemabrikSubjectElement = screen.getByText('Dansk');
-    const skemabrikSubjectLogo = screen.getByAltText('Dansk Logo');
+    const skemabrikElementDansk = screen.getByText('Dansk');
+    const skemabrikLogoDansk = screen.getByAltText('Dansk Logo');
+    const skemabrikElementMatematik = screen.getByText('Matematik');
+    const skemabrikLogoMatematik = screen.getByAltText('Matematik Logo');
 
-    expect(skemabrikStartElement).toBeInTheDocument;
-    expect(skemabrikSubjectElement).toBeInTheDocument;
-    expect(skemabrikSubjectLogo).toBeInTheDocument;
+    function dayDivsContain(subjectElement, subjectLogo, subjectDay) {
+        const weekDays = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"]
+        weekDays.forEach(weekDay => {
+            const weekDayDiv = screen.getByTestId(weekDay);
+            if(weekDay === subjectDay){
+                expect(weekDayDiv).toContainElement(subjectElement);
+                expect(weekDayDiv).toContainElement(subjectLogo);
+            } else{
+                expect(weekDayDiv).not.toContainElement(subjectElement);
+                expect(weekDayDiv).not.toContainElement(subjectLogo);
+            }
+        })
+    }
+
+    dayDivsContain(skemabrikElementDansk, skemabrikLogoDansk, "Mandag");
+    dayDivsContain(skemabrikElementMatematik, skemabrikLogoMatematik, "Onsdag");
     /* Test af disableModal og onSkemaClick mangler */
 });
 
 /* Tests for skemabrikModal */
-/*test('skemabrikModal component renders correctly', () => {
-    render(
+test('skemabrikModal component renders correctly', () => {
+    /*render(
         <SkemabrikModal/>
-    )
-});*/
+    )*/
+});

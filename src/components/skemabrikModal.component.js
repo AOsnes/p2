@@ -27,7 +27,7 @@ export default class SkemabrikModal extends Component{
                     <div onClick={this.handleClick} className="close">&#10006;</div>
                     <div className="skemabrikModalText textCenter">{this.props.toHHMM(startTime)} - {this.props.toHHMM(endTime)}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
-                    {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null};
+                    {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
                 </div>,
                 document.getElementById('root')
             )

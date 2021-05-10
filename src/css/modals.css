@@ -87,7 +87,7 @@
     filter: blur(2px);
 }
 
-.modal-backdrop {
+.modalBackdrop {
     position: fixed;
     top: 0;
     bottom: 0;
