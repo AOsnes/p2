@@ -8,16 +8,16 @@ import './css/loginform.css';
 import './css/sidebar.css';
 import './css/skema.css';
 import './css/skemabrik.css';
-import './css/skemabrikModal.css';
+import './css/modals.css';
 import './css/afleveringer.css';
 import './css/skemabrikForm.css';
 import './css/toggleknap.css';
+import './css/timeIndicator.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
-import Skema from "./components/skema.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Afleveringer from "./components/afleveringer.component";
 import Dagsvisning from "./components/dagsvisning.component";
@@ -69,7 +69,6 @@ function Skemapage(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Dagsvisning/>
-            <Skema/>
         </div>
     )
 }

@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import SkemabrikModal from './skemabrikModal.component';
+import { UserContext } from '../UserContext';
+import ReactDOM from 'react-dom';
 
 export default class Skemabrik extends Component {
+    static contextType = UserContext;
     constructor(props){
         super(props)
         this.state = {
             showSkemabrikModal: false,
+            isLoaded: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
+        this.toHHMM = this.toHHMM.bind(this);
     }
 
     /* Beregn hvor stor højde der skal være på elemented ud fra end time - start time,*/
@@ -38,16 +43,33 @@ export default class Skemabrik extends Component {
     disableModal(){
         this.setState({
             showSkemabrikModal: false
+        }, () => {
+            document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
         })
-        document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
     }
 
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal
-        }));
-        this.state.showSkemabrikModal ?  document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter')
+        }), () => {
+            this.state.showSkemabrikModal ? document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
+        });
+        
+    }
+
+    calculatePosition(date){
+        let deltaHours = date.getHours() - 8;
+        let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
+        return `calc(${minutesPercentage}% + ${minutesPercentage ? "1px": "0px"})`;
+    }
+
+    componentDidMount(){
+        if(document.getElementsByClassName('gridContainerFiveDay') || document.getElementsByClassName('gridContainerOneDay')){
+            this.setState({
+                isLoaded: true,
+            })
+        }
     }
 
     render(){
@@ -56,19 +78,41 @@ export default class Skemabrik extends Component {
         const startTime = new Date(this.props.skemabrik.startTime);
         const style = {
             height: this.calculateHeight(startTime, endTime),
+            position: 'absolute',
+            top: this.calculatePosition(startTime),
         }
-        return([
-            <div key="time" className="gridItem">{this.toHHMM(startTime)} 
-                {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
-            </div>,
-            <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick} >
-                <p className="skemabrikTitleText">
-                    <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                    {subject}
-                </p>
-                
-            </div>
-            ]
-        )
+        if(this.props.dayView === true && this.state.isLoaded){
+            return([
+                <div>
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
+                </div>,
+                ReactDOM.createPortal(
+                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                    <p className="skemabrikTitleText">
+                        <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                        {subject}
+                    </p>
+                </div>,
+                document.getElementById(`${this.props.weekday}`))]
+            )
+        }
+        else if (this.props.dayView === false && this.state.isLoaded){
+            return([
+                <div>
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={this.toHHMM}/> : null}
+                </div>,
+                ReactDOM.createPortal(
+                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                        <p className="skemabrikTitleText">
+                            <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
+                            {subject}
+                        </p>
+                </div>,
+                document.getElementById(`${this.props.weekday}`))]
+            )
+        }
+        else {
+            return null;
+        }
     }
 }

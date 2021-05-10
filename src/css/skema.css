@@ -7,17 +7,14 @@
     height: 80%;
     margin-top: 3.5%;
     border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
 }
 
 /* grid style */
-.gridContainer {
+.gridContainerOneDay {
     position: relative;
-    left: 5%;
-    width: 90%;
     display: grid;
-    grid-template-columns: 10% auto;
-    padding: 10px;
-    padding-bottom: 40px;
+    grid-template-columns: 7.5% auto;
 }
 
 .gridItem {
@@ -31,5 +28,126 @@
 }
 
 .gridLessonItem {
+    border-right: none;
+}
+
+/*Five day css*/
+.gridContainerFiveDay {
+    position: relative;
+    display: grid;
+    grid-template-columns: 7.5% auto auto auto auto auto;
+}
+
+.gridItemContainer {
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.gridItemHour {
+    position: relative;
+    width: 100%;
+    padding-right: 5px;
+    font-size: 30px;
+    text-align: center;
+    height: 49px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.gridItemHalfHour {
+    position: relative;
+    width: 100%;
+    padding-right: 5px;
+    font-size: 30px;
+    text-align: center;
+    height: 49px;
+    border: 1px dotted rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.lastScheduleBlock {
+    border-bottom-right-radius: 10px;
+}
+
+.timeOne {
+    border-top: none;
+    height: 50px;
+}
+
+
+/*Schedule layout css */
+.scheduleBordersHour {
+    position: relative;
+    height: 49px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.scheduleBordersHalfHour {
+    position: relative;
+    height: 49px;
+    border: 1px dotted rgba(0, 0, 0, 0.8);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.scheduleBorderFirst {
+    border-top: none;
+    height: 50px;
+}
+
+.Mandag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    border-bottom: none;
+    border-right: none;
+}
+
+.Tirsdag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    border-bottom: none;
+    border-right: none;
+}
+
+.Onsdag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    border-bottom: none;
+    border-right: none;
+}
+
+.Torsdag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    border-bottom: none;
+    border-right: none;
+}
+
+.Fredag{
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 800px;
+    border-bottom: none;
     border-right: none;
 }

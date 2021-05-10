@@ -2,11 +2,12 @@
 This just makes the form be in the middle for now */
 .opretSkemabrik{
     position: absolute;
+    display: grid;
+    width: 20%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: grid;
-    grid-template-columns: 70% auto;
+    grid-template-columns: auto auto;
 }
 
 .legend{
@@ -20,6 +21,27 @@ This just makes the form be in the middle for now */
     padding-right: 1em;
 }
 
-.wideOption{
-    grid-column: 1 / span 2;
+.twoColumnWide{
+    grid-column: auto/span 2;
+}
+
+textarea{
+    height: 5em;
+}
+
+.advancedGrid{
+    display: grid;
+    grid-template-columns: auto auto 10%;
+}
+
+.advancedText{
+    padding: 0em;
+    font-size: 0.65em;
+    font-weight: 800;
+    text-align: right;
+}
+
+.submitButton:disabled{
+    opacity: 0.5;
+    pointer-events: none;
 }

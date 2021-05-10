@@ -1,0 +1,10 @@
+/* CSS for the line */
+.timeIndicator {
+    background-color: red;
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    top: 0px;
+    filter: drop-shadow(0.5px 1.5px 1px rgba(0,0,0,.575));
+    z-index: 2;
+}
