@@ -83,7 +83,7 @@ export default class Skemabrik extends Component {
         }
         if(this.props.dayView === true && this.state.isLoaded){
             return([
-                <div>
+                <div key="modal">
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
                 </div>,
                 ReactDOM.createPortal(
@@ -98,7 +98,7 @@ export default class Skemabrik extends Component {
         }
         else if (this.props.dayView === false && this.state.isLoaded){
             return([
-                <div>
+                <div key="modal">
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={this.toHHMM}/> : null}
                 </div>,
                 ReactDOM.createPortal(

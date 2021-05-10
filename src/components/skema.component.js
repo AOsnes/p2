@@ -89,8 +89,8 @@ export default class Skema extends Component{
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
-                    <TimeIndicator/>
                     <div className="gridContainerFiveDay">
+                        <TimeIndicator/>
                         <div className="gridItemContainer">
                             <div className="gridItemHour timeOne">8:00</div>
                             <div className="gridItemHalfHour"></div>
@@ -126,8 +126,8 @@ export default class Skema extends Component{
             return(
                 <div className="skemaContainer">
                     <h1 className="textCenter">{this.state.viewText}</h1>
-                    <TimeIndicator/>
                     <div className="gridContainerOneDay">
+                        <TimeIndicator/>
                         <div className="gridItemContainer">
                             <div className="gridItemHour timeOne">8:00</div>
                             <div className="gridItemHalfHour"></div>

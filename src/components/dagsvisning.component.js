@@ -18,13 +18,13 @@ export default class Dagsvisning extends Component{
 
     render(){
         return ([
-            <div className="toggleVisning">
+            <div key="toggleVisning" className="toggleVisning">
                 <button className="button"
                     onClick={this.handleClick}>
                     {this.state.dayView ? '1 dags visning' : '5 dags visning'}
                 </button>
             </div>,
-            <Skema dayView={this.state.dayView}/>
+            <Skema key="skema" dayView={this.state.dayView}/>
         ]);
     }
 }
