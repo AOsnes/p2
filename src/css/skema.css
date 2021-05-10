@@ -1,7 +1,7 @@
 /*  General Schedule Styling */
-.skemaContainer{
+.scheduleContainer{
     position: relative;
-    background-color:#E5E5E5;
+    background-color: white;
     left: 10%;
     width: 85%;
     height: 80%;
@@ -82,6 +82,68 @@
     height: 50px;
 }
 
+/*Top of schedule things */
+.weekContainerFiveDay {
+    display: grid;
+    grid-template-columns: 7.5% 18.5% 18.5% 18.5% 18.5% 18.5%;
+}
+
+.weekContainerOneDay {
+    display: grid;
+    grid-template-columns: 7.5% 92.5%;
+}
+
+.weekText {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: none;
+    border-right: none;
+}
+
+.oneDayText {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: none;
+    border-right: none;
+}
+
+.oneDayTextPosition {
+    position: relative;
+    left: -3.75%;
+}
+
+.weekContainerBorderFix {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: none;
+    border-left: none;
+}
+
+.todayText {
+    background: darkgray;
+}
+
+.scheduleContainerHeader {
+    height: 70px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.scheduleContainerHeaderTeacher{
+    background: #00cc00;
+    opacity: 80%;
+}
+
+.scheduleContainerHeaderPupil{
+    background: #0075ff;
+    opacity: 80%;
+}
+
+.scheduleContainerHeaderText {
+    font-size: 3.157em;
+    color: white;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
 /*Schedule layout css */
 .scheduleBordersHour {
