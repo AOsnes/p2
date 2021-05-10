@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class TimeIndicator extends Component {
     constructor(props){
         super(props)
-        this.state = {time: Date.now()}
+        this.state = {time: Date.now(), show: 1}
     }
      
     calculatePosition(date){
@@ -13,20 +13,41 @@ export default class TimeIndicator extends Component {
         const minutes = date.getMinutes();
         const minutesSinceStartHour = hours*60 + minutes;
         const position = (minutesSinceStartHour / totalMinutes) * 100;
-
+        console.log(position)
         return `${position}%`;
     }
 
     componentDidMount(){
-        this.interval = setInterval(() =>
+        /* Before rendering we want find out if we should show the indicator or nah. */
+        if(new Date().getHours() < 8){
             this.setState({
-                time: Date.now()
-            },() =>{
-                
-        }), 1000*60*5); /* Update every 5 minutes */
+                show: 0,
+            })
+        }
+        /* Update time state every 5 minutes, */
+        this.interval = setInterval(() =>{
+            let currentTime = new Date()
+            if(currentTime.getHours() < 8){
+                this.setState({
+                    show: 0,
+                });
+            }
+            else if (currentTime.getHours() > 15){
+                clearInterval(this.interval)
+                this.setState({
+                    show: 0,
+                });
+            }
+            else {
+                this.setState({
+                    time: currentTime,
+                    show: 1,
+                });
+        }}, 1000*60*5)
     }
 
     componentWillUnmount(){
+        /* Make sure to stop the timer to avoid memory leakage */
         clearInterval(this.interval)
     }
 
@@ -34,6 +55,7 @@ export default class TimeIndicator extends Component {
         const style = {
             position: 'absolute',
             top: this.calculatePosition(new Date(this.state.time)),
+            opacity: this.state.show
         }
 
         return(
