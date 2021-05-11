@@ -81,7 +81,7 @@ export default class Skemabrik extends Component {
             position: 'absolute',
             top: this.calculatePosition(startTime),
         }
-        if(this.props.dayView === true && this.state.isLoaded){
+        if(this.props.dayView === 1 && this.state.isLoaded){
             return([
                 <div>
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
@@ -96,7 +96,7 @@ export default class Skemabrik extends Component {
                 document.getElementById(`${this.props.weekday}`))]
             )
         }
-        else if (this.props.dayView === false && this.state.isLoaded){
+        else if (this.props.dayView === 5 && this.state.isLoaded){
             return([
                 <div>
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={this.toHHMM}/> : null}
