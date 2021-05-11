@@ -19,10 +19,12 @@ export default class Dagsvisning extends Component{
     render(){
         return ([
             <div className="toggleVisning">
-                <button className="button"
-                    onClick={this.handleClick}>
-                    {this.state.dayView ? '1 dags visning' : '5 dags visning'}
-                </button>
+                <label className="switch">
+                    <input type="checkbox" defaultChecked={this.state.dayView}
+                        onClick={this.handleClick} />
+                    <span className="slider">
+                       {this.state.dayView ? <div className="oneDayToggleText"> 1-Dag </div>: <div className="fiveDayToggleText">5-Dage</div>}</span>
+                </label>
             </div>,
             <Skema dayView={this.state.dayView}/>
         ]);
