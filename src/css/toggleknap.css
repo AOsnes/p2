@@ -1,19 +1,85 @@
 .toggleVisning{
     position: relative;
     left: 90%;
-    left: 85%;
     top: 50px;
-    }
+}
     
-.button {
-    background-color: #008CBA;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
+.switch{
+    position: relative;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    width: 100px;
+    height: 34px;
+}
+    
+.switch input{ 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+    
+.slider{
+    position: absolute;
     cursor: pointer;
-      }
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+    
+.slider:before{
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+    
+input:checked + .slider{
+    background-color: #0075FF;
+}
+    
+input:focus + .slider{
+    box-shadow: 0 0 1px #0075FF;
+}
+    
+input:checked + .slider:before{
+    -webkit-transform: translateX(64px);
+    -ms-transform: translateX(64px);
+    transform: translateX(64px);
+}
+
+.oneDayText{
+    position: relative;
+    text-align: left;
+    font-family: Work Sans;
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    top: 5px;
+    left: 10px;
+    stroke: black;
+    user-select: none;
+
+}
+
+.fiveDayText{
+    position: relative;
+    text-align: right;
+    font-family: Work Sans;
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    top: 5px;
+    right: 5px;
+    stroke: black; 
+    user-select: none;
+}
