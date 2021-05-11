@@ -219,9 +219,9 @@ test('skemabrik component renders correctly', () => {
     const skemabrikSubjectElement = screen.getByText('Dansk');
     const skemabrikSubjectLogo = screen.getByAltText('Dansk Logo');
 
-    expect(skemabrikStartElement).toBeInTheDocument;
-    expect(skemabrikSubjectElement).toBeInTheDocument;
-    expect(skemabrikSubjectLogo).toBeInTheDocument;
+    expect(skemabrikStartElement).toBeInTheDocument();
+    expect(skemabrikSubjectElement).toBeInTheDocument();
+    expect(skemabrikSubjectLogo).toBeInTheDocument();
     /* Test af disableModal og onSkemaClick mangler */
 });
 
