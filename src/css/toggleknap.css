@@ -1,8 +1,8 @@
 .toggleVisning{
     position: relative;
-    left: 90%;
-    top: 50px;
     width: 110px;
+    top: 45%;
+    transform: translate(0, -25%);
 }
     
 .switch{
@@ -10,6 +10,8 @@
     display: inline-block;
     width: 110px;
     height: 34px;
+    border-radius: 36px;
+    border: 5px solid #C4C4C4;
 }
     
 .switch input{ 
@@ -25,7 +27,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #06142F;
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 34px;
@@ -49,7 +51,7 @@ input:checked + .slider{
 }
     
 input:focus + .slider{
-    box-shadow: 0 0 1px #0075FF;
+    box-shadow: 0 0 1px #C4C4C4;
 }
     
 input:checked + .slider:before{

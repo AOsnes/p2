@@ -20,7 +20,7 @@ import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Afleveringer from "./components/afleveringer.component";
-import Dagsvisning from "./components/dagsvisning.component";
+import Skema from "./components/skema.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -68,7 +68,7 @@ function Skemapage(){
         <div>
             <Header linkTo="/skema"/>
             <Sidebar/>
-            <Dagsvisning/>
+            <Skema/>
         </div>
     )
 }
