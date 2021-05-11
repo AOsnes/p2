@@ -16,10 +16,10 @@ export default class Dagsvisning extends Component{
         return([
             <div className="toggleVisning">
                 <label className="switch">
-                    <input type="checkbox" defaultChecked={this.props.dayView}
-                        onClick={this.handleClick} />
+                    <input type="checkbox" defaultChecked={this.props.dayView === 1 ? true : false} onClick={this.handleClick} />
                     <span className="slider">
-                       {this.props.dayView ? <div className="oneDayToggleText"> 1-Dag </div>: <div className="fiveDayToggleText">5-Dage</div>}</span>
+                       {this.props.dayView === 1 ? <div className="toggleText toggleTextLeft"> 1-Dag </div>: <div className="toggleText toggleTextRight">5-Dage</div>}
+                    </span>
                 </label>
             </div>,
         ]);

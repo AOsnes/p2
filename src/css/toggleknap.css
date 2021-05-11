@@ -60,29 +60,23 @@ input:checked + .slider:before{
     transform: translateX(74px);
 }
 
-.oneDayToggleText{
+.toggleText{
     position: relative;
-    text-align: left;
     font-family: Work Sans;
     font-weight: bold;
     color: white;
     font-size: 20px;
     top: 5px;
-    left: 10px;
-    stroke: black;
-    user-select: none;
-
-}
-
-.fiveDayToggleText{
-    position: relative;
-    text-align: right;
-    font-family: Work Sans;
-    font-weight: bold;
-    color: white;
-    font-size: 20px;
-    top: 5px;
-    right: 5px;
     stroke: black; 
     user-select: none;
+}
+
+.toggleTextLeft{
+    text-align: left;
+    left: 5px;
+}
+
+.toggleTextRight{
+    text-align: right;
+    right: 5px;
 }
