@@ -1,14 +1,13 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
-import { link } from 'fs-extra';
-import {BrowserRouter as Router, useLocation} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 import App from './App';
-import Skema from './components/skema.component';
 import Skemabrik from './components/skemabrik.component';
-import SkemabrikModal from './components/skemabrikModal.component'
 import Header from './components/header.component';
 import Sidebar from './components/sidebar.component';
 import LoginForm from './components/loginform.component';
 import NoMatchError from './components/noMatchError.component';
+import TimeIndicator from './components/timeIndicator.component';
+import SkemabrikModal from './components/skemabrikModal.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 
 afterEach(cleanup);
@@ -233,10 +232,14 @@ test('skemabrik component renders correctly', () => {
         weekDays.forEach(weekDay => {
             const weekDayDiv = screen.getByTestId(weekDay);
             if(weekDay === subjectDay){
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(weekDayDiv).toContainElement(subjectElement);
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(weekDayDiv).toContainElement(subjectLogo);
             } else{
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(weekDayDiv).not.toContainElement(subjectElement);
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(weekDayDiv).not.toContainElement(subjectLogo);
             }
         })
@@ -248,8 +251,47 @@ test('skemabrik component renders correctly', () => {
 });
 
 /* Tests for skemabrikModal */
-test('skemabrikModal component renders correctly', () => {
-    /*render(
-        <SkemabrikModal/>
-    )*/
+test.only('skemabrikModal component renders correctly', () => {
+    /* Det er nok smartere at render en skemabrik og så få den til at render modal ved at simulere et tryk på brikken. */
+    render(
+        <div className="root">
+            {/* <SkemabrikModal /> */}
+        </div>
+    )
+    /* const linkElement = document.getElementsByClassName("detailsModal")[0] */
+});
+
+test('timeIndicator renders on the correct percentage on the schedule', () =>{
+    jest.useFakeTimers()
+    let testCases =
+    [/* Opacity before, Position before, Opacity after, Position after , Time before, Time after */
+        [0, -0.21, 1, 0.83 , new Date("2021-05-11T07:59:00"), new Date("2021-05-11T08:04:00")],
+        [1, 0    , 1, 1.04 , new Date("2021-05-11T08:00:00"), new Date("2021-05-11T08:05:00")],
+        [1, 12.5 , 1, 13.5 , new Date("2021-05-11T09:00:00"), new Date("2021-05-11T09:05:00")],
+        [1, 50   , 1, 51.0 , new Date("2021-05-11T12:00:00"), new Date("2021-05-11T12:05:00")],
+        [1, 99.79, 0, 100.8, new Date("2021-05-11T15:59:00"), new Date("2021-05-11T16:04:00")],
+        [0, 100  , 0, 101  , new Date("2021-05-11T16:00:00"), new Date("2021-05-11T16:05:00")],
+    ]
+    testCases.forEach(testCase =>{
+        global.Date = jest.fn()
+        Date.now = jest.fn(() => testCase[4])
+        jest.spyOn(global, 'Date').mockImplementation(() => testCase[4])
+        render(<TimeIndicator/>)
+        const linkElement = screen.getByTestId("timeIndicator")
+        const linkElementTopBefore = parseFloat(linkElement.style._values.top);
+        const linkeElementOpacityBefore = parseInt(linkElement.style._values.opacity);
+        expect(linkeElementOpacityBefore).toBe(testCase[0])
+        expect(linkElementTopBefore).toBeCloseTo(testCase[1], 2)
+        
+        /* Time is now advanced 5 minutes */
+        jest.spyOn(global, 'Date').mockImplementation(() => testCase[5])
+        jest.advanceTimersByTime(1000*60*5)
+        const linkElementTopAfter = parseFloat(linkElement.style._values.top);
+        const linkeElementOpacityAfter = parseInt(linkElement.style._values.opacity);
+        expect(linkeElementOpacityAfter).toBe(testCase[2])
+        expect(linkElementTopAfter).toBeCloseTo(testCase[3], 1)
+        cleanup();
+    })
+    /* A total of 9 calls to clear interval will be made, please count :) */
+    expect(clearInterval).toHaveBeenCalledTimes(9)
 });
