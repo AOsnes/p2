@@ -13,7 +13,6 @@ export default class TimeIndicator extends Component {
         const minutes = date.getMinutes();
         const minutesSinceStartHour = hours*60 + minutes;
         const position = (minutesSinceStartHour / totalMinutes) * 100;
-        console.log(position)
         return `${position}%`;
     }
 
