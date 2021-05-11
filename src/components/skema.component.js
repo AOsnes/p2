@@ -87,8 +87,18 @@ export default class Skema extends Component{
         }
         else if(this.props.dayView === false){
             return(
-                <div className="skemaContainer">
-                    <h1 className="textCenter">{this.state.viewText}</h1>
+                <div className="scheduleContainer">
+                    <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacher" : "scheduleContainerHeaderPupil"}`}>
+                        <h1 className="textCenter scheduleContainerHeaderText">Skema</h1>
+                    </div>
+                    <div className="weekContainerFiveDay">
+                        <h1 className="weekContainerBorderFix"> </h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag") ? "todayText" : ""}`}>Mandag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag") ? "todayText" : ""}`}>Tirsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag") ? "todayText" : ""}`}>Onsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag") ? "todayText" : ""}`}>Torsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag") ? "todayText" : ""}`}>Fredag</h1>
+                    </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
                         <div className="gridItemContainer">
@@ -124,8 +134,14 @@ export default class Skema extends Component{
         }
         else if(this.props.dayView === true){
             return(
-                <div className="skemaContainer">
-                    <h1 className="textCenter">{this.state.viewText}</h1>
+                <div className="scheduleContainer">
+                    <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacher" : "scheduleContainerHeaderPupil"}`}>
+                    <h1 className="textCenter scheduleContainerHeaderText">Skema</h1>
+                    </div>
+                    <div className="weekContainerOneDay">
+                        <h1 className="weekContainerBorderFix"> </h1>
+                        <h1 className="textCenter oneDayText"><p className="oneDayTextPosition">{this.state.viewText}</p></h1>
+                    </div>
                     <div className="gridContainerOneDay">
                         <TimeIndicator/>
                         <div className="gridItemContainer">
