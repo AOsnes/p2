@@ -24,7 +24,7 @@ export default class Dagsvisning extends Component{
                     <input type="checkbox" defaultChecked={this.state.dayView}
                         onClick={this.handleClick} />
                     <span className="slider">
-                       {this.state.dayView ? <div className="oneDayText"> 1-Dag </div>: <div className="fiveDayText">5-Dage</div>}</span>
+                       {this.state.dayView ? <div className="oneDayToggleText"> 1-Dag </div>: <div className="fiveDayToggleText">5-Dage</div>}</span>
                 </label>
             </div>,
             <Skema dayView={this.state.dayView} />

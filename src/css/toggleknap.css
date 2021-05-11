@@ -2,12 +2,13 @@
     position: relative;
     left: 90%;
     top: 50px;
+    width: 110px;
 }
     
 .switch{
     position: relative;
     display: inline-block;
-    width: 100px;
+    width: 110px;
     height: 34px;
 }
     
@@ -52,12 +53,12 @@ input:focus + .slider{
 }
     
 input:checked + .slider:before{
-    -webkit-transform: translateX(64px);
-    -ms-transform: translateX(64px);
-    transform: translateX(64px);
+    -webkit-transform: translateX(74px);
+    -ms-transform: translateX(74px);
+    transform: translateX(74px);
 }
 
-.oneDayText{
+.oneDayToggleText{
     position: relative;
     text-align: left;
     font-family: Work Sans;
@@ -71,7 +72,7 @@ input:checked + .slider:before{
 
 }
 
-.fiveDayText{
+.fiveDayToggleText{
     position: relative;
     text-align: right;
     font-family: Work Sans;
