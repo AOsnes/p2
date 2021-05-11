@@ -99,8 +99,8 @@ export default class Skema extends Component{
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag") ? "todayText" : ""}`}>Torsdag</h1>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag") ? "todayText" : ""}`}>Fredag</h1>
                     </div>
-                    <TimeIndicator/>
                     <div className="gridContainerFiveDay">
+                        <TimeIndicator/>
                         <div className="gridItemContainer">
                             <div className="gridItemHour timeOne">8:00</div>
                             <div className="gridItemHalfHour"></div>
@@ -142,8 +142,8 @@ export default class Skema extends Component{
                         <h1 className="weekContainerBorderFix"> </h1>
                         <h1 className="textCenter oneDayText"><p className="oneDayTextPosition">{this.state.viewText}</p></h1>
                     </div>
-                    <TimeIndicator/>
                     <div className="gridContainerOneDay">
+                        <TimeIndicator/>
                         <div className="gridItemContainer">
                             <div className="gridItemHour timeOne">8:00</div>
                             <div className="gridItemHalfHour"></div>
