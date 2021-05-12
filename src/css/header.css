@@ -114,9 +114,8 @@
 }
 
 .showMenu {
-    display: block;
     position: absolute;
-    z-index: 1;
+    display: block;
     top: 100%;
 }
 
