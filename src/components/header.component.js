@@ -23,23 +23,25 @@ export default class Header extends Component {
                             <p id="headerLogoName">Skema.dk</p>
                         </Link>
                     </li>
-                    <UserContext.Consumer>
-                        {user => {
-                            if(user.name){
-                                return(
-                                    <div className="headerProfileContainer">
-                                        <li className="headerItem">
-                                            <p id="headerProfileName">{user.name}</p>
-                                        </li>
-                                        <li className="headerItem">
-                                            <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede"></img>
-                                            <LogoutModal/>
-                                        </li>
-                                    </div>
-                                );
-                            } 
-                        }}
-                    </UserContext.Consumer>
+                    <div className="testy">
+                        <UserContext.Consumer>
+                            {user => {
+                                if(user.name){
+                                    return(
+                                        <div className="headerProfileContainer">
+                                            <li className="headerItem">
+                                                <p id="headerProfileName">{user.name}</p>
+                                            </li>
+                                            <li className="headerItem">
+                                                <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede"></img>
+                                                <LogoutModal/>
+                                            </li>
+                                        </div>
+                                    );
+                                } 
+                            }}
+                        </UserContext.Consumer>
+                    </div>
                 </div>
             </ul>
         );

@@ -6,7 +6,7 @@
     background-color: #c4c4c4;
     position: absolute;
     top: 100px;
-    height: 100%;
+    height: calc(100% - 100px); /* Entire height of screen minus header height */
     filter: drop-shadow(.125rem 0 .25rem rgba(0,0,0,.075));
 }
 
