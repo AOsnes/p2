@@ -5,12 +5,13 @@ import Skemabrik from './components/skemabrik.component';
 import Header from './components/header.component';
 import Sidebar from './components/sidebar.component';
 import LoginForm from './components/loginform.component';
+import Dagsvisning from './components/dagsvisning.component';
 import NoMatchError from './components/noMatchError.component';
 import TimeIndicator from './components/timeIndicator.component';
-import Dagsvisning from './components/dagsvisning.component';
+import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
-import Skema from './components/skema.component';
 
+/* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup);
 
 /* Tests for header */
@@ -359,3 +360,111 @@ test('toggle day view component changes when clicked', () =>{
     fireEvent.click(inputElementFiveday);
     expect(handleClick).toHaveBeenCalledTimes(2);
 })
+
+describe('skemabrikForm tests', () =>{
+    let signedInUser = {role: 'teacher', name: 'Sigurd', id: '123'};
+    beforeEach(() =>{
+        global.fetch = jest.fn(() => {
+            return( 
+            Promise.resolve({
+                json: () => Promise.resolve(["sw2b2-20","sw2b2-21","sw2b2-22"])
+            })
+        )});
+        render(
+            <div id="root">
+                <UserContext.Provider value={signedInUser}>
+                    <SkemabrikForm/>
+                </UserContext.Provider>
+            </div>
+            )
+    });
+
+    test('form has correct inital values', () =>{
+        const formElement = document.getElementsByClassName("formContainer")[0];
+        expect(formElement).toHaveFormValues({
+            date: '',
+            startTime: '',
+            endTime: '',
+            advanced: false,
+            subject: 'Dansk',
+            class: 'sw2b2-20',
+            description: '',
+        });
+    })
+    test('form has correct values when user changes values', () =>{
+        const formElement = document.getElementsByClassName("formContainer")[0];
+        const dateElement = screen.getByTestId("date");
+        const startTimeElement = screen.getByTestId("startTime");
+        const endTimeElement = screen.getByTestId("endTime");
+        const advancedElement = screen.getByTestId("advanced");
+        const subjectSelectElement = screen.getByTestId("subject");
+        const classSelectElement = screen.getByTestId("class");
+        const descriptionElement = screen.getByTestId("description");
+        const classOptionElements = screen.getAllByTestId("classOption");
+        const subjectOptionElements = screen.getAllByTestId("subjectOption");
+        
+        fireEvent.change(dateElement,        {target: {value: "2021-05-11"}})
+        fireEvent.change(startTimeElement,   {target: {value: "12:00:00"}})
+        fireEvent.change(endTimeElement,     {target: {value: "13:00:00"}})
+        fireEvent.change(descriptionElement, {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+        fireEvent.click(advancedElement)
+        expect(formElement).toHaveFormValues({
+            date: '2021-05-11',
+            startTime: '12:00:00',
+            endTime: '13:00:00',
+            advanced: true,
+            subject: 'Dansk',
+            class: 'sw2b2-20',
+            description: 'Vi skal bare blast fucking meget kode! WICKED',
+        });
+        subjectOptionElements.forEach(subjectElement => {
+            classOptionElements.forEach(classElement =>{
+                fireEvent.change(classSelectElement, {target: {value: classElement.value}})
+                fireEvent.change(subjectSelectElement, {target: {value: subjectElement.value}})
+                expect(formElement).toHaveFormValues({
+                    date: '2021-05-11',
+                    startTime: '12:00:00',
+                    endTime: '13:00:00',
+                    advanced: true,
+                    subject: subjectElement.value,
+                    class: classElement.value,
+                    description: 'Vi skal bare blast fucking meget kode! WICKED',
+                });
+            })
+        });
+    })
+    test('submit button is only enabled when all fields have been filled', () =>{
+        const formElement = document.getElementsByClassName("formContainer")[0];
+        const submitElement = screen.getByTestId("submit");
+        const dateElement = screen.getByTestId("date");
+        const startTimeElement = screen.getByTestId("startTime");
+        const endTimeElement = screen.getByTestId("endTime");
+        const descriptionElement = screen.getByTestId("description");
+        const subjectSelectElement = screen.getByTestId("subject");
+        const classSelectElement = screen.getByTestId("class");
+
+        expect(submitElement).toHaveAttribute("disabled");
+        fireEvent.click(submitElement);
+        expect(submitElement).toHaveAttribute("disabled");
+        expect(screen.queryByText("Time tilføjet")).not.toBeInTheDocument();
+      
+        fireEvent.change(dateElement,         {target: {value: "2021-05-11"}})
+        fireEvent.change(startTimeElement,    {target: {value: "12:00:00"}})
+        fireEvent.change(endTimeElement ,     {target: {value: "13:00:00"}})
+        fireEvent.change(subjectSelectElement,{target: {value: "Engelsk"}})
+        fireEvent.change(classSelectElement,  {target: {value: "sw2b2-21"}})
+        fireEvent.change(descriptionElement,  {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+        
+        expect(formElement).toHaveFormValues({
+            date: '2021-05-11',
+            startTime: '12:00:00',
+            endTime: '13:00:00',
+            advanced: false,
+            subject: 'Engelsk',
+            class: 'sw2b2-21',
+            description: 'Vi skal bare blast fucking meget kode! WICKED',
+        });
+
+        expect(submitElement).not.toHaveAttribute("disabled")
+    })
+}) 
