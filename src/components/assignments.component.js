@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 import TimeIndicator from './timeIndicator.component';
 import AssignmentBricks from './assignmentBricks.component';
+import currentDay from '../utils/currentDay';
+import getWeekday from '../utils/getWeekday';
 
 export default class Afleveringer extends Component {
     static contextType = UserContext;
     constructor(props){
         super(props)
         this.state = {id: '', date: '', viewText: "",  assignments:{}, isLoaded: false};
-        this.currentDay = this.currentDay.bind(this)
         this.getAssignments = this.getAssignments.bind(this);
-        this.getWeekday = this.getWeekday.bind(this);
         this.scheduleBorders = this.scheduleBorders.bind(this);
     }
 
     componentDidMount(){
-        let weekday = this.currentDay();
+        let weekday = currentDay();
         let user = this.context;
 
         this.setState({
@@ -36,28 +36,7 @@ export default class Afleveringer extends Component {
         .then(response => {
             this.setState({assignments: response},()=>{this.setState({isLoaded:true})});
         });
-    }
-
-    /* returns the name of the day depending, day parameter should come from Date.getDay method. */
-    getWeekday(day){
-        let weekday = '';
-        switch(day){
-            case 0: weekday = "Søndag"; break;
-            case 1: weekday = "Mandag"; break;
-            case 2: weekday = "Tirsdag"; break;
-            case 3: weekday = "Onsdag"; break;
-            case 4: weekday = "Torsdag"; break;
-            case 5: weekday = "Fredag"; break;
-            case 6: weekday = "Lørdag"; break;
-            default: /* TODO: Something is straight up buggin yuh */ break;
-        }
-        return weekday;
-    }
-    
-    /* Finds and returns current day of the week */
-    currentDay(){
-        return this.getWeekday(new Date().getDay())
-    }
+    }  
 
     scheduleBorders(weekday, currentDay, isFiveDayView){
         return(
@@ -124,14 +103,14 @@ export default class Afleveringer extends Component {
                             <div className="gridItemHour">15:00</div>
                             <div className="gridItemHalfHour"></div>
                         </div>
-                        {this.scheduleBorders("Mandag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Tirsdag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Onsdag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Torsdag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Fredag", this.currentDay(), 1)}
+                        {this.scheduleBorders("Mandag", currentDay(), 1)}
+                        {this.scheduleBorders("Tirsdag", currentDay(), 1)}
+                        {this.scheduleBorders("Onsdag", currentDay(), 1)}
+                        {this.scheduleBorders("Torsdag", currentDay(), 1)}
+                        {this.scheduleBorders("Fredag", currentDay(), 1)}
                         
                         {this.state.assignments.map((assignmentBrick) => { 
-                            return <AssignmentBricks key={assignmentBrick._id} assignmentBrick={assignmentBrick} weekday={this.getWeekday(new Date(assignmentBrick.dueDate).getDay())}/>
+                            return <AssignmentBricks key={assignmentBrick._id} assignmentBrick={assignmentBrick} weekday={getWeekday(new Date(assignmentBrick.dueDate).getDay())}/>
                         })}
                     </div>
                 </div>

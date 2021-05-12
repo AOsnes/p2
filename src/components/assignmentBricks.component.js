@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 import ReactDOM from 'react-dom';
+import calculatePosition from '../utils/calculatePosition';
 
 export default class AssignmentBricks extends Component {
     static contextType = UserContext;
@@ -9,12 +10,6 @@ export default class AssignmentBricks extends Component {
         this.state = {
             isLoaded: false,
         };
-    }
-
-    calculatePosition(date){
-        let deltaHours = date.getHours() - 8;
-        let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
-        return `calc(${minutesPercentage}% + ${minutesPercentage ? "1px": "0px"})`;
     }
 
     componentDidMount(){
@@ -30,7 +25,7 @@ export default class AssignmentBricks extends Component {
         const due = new Date(this.props.assignmentBrick.dueDate);
         const style = {
             position: 'absolute',
-            top: this.calculatePosition(due),
+            top: calculatePosition(due, 1),
         }
         if (this.state.isLoaded){
             return(
