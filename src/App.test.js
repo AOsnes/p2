@@ -218,8 +218,8 @@ test('skemabrik component renders correctly', () => {
         <div id="Onsdag" data-testid="Onsdag"/>,
         <div id="Torsdag" data-testid="Torsdag"/>,
         <div id="Fredag" data-testid="Fredag"/>,
-        <Skemabrik skemabrik={skemabrikDansk} dayView={true} weekday="Mandag"/>,
-        <Skemabrik skemabrik={skemabrikMatematik} dayView={false} weekday="Onsdag"/>
+        <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
+        <Skemabrik skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
     ])
 
     const skemabrikElementDansk = screen.getByText('Dansk');
@@ -252,12 +252,17 @@ test('skemabrik component renders correctly', () => {
 
 /* Tests for skemabrikModal */
 test.only('skemabrikModal component renders correctly', () => {
-    /* Det er nok smartere at render en skemabrik og så få den til at render modal ved at simulere et tryk på brikken. */
+    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
     render(
         <div className="root">
-            {/* <SkemabrikModal /> */}
+            <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
         </div>
     )
+    const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+    fireEvent.click(skemabrikElement)
+    const skemabrikModalElement = document.getElementsByClassName("detailsModal")[0];
+    expect(skemabrikElement).toContainElement(skemabrikModalElement);
+    //&#10006;
     /* const linkElement = document.getElementsByClassName("detailsModal")[0] */
 });
 
