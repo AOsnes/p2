@@ -8,7 +8,7 @@ export default class Skema extends Component{
     static contextType = UserContext;
     constructor(props, context){
         super(props)
-        this.state = {id: '', date: '', view: context.role === 'student' ? 1 : 5, viewText: "",  skema:{}, isLoaded: false};
+        this.state = {id: context.id, date: '', view: context.role === 'student' ? 1 : 5, viewText: "",  skema:{}, isLoaded: false};
         this.currentDay = this.currentDay.bind(this)
         this.getSchedule = this.getSchedule.bind(this);
         this.getWeekday = this.getWeekday.bind(this);
@@ -18,10 +18,8 @@ export default class Skema extends Component{
 
     componentDidMount(){
         let weekday = this.currentDay();
-        let user = this.context;
 
         this.setState({
-            id: user.id,
             date: new Date().toISOString(),
             viewText: weekday
         }, () =>{
