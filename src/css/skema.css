@@ -173,43 +173,7 @@
     height: 40.625px;
 }
 
-.Mandag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 100%;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Tirsdag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 100%;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Onsdag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 100%;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Torsdag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 100%;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Fredag{
+.weekdayStyling{
     position: relative;
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
