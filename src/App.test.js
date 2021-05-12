@@ -326,23 +326,36 @@ test('timeIndicator renders on the correct percentage on the schedule', () =>{
     expect(clearInterval).toHaveBeenCalledTimes(9)
 });
 
-test.only('toggle day view component changes when clicked', () =>{
+test('toggle day view component changes when clicked', () =>{
     const handleClick = jest.fn()
+    render(<Dagsvisning dayView={1} handleClick={handleClick} />)
 
-    render(
-            <Dagsvisning dayView={1} handleClick={handleClick} />
-        )
-    const linkElement = document.getElementsByClassName("toggleVisning")[0];
+    const linkElementOneday = document.getElementsByClassName("toggleVisning")[0];
     const labelElement = document.getElementsByClassName("switch")[0];
-    const inputElement = screen.getByRole("checkbox")
+    const inputElementOneday = screen.getByRole("checkbox")
     const sliderElement = document.getElementsByClassName("slider")[0];
-    const sliderTextElement = document.getElementsByClassName("toggleText toggleTextLeft")[0];
-    expect(linkElement).toContainElement(labelElement);
-    expect(labelElement).toContainElement(inputElement);
+    const sliderTextElementOneday = document.getElementsByClassName("toggleText toggleTextLeft")[0];
+    
+    expect(linkElementOneday).toContainElement(labelElement);
+    expect(labelElement).toContainElement(inputElementOneday);
     expect(labelElement).toContainElement(sliderElement);
-    expect(sliderElement).toContainElement(sliderTextElement);
-    expect(inputElement).toHaveAttribute("checked")
-    expect(sliderTextElement).toHaveTextContent("1-Dag")
-    fireEvent.click(inputElement)
+    expect(sliderElement).toContainElement(sliderTextElementOneday);
+    expect(inputElementOneday).toHaveAttribute("checked");
+    expect(sliderTextElementOneday).toHaveTextContent("1-Dag");
 
+    expect(handleClick).toHaveBeenCalledTimes(0);
+    fireEvent.click(inputElementOneday);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    cleanup();
+    
+    render(<Dagsvisning dayView={5} handleClick={handleClick} />)
+    const inputElementFiveday = screen.getByRole("checkbox")
+    const sliderTextElementFiveday = document.getElementsByClassName("toggleText toggleTextRight")[0];
+    expect(inputElementFiveday).not.toHaveAttribute("checked");
+    expect(sliderTextElementFiveday).toHaveTextContent("5-Dag");
+
+    /* The the function was clicked before in the test */
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    fireEvent.click(inputElementFiveday);
+    expect(handleClick).toHaveBeenCalledTimes(2);
 })
