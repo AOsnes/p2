@@ -1,8 +1,76 @@
 /*  General Schedule Styling */
-.afleveringerCotainer{
+.assignmentsContainer{
     position: relative;
-    background-color:#E5E5E5;
-    left: 15%;
-    width: 80%;
+    background-color: white;
+    left: 10%;
+    width: 85%;
     height: 80%;
+    margin-top: 3.5%;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+/*Top of assignments things */
+.assignmentsContainerHeader {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    height: 70px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.assignmentsContainerHeaderTeacher{
+    background: #00cc00;
+    opacity: 80%;
+}
+
+.assignmentsContainerHeaderPupil{
+    background: #0075ff;
+    opacity: 80%;
+}
+
+.assignmentsContainerHeaderText {
+    font-size: 3.157em;
+    color: white;
+    position: relative;
+    top: 55%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+}
+
+/* Afleveringsbrikker css*/
+.assignmentBrick{
+    position: relative;
+    left: 0.75%;
+    width: 98.5%;
+    height: 81.25px;
+    display: flex;
+    background: lightslategray;
+    align-items: center;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+/* Hovering on assignmentBrick */
+.assignmentBrick:hover{
+    cursor: pointer;
+    filter:brightness(80%);
+}
+
+/* Text */
+.assignmentBrickTitleText{
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-weight: 900;
+    font-size: 2.369em;
+    border: none;
+    margin: none;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+.assignmentBrickIcon{
+    position: relative;
+    width: 40px;
 }
