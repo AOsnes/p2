@@ -3,21 +3,21 @@ import { UserContext } from '../UserContext';
 import Skemabrik from './skemabrik.component';
 import TimeIndicator from './timeIndicator.component';
 import Dagsvisning from './dagsvisning.component';
+import currentDay from '../utils/currentDay';
+import getWeekday from '../utils/getWeekday';
 
 export default class Skema extends Component{
     static contextType = UserContext;
     constructor(props, context){
         super(props)
         this.state = {id: context.id, date: '', view: context.role === 'student' ? 1 : 5, viewText: "",  skema:{}, isLoaded: false};
-        this.currentDay = this.currentDay.bind(this)
         this.getSchedule = this.getSchedule.bind(this);
-        this.getWeekday = this.getWeekday.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.scheduleBorders = this.scheduleBorders.bind(this);
     }
 
     componentDidMount(){
-        let weekday = this.currentDay();
+        let weekday = currentDay();
 
         this.setState({
             date: new Date().toISOString(),
@@ -26,28 +26,7 @@ export default class Skema extends Component{
             let requestString = `${this.state.id}/${this.state.date}/5`;
             this.getSchedule(requestString)
         })
-    }
-
-    /* returns the name of the day depending, day parameter should come from Date.getDay method. */
-    getWeekday(day){
-        let weekday = '';
-        switch(day){
-            case 0: weekday = "Søndag"; break;
-            case 1: weekday = "Mandag"; break;
-            case 2: weekday = "Tirsdag"; break;
-            case 3: weekday = "Onsdag"; break;
-            case 4: weekday = "Torsdag"; break;
-            case 5: weekday = "Fredag"; break;
-            case 6: weekday = "Lørdag"; break;
-            default: /* TODO: Something is straight up buggin yuh */ break;
-        }
-        return weekday;
-    }
-    
-    /* Finds and returns current day of the week */
-    currentDay(){
-        return this.getWeekday(new Date().getDay())
-    }
+    }   
 
     getSchedule(requestString){
         fetch(`http://localhost:5000/schedule/${requestString}`,{
@@ -131,14 +110,14 @@ export default class Skema extends Component{
                             <div className="gridItemHour">15:00</div>
                             <div className="gridItemHalfHour"></div>
                         </div>
-                        {this.scheduleBorders("Mandag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Tirsdag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Onsdag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Torsdag", this.currentDay(), 1)}
-                        {this.scheduleBorders("Fredag", this.currentDay(), 1)}
+                        {this.scheduleBorders("Mandag", currentDay(), 1)}
+                        {this.scheduleBorders("Tirsdag", currentDay(), 1)}
+                        {this.scheduleBorders("Onsdag", currentDay(), 1)}
+                        {this.scheduleBorders("Torsdag", currentDay(), 1)}
+                        {this.scheduleBorders("Fredag", currentDay(), 1)}
                         
                         {this.state.skema.map((skemabrik) => { 
-                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={this.getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.state.view}/>
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.state.view}/>
                         })}
                     </div>
                 </div>
@@ -175,11 +154,11 @@ export default class Skema extends Component{
                             <div className="gridItemHour">15:00</div>
                             <div className="gridItemHalfHour"></div>
                         </div>
-                        {this.scheduleBorders(this.currentDay())}
+                        {this.scheduleBorders(currentDay())}
                         {this.state.skema.map((skemabrik) => {
                             let lessonDate = new Date(skemabrik.startTime).getDay();
                             if(lessonDate === new Date().getDay())
-                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.state.view} weekday={this.getWeekday(lessonDate)}/>
+                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.state.view} weekday={getWeekday(lessonDate)}/>
                             else
                                 return null;
                         })}
