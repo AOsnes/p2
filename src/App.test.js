@@ -7,7 +7,9 @@ import Sidebar from './components/sidebar.component';
 import LoginForm from './components/loginform.component';
 import NoMatchError from './components/noMatchError.component';
 import TimeIndicator from './components/timeIndicator.component';
+import Dagsvisning from './components/dagsvisning.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
+import Skema from './components/skema.component';
 
 afterEach(cleanup);
 
@@ -323,3 +325,24 @@ test('timeIndicator renders on the correct percentage on the schedule', () =>{
     /* A total of 9 calls to clear interval will be made, please count :) */
     expect(clearInterval).toHaveBeenCalledTimes(9)
 });
+
+test.only('toggle day view component changes when clicked', () =>{
+    const handleClick = jest.fn()
+
+    render(
+            <Dagsvisning dayView={1} handleClick={handleClick} />
+        )
+    const linkElement = document.getElementsByClassName("toggleVisning")[0];
+    const labelElement = document.getElementsByClassName("switch")[0];
+    const inputElement = screen.getByRole("checkbox")
+    const sliderElement = document.getElementsByClassName("slider")[0];
+    const sliderTextElement = document.getElementsByClassName("toggleText toggleTextLeft")[0];
+    expect(linkElement).toContainElement(labelElement);
+    expect(labelElement).toContainElement(inputElement);
+    expect(labelElement).toContainElement(sliderElement);
+    expect(sliderElement).toContainElement(sliderTextElement);
+    expect(inputElement).toHaveAttribute("checked")
+    expect(sliderTextElement).toHaveTextContent("1-Dag")
+    fireEvent.click(inputElement)
+
+})
