@@ -7,7 +7,6 @@ import Sidebar from './components/sidebar.component';
 import LoginForm from './components/loginform.component';
 import NoMatchError from './components/noMatchError.component';
 import TimeIndicator from './components/timeIndicator.component';
-import SkemabrikModal from './components/skemabrikModal.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 
 afterEach(cleanup);
@@ -219,7 +218,7 @@ test('skemabrik component renders correctly', () => {
         <div id="Torsdag" data-testid="Torsdag"/>,
         <div id="Fredag" data-testid="Fredag"/>,
         <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-        <Skemabrik skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
+        <Skemabrik skemabrik={skemabrikMatematik} dayView={5}weekday="Onsdag"/>
     ])
 
     const skemabrikElementDansk = screen.getByText('Dansk');

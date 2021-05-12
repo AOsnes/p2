@@ -1,4 +1,3 @@
-import { span } from 'prelude-ls';
 import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 
@@ -6,24 +5,21 @@ export default class Dagsvisning extends Component{
     static contextType= UserContext;
     constructor(props,context){
         super(props);
-        this.state= { dayView: context.role!=='teacher' ? true : false};
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(){
-        this.setState(state => ({
-            dayView: !state.dayView
-        }));
+        this.props.handleClick();
     }
 
     render(){
         return(
             <div className="toggleVisning">
                 <label className="switch">
-                    <input type="checkbox" defaultChecked={this.state.dayView}
-                        onClick={this.handleClick} />
+                    <input type="checkbox" defaultChecked={this.props.dayView === 1 ? true : false} onClick={this.handleClick} />
                     <span className="slider">
-                       {this.state.dayView ? <div className="oneDayToggleText"> 1-Dag </div>: <div className="fiveDayToggleText">5-Dage</div>}</span>
+                       {this.props.dayView === 1 ? <div className="toggleText toggleTextLeft"> 1-Dag </div>: <div className="toggleText toggleTextRight">5-Dage</div>}
+                    </span>
                 </label>
             </div>
         );
