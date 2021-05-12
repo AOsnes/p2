@@ -10,6 +10,7 @@ import TimeIndicator from './components/timeIndicator.component';
 import Dagsvisning from './components/dagsvisning.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import Skema from './components/skema.component';
+import { clean } from 'semver';
 
 afterEach(cleanup);
 
@@ -102,102 +103,143 @@ test('noMatchError renders correctly', () => {
 });
 
 /* Tests for loginform */
-test('app renders loginform correctly', () => {
-    render(<App />);
-    const linkElement = screen.getByTestId('loginForm');
-    const h2element = screen.getByText("Skema.dk");
-    const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
-    const adgangskodeElement = screen.getByPlaceholderText("Adgangskode");
-    const loginElement = screen.getByDisplayValue("Log ind");
-    
-    expect(linkElement).toBeInTheDocument();
-    expect(linkElement).toContainElement(h2element);
-    expect(linkElement).toContainElement(brugernavnElement);
-    expect(linkElement).toContainElement(adgangskodeElement);
-    expect(linkElement).toContainElement(loginElement);
-});
-
-test('form value changed when user types', () => {
-    //TODO: check if the change is handled correctly by the component
-    render(<LoginForm />);
-    expect(screen.getByTestId('loginForm')).toHaveFormValues({
-        username: '',
-        password: '',
+describe('loginform renders correctly', () => {
+    /* Tear down the the window after each test */
+    afterEach(() =>{
+        cleanup();
     });
-    const usernameElement = screen.getByPlaceholderText("Brugernavn");
-    const passwordElement = screen.getByPlaceholderText("Adgangskode");
-    const loginElement = screen.getByDisplayValue("Log ind");
-    expect(loginElement).toHaveAttribute("disabled");
-    fireEvent.change(usernameElement, {target: {value: "Sigurd"}});
-    fireEvent.change(passwordElement, {target: {value: "hacked"}});
-    expect(screen.getByTestId('loginForm')).toHaveFormValues({
-        username: 'Sigurd',
-        password: 'hacked',
+
+    test('app renders loginform correctly', () => {
+        render(<App />);
+        const linkElement = screen.getByTestId('loginForm');
+        const h2element = screen.getByText("Skema.dk");
+        const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
+        const adgangskodeElement = screen.getByPlaceholderText("Adgangskode");
+        const loginElement = screen.getByDisplayValue("Log ind");
+        
+        expect(linkElement).toBeInTheDocument();
+        expect(linkElement).toContainElement(h2element);
+        expect(linkElement).toContainElement(brugernavnElement);
+        expect(linkElement).toContainElement(adgangskodeElement);
+        expect(linkElement).toContainElement(loginElement);
     });
-    expect(loginElement).not.toHaveAttribute("disabled");
-});
 
-test('submits data when user presses submit', async () => {
-    window.HTMLFormElement.prototype.submit = () => {};
-    global.fetch = jest.fn(() => {
-        return( 
-        Promise.resolve({
-            json: () => Promise.resolve({id: "60608f0389177a0bb0679e78"})
-        })
-    )});
-    delete window.location;
-    window.location = { reload: jest.fn() };
+    test('form value changed when user types', () => {
+        //TODO: check if the change is handled correctly by the component
+        render(<LoginForm />);
+        expect(screen.getByTestId('loginForm')).toHaveFormValues({
+            username: '',
+            password: '',
+        });
+        const usernameElement = screen.getByPlaceholderText("Brugernavn");
+        const passwordElement = screen.getByPlaceholderText("Adgangskode");
+        const loginElement = screen.getByDisplayValue("Log ind");
+        expect(loginElement).toHaveAttribute("disabled");
+        fireEvent.change(usernameElement, {target: {value: "Sigurd"}});
+        fireEvent.change(passwordElement, {target: {value: "hacked"}});
+        expect(screen.getByTestId('loginForm')).toHaveFormValues({
+            username: 'Sigurd',
+            password: 'hacked',
+        });
+        expect(loginElement).not.toHaveAttribute("disabled");
+    });
 
-    render(<Router><LoginForm /></Router>); 
-    const usernameElement = screen.getByPlaceholderText("Brugernavn");
-    const passwordElement = screen.getByPlaceholderText("Adgangskode");
-    const submitElement = screen.getByDisplayValue("Log ind");
-    fireEvent.change(usernameElement, {target: {value: "sigurd"}});
-    fireEvent.change(passwordElement, {target: {value: "password"}});
-    fireEvent.click(submitElement);
-    /* Should test that cookie is set and that user is redirected */
+    test('submits data when user presses submit', async () => {
+        window.HTMLFormElement.prototype.submit = () => {};
+        global.fetch = jest.fn(() => {
+            return( 
+            Promise.resolve({
+                json: () => Promise.resolve({id: "60608f0389177a0bb0679e78"})
+            })
+        )});
+        delete window.location;
+        window.location = { reload: jest.fn() };
+
+        render(<Router><LoginForm /></Router>); 
+        const usernameElement = screen.getByPlaceholderText("Brugernavn");
+        const passwordElement = screen.getByPlaceholderText("Adgangskode");
+        const submitElement = screen.getByDisplayValue("Log ind");
+        fireEvent.change(usernameElement, {target: {value: "sigurd"}});
+        fireEvent.change(passwordElement, {target: {value: "password"}});
+        fireEvent.click(submitElement);
+        /* Should test that cookie is set and that user is redirected */
+    });
 });
 
 /* Tests for userContext */
-test('finds the correct id value in cookie', () => {
-    const expected = "60608f0389177a0bb0679e78"
-    let extractedId;
-    const cookieStrings = [
-        "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
-        "role=teacher; id=60608f0389177a0bb0679e78; name=Testy McTestFace; Secure",
-        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
-        "foo; id=60608f0389177a0bb0679e78; bar"]
-    cookieStrings.forEach(cookie => {
-        extractedId = updateIdValue(cookie);
-        expect(extractedId).toEqual(expected);
+describe('UserContext is set correctly', () =>{
+    /* Tear down the the window after each test */
+    afterEach(() =>{
+        cleanup();
     });
-});
 
-test('finds the correct role value in cookie', () => {
-    const expected = "teacher"
-    let extractedRole;
-    const cookieStrings = [
-        "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
-        "role=teacher; id=60608f0389177a0bb0679e78; name=Testy McTestFace; Secure",
-        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
-        "foo; role=teacher; bar"]
-    cookieStrings.forEach(cookie => {
-        extractedRole = updateRoleValue(cookie);
-        expect(extractedRole).toEqual(expected);
+    test('finds the correct id value in cookie', () => {
+        const expected = "60608f0389177a0bb0679e78"
+        let extractedId;
+        const cookieStrings = [
+            "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
+            "role=teacher; id=60608f0389177a0bb0679e78; name=Testy McTestFace; Secure",
+            "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
+            "foo; id=60608f0389177a0bb0679e78; bar"]
+        cookieStrings.forEach(cookie => {
+            extractedId = updateIdValue(cookie);
+            expect(extractedId).toEqual(expected);
+        });
     });
-});
 
-test('finds the correct name value in cookie', () => {
-    const expected = "Testy McTestFace"
-    let extractedName;
-    const cookieStrings = [
-        "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
-        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; Secure",
-        "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
-        "foo; name=Testy McTestFace; bar"]
-    cookieStrings.forEach(cookie => {
-        extractedName = updateNameValue(cookie);
-        expect(extractedName).toEqual(expected);
+    test('finds the correct role value in cookie', () => {
+        const expected = "teacher"
+        let extractedRole;
+        const cookieStrings = [
+            "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
+            "role=teacher; id=60608f0389177a0bb0679e78; name=Testy McTestFace; Secure",
+            "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
+            "foo; role=teacher; bar"]
+        cookieStrings.forEach(cookie => {
+            extractedRole = updateRoleValue(cookie);
+            expect(extractedRole).toEqual(expected);
+        });
+    });
+
+    test('finds the correct name value in cookie', () => {
+        const expected = "Testy McTestFace"
+        let extractedName;
+        const cookieStrings = [
+            "id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure",
+            "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; Secure",
+            "role=teacher; name=Testy McTestFace; id=60608f0389177a0bb0679e78; ",
+            "foo; name=Testy McTestFace; bar"]
+        cookieStrings.forEach(cookie => {
+            extractedName = updateNameValue(cookie);
+            expect(extractedName).toEqual(expected);
+        });
+    });
+
+    test('try catch throws correct error', () => {
+        console.log = jest.fn();
+        const expected = undefined;
+        let errorType = new TypeError("Cannot read property 'split' of undefined");
+
+        function tryCatchOfValue(updateValueFunction){
+            let extractedValue;
+            const deformedCookieStrings = [
+                "i60608f0389177a0bb0679e78; Testy McTestFace; teacher; Secure",
+                "teacher; 60608f0389177a0bb0679e78; Testy McTestFace; Secure",
+                "teacher; Testy McTestface; 60608f0389177a0bb0679e78",
+                "foo; Testy McTestface; bar"]
+            deformedCookieStrings.forEach(cookie => {
+                extractedValue = updateValueFunction(cookie);
+                expect(extractedValue).toEqual(expected);
+                expect(console.log).toHaveBeenCalledWith(errorType);
+            });
+            expect(console.log).toHaveBeenCalledTimes(4);
+            /* Resets toHaveBeenCalledTimes after each function call */
+            jest.clearAllMocks();
+        }
+
+        tryCatchOfValue(updateNameValue);
+        tryCatchOfValue(updateIdValue);
+        tryCatchOfValue(updateRoleValue);
     });
 });
 
@@ -264,7 +306,6 @@ describe('skemabrikModal component renders correctly', () =>{
                 <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>
             </div>
         )
-        
     })
     /* Tear down the the window after each test */
     afterEach(() =>{
@@ -326,7 +367,7 @@ test('timeIndicator renders on the correct percentage on the schedule', () =>{
     expect(clearInterval).toHaveBeenCalledTimes(9)
 });
 
-test.only('toggle day view component changes when clicked', () =>{
+test('toggle day view component changes when clicked', () =>{
     const handleClick = jest.fn()
 
     render(
@@ -344,5 +385,4 @@ test.only('toggle day view component changes when clicked', () =>{
     expect(inputElement).toHaveAttribute("checked")
     expect(sliderTextElement).toHaveTextContent("1-Dag")
     fireEvent.click(inputElement)
-
-})
+});
