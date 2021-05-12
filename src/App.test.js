@@ -249,20 +249,44 @@ test('skemabrik component renders correctly', () => {
     /* Test af disableModal og onSkemaClick mangler */
 });
 
-/* Tests for skemabrikModal */
-test.only('skemabrikModal component renders correctly', () => {
+
+describe('skemabrikModal component renders correctly', () =>{
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    render(
-        <div className="root">
-            <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-        </div>
-    )
-    const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-    fireEvent.click(skemabrikElement)
-    const skemabrikModalElement = document.getElementsByClassName("detailsModal")[0];
-    expect(skemabrikElement).toContainElement(skemabrikModalElement);
-    //&#10006;
-    /* const linkElement = document.getElementsByClassName("detailsModal")[0] */
+    /* Render the test window before each test */
+    beforeEach(() =>{
+        render(
+            <div id="root" data-testid="root">
+                <div className="scheduleContainer">
+                    <div id="Mandag"/>
+                </div>
+                <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>
+            </div>
+        )
+        
+    })
+    /* Tear down the the window after each test */
+    afterEach(() =>{
+        cleanup();
+    })    
+    
+    test('modal opens when skemabrik is clicked', () =>{
+        const rootElement = screen.getByTestId("root")
+        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+        fireEvent.click(skemabrikElement)
+        const modalElement = document.getElementsByClassName("detailsModal")[0];
+
+        expect(rootElement).toContainElement(modalElement);
+    })
+    test('modal closes when X is clicked', () =>{
+        const rootElement = screen.getByTestId("root")
+        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+        fireEvent.click(skemabrikElement)
+        const modalXElement = screen.getByTestId("Xelement");
+        expect(modalXElement).toBeVisible()
+        fireEvent.click(modalXElement)
+        expect(modalXElement).not.toBeInTheDocument()
+        expect(skemabrikElement).toBeInTheDocument()
+    })
 });
 
 test('timeIndicator renders on the correct percentage on the schedule', () =>{
