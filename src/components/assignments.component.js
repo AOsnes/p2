@@ -40,7 +40,7 @@ export default class Afleveringer extends Component {
 
     scheduleBorders(weekday, currentDay, isFiveDayView){
         return(
-            <div className={`${weekday} ${((currentDay === weekday) && isFiveDayView) ? "currentDayHighlight" : ""}`} id={weekday}>
+            <div className={`weekdayStyling ${((currentDay === weekday) && isFiveDayView) ? "currentDayHighlight" : ""}`} id={weekday}>
                 <div className="scheduleBordersHour scheduleBorderFirst"></div>
                 <div className="scheduleBordersHalfHour"></div>
                 <div className="scheduleBordersHour"></div>
