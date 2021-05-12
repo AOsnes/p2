@@ -4,6 +4,7 @@ export default class TimeIndicator extends Component {
     constructor(props){
         super(props)
         this.state = {time: Date.now(), show: 1}
+        this.controlIndicaterDisplay = this.controlIndicaterDisplay.bind(this);
     }
      
     calculatePosition(date){
@@ -18,31 +19,33 @@ export default class TimeIndicator extends Component {
 
     componentDidMount(){
         /* Before rendering we want find out if we should show the indicator or nah. */
-        if(new Date().getHours() < 8){
-            this.setState({
-                show: 0,
-            })
-        }
+        this.controlIndicaterDisplay();
         /* Update time state every 5 minutes, */
         this.interval = setInterval(() =>{
-            let currentTime = new Date()
-            if(currentTime.getHours() < 8){
-                this.setState({
-                    show: 0,
-                });
-            }
-            else if (currentTime.getHours() > 15){
-                clearInterval(this.interval)
-                this.setState({
-                    show: 0,
-                });
-            }
-            else {
-                this.setState({
-                    time: currentTime,
-                    show: 1,
-                });
-        }}, 1000*60*5)
+            this.controlIndicaterDisplay();
+        }, 1000*60*5)
+    }
+
+    /* Helper function used in interval */
+    controlIndicaterDisplay(){
+        let currentTime = new Date()
+        if(currentTime.getHours() < 8){
+            this.setState({
+                show: 0,
+            });
+        }
+        else if (currentTime.getHours() > 15){
+            clearInterval(this.interval)
+            this.setState({
+                show: 0,
+            });
+        }
+        else {
+            this.setState({
+                time: currentTime,
+                show: 1,
+            });
+        }
     }
 
     componentWillUnmount(){
@@ -58,7 +61,7 @@ export default class TimeIndicator extends Component {
         }
 
         return(
-            <div className="timeIndicator" style={style}></div>
+            <div data-testid="timeIndicator" className="timeIndicator" style={style}></div>
         )
     }
 }
