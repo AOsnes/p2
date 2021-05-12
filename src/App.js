@@ -19,7 +19,7 @@ import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
-import Afleveringer from "./components/afleveringer.component";
+import Afleveringer from "./components/assignments.component";
 import Skema from "./components/skema.component";
 
 class App extends React.Component{

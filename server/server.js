@@ -108,7 +108,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
 
         //Determines the role of the user as each role needs a different query to the correct lessons.
         if (user.role === "teacher") {
-            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "startTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
+            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
             schedule = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
@@ -203,6 +203,43 @@ exports.deleteLesson = async function deleteLesson(id){
     });
 }
 
+//This function queries assignments for a given user at a 5 day interval and date
+exports.getAssignments = async function getAssignments(user, date) {
+    try {
+        /* await client.connect(); */
+        const database = client.db('P2');
+        const collection = database.collection("assignments");
+        //Calculates the time interval using the passed date and amount of days
+        let interval = getDateInterval(date, "5");
+
+        let start = interval.start;
+        let end = interval.end;
+        let cursor;
+        let assignments;
+
+        //Determines the role of the user as each role needs a different query to the correct assignments.
+        if (user.role === "teacher") {
+            cursor = await collection.find({ "teacherID": user._id.toString(),  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
+            assignments = await cursor.toArray();
+        } else {
+            cursor = await collection.find({ "class": { $in: user.class },  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } });
+            assignments = await cursor.toArray();
+        }
+
+        //Checks if the query had any results. 
+        let assignmentsCount = await cursor.count();
+        await cursor.close();
+        if (assignmentsCount === 0) {
+            throw new Error("No documents found!");
+        } else {
+            return assignments;
+        }
+
+    } catch(error){
+        throw error;
+    }
+}
+
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
     next();
@@ -232,10 +269,12 @@ const classesRouter = require('./routes/classes');
 const loginRouter = require('./routes/login');
 const userinfoRouter = require('./routes/userinfo');
 const scheduleRouter = require('./routes/schedule');
+const assignmentsRouter = require('./routes/assignments');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
 app.use('/schedule', scheduleRouter);
+app.use('/assignments', assignmentsRouter);
 
 client.connect()
 
