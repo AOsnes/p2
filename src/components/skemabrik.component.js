@@ -23,8 +23,8 @@ export default class Skemabrik extends Component {
         /* This is how long every class is in milliseconds */
         let deltaTime = endTime - startTime;
         
-        /* One hour is 100 px, change this to change the size of the classes */
-        let scale = 100;
+        /* One hour is 81.25 px, change this to change the size of the classes */
+        let scale = 81.25;
         /* We calculate how many hours the deltaTime translates to and we multiply it with the scale */
         let height = deltaTime / 1000000 / 3.6 * scale;
         return `${height}px`;
@@ -63,7 +63,7 @@ export default class Skemabrik extends Component {
     calculatePosition(date){
         let deltaHours = date.getHours() - 8;
         let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
-        return `calc(${minutesPercentage}% + ${minutesPercentage ? "1px": "0px"})`;
+        return `calc(${minutesPercentage}% + ${minutesPercentage ? "0.5px": "0px"})`;
     }
 
     componentDidMount(){
