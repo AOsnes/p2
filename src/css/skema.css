@@ -2,11 +2,12 @@
 .scheduleContainer{
     position: relative;
     background-color: white;
-    left: 10%;
+    left: 100px;
     width: 85%;
     height: 80%;
     margin-top: 2%;
     margin-bottom: 1.5%;
+    margin-left: 4%;
     border-radius: 10px;
     filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.5));
 }
@@ -84,8 +85,12 @@
     height: 40.625px;
 }
 
-.currentDayHighlight{
+.currentDayHighlightPupil{
     background: #0077ff1f;
+}
+
+.currentDayHighlightTeacher{
+    background: #00cc0021;
 }
 
 /*Top of schedule things */
@@ -124,18 +129,18 @@
 
 .scheduleContainerHeader {
     display: grid;
-    grid-template-columns: 90% 10%;
+    grid-template-columns: auto 140px;
     height: 70px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
-.scheduleContainerHeaderTeacher{
+.scheduleContainerHeaderTeacherColour{
     background: #00cc00;
     opacity: 80%;
 }
 
-.scheduleContainerHeaderPupil{
+.scheduleContainerHeaderPupilColour{
     background: #0075ff;
     opacity: 80%;
 }
@@ -145,7 +150,7 @@
     color: white;
     position: relative;
     top: 55%;
-    left: 55%;
+    left: calc(50% + 70px);
     transform: translate(-50%, -50%);
 }
 

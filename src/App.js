@@ -21,6 +21,7 @@ import NoMatchError from "./components/noMatchError.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Afleveringer from "./components/assignments.component";
 import Skema from "./components/skema.component";
+import LogoutModal from "./components/logoutModal.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -68,6 +69,7 @@ function Skemapage(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Skema/>
+            <LogoutModal/>
         </div>
     )
 }
@@ -78,6 +80,7 @@ function Afleveringerpage(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Afleveringer/>
+            <LogoutModal/>
         </div>
     )
 }
@@ -88,6 +91,7 @@ function RedigerSkema(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <SkemabrikForm/>
+            <LogoutModal/>
         </div>
     )
 }

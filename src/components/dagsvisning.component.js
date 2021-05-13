@@ -3,7 +3,7 @@ import { UserContext } from '../UserContext';
 
 export default class Dagsvisning extends Component{
     static contextType= UserContext;
-    constructor(props,context){
+    constructor(props, context){
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }

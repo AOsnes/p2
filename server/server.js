@@ -160,7 +160,6 @@ exports.createLesson = async function createLesson(id, className, subject, start
                 .catch(console.dir);
     
             } else {
-                //result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
                 doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
                 .then(result => console.log(result.insertedCount))
                 .catch(console.dir)
@@ -240,6 +239,53 @@ exports.getAssignments = async function getAssignments(user, date) {
     }
 }
 
+exports.createAssignment = async function createAssignment(id, lessonID, subject, description, dueDate, optionalFile){
+    return new Promise ((resolve, reject) => {
+        try {
+            //await client.connect();
+            const database = client.db('P2');
+            const doc = database.collection("assignments");
+            doc.insertOne({ "teacherID": id.toString(), "lessonID" : lessonID, "subject": subject, "description": description, "dueDate": dueDate, "fileID": optionalFile, })
+            .then(result => console.log(result.insertedCount))
+            .then(() => { resolve(); })
+            .catch(console.dir);
+        } finally {
+            // Ensures that the client will close when you finish/error
+            
+        }
+    });
+}
+
+exports.updateAssignment = async function updateAssignment(id, changes){
+    return new Promise ((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("assigments");
+            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .catch(console.dir)
+            .finally(() => {resolve();});
+        } catch(error) {
+            throw error;
+        }
+    });
+}
+
+exports.deleteAssignment = async function deleteAssignment(id){
+    return new Promise((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("assigments");
+            doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
+            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
+            .catch(console.dir)
+            .finally(() => { resolve(); });
+        } catch (error) {
+            throw error;
+        }
+    });
+}
+
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
     next();
@@ -270,11 +316,13 @@ const loginRouter = require('./routes/login');
 const userinfoRouter = require('./routes/userinfo');
 const scheduleRouter = require('./routes/schedule');
 const assignmentsRouter = require('./routes/assignments');
+const upload = require('./routes/upload');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
 app.use('/schedule', scheduleRouter);
 app.use('/assignments', assignmentsRouter);
+app.use('/upload', upload);
 
 client.connect()
 
