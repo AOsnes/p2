@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { UserContext } from "../UserContext";
+import toHHMM from '../utils/toHHMM';
 
 export default class SkemabrikModal extends Component{
     static contextType = UserContext;
@@ -25,7 +26,7 @@ export default class SkemabrikModal extends Component{
         return( ReactDOM.createPortal(
                 <div className={`detailsModal ${subject}`}>
                     <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
-                    <div className="skemabrikModalText textCenter">{this.props.toHHMM(startTime)} - {this.props.toHHMM(endTime)}</div>
+                    <div className="skemabrikModalText textCenter">{toHHMM(startTime)} - {toHHMM(endTime)}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
                 </div>,

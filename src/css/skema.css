@@ -117,15 +117,18 @@
     left: -3.75%;
 }
 
-.weekContainerBorderFix {
+.weekNumberText {
     border: 1px solid rgba(0, 0, 0, 0.8);
     border-bottom: none;
     border-left: none;
+    font-size: 1.333em;
+    font-weight: bold;
+    text-align: center;
 }
 
 .scheduleContainerHeader {
     display: grid;
-    grid-template-columns: auto 140px;
+    grid-template-columns: auto 110px 140px;
     height: 70px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;

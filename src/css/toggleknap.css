@@ -1,5 +1,6 @@
 .toggleVisning{
     position: relative;
+    grid-column: 3;
     width: 110px;
     top: 45%;
     transform: translate(0, -25%);

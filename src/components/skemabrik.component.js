@@ -5,7 +5,6 @@ import { UserContext } from '../UserContext';
 import ReactDOM from 'react-dom';
 import calculatePosition from '../utils/calculatePosition';
 import calculateHeight from '../utils/calculateHeight';
-import toHHMM from '../utils/toHHMM';
 
 export default class Skemabrik extends Component {
     static contextType = UserContext;
@@ -60,7 +59,7 @@ export default class Skemabrik extends Component {
         if(this.props.dayView === 1 && this.state.isLoaded){
             return([
                 <div key="modal">
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
                 </div>,
                 ReactDOM.createPortal(
                 <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
@@ -76,7 +75,7 @@ export default class Skemabrik extends Component {
         else if (this.props.dayView === 5 && this.state.isLoaded){
             return([
                 <div key="modal">
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={toHHMM}/> : null}
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
                 </div>,
                 ReactDOM.createPortal(
                     <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
