@@ -160,7 +160,6 @@ exports.createLesson = async function createLesson(id, className, subject, start
                 .catch(console.dir);
     
             } else {
-                //result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
                 doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
                 .then(result => console.log(result.insertedCount))
                 .catch(console.dir)
