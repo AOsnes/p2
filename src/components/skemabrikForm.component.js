@@ -36,7 +36,7 @@ export default class SkemabrikForm extends Component{
             }),
         })
         .then(response =>{
-            this.setState({didSubmit: true});
+            this.setState({didSubmit: true})
         })
     }
 
@@ -84,7 +84,6 @@ export default class SkemabrikForm extends Component{
         
         return(
             <form className="formContainer" onSubmit={this.handleSubmit}>
-                {this.state.didSubmit ? <DidSubmitModal/> : null}
                 <fieldset className="opretSkemabrik">
                     <label className="inputText" htmlFor="date">Vælg dag</label>
                     <input type="date" name="date" data-testid="date" value={this.state.date} onChange={this.handleChange}></input>
@@ -112,8 +111,8 @@ export default class SkemabrikForm extends Component{
                     <label className="inputText twoColumnWide" htmlFor="description">Beskrivelse:</label>
                     <textarea className="twoColumnWide" name="description" maxLength="512" data-testid="description" onChange={this.handleChange}></textarea> 
                     <input disabled={this.validateAll() ? 'disabled' : null} className="twoColumnWide submitButton" type="submit" name="submit" data-testid="submit" value="Opret"></input>
-
                 </fieldset>
+                {this.state.didSubmit ? <DidSubmitModal/> : null}
             </form>
         )
     }

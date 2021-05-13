@@ -215,13 +215,13 @@ test('skemabrik component renders correctly', () => {
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '', startTime: '', endTime: ''}
     render([
-        <div id="Mandag" data-testid="Mandag"/>,
-        <div id="Tirsdag" data-testid="Tirsdag"/>,
-        <div id="Onsdag" data-testid="Onsdag"/>,
-        <div id="Torsdag" data-testid="Torsdag"/>,
-        <div id="Fredag" data-testid="Fredag"/>,
-        <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-        <Skemabrik skemabrik={skemabrikMatematik} dayView={5}weekday="Onsdag"/>
+        <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+        <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
+        <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+        <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
+        <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
+        <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
+        <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5}weekday="Onsdag"/>
     ])
 
     const skemabrikElementDansk = screen.getByText('Dansk');
@@ -361,23 +361,23 @@ test('toggle day view component changes when clicked', () =>{
     expect(handleClick).toHaveBeenCalledTimes(2);
 })
 
-describe.skip('skemabrikForm tests', () =>{
+describe.only('skemabrikForm tests', () =>{    
     let signedInUser = {role: 'teacher', name: 'Sigurd', id: '123'};
     beforeEach(() =>{
         global.fetch = jest.fn(() => {
             return( 
             Promise.resolve({
-                json: () => Promise.resolve(["sw2b2-20","sw2b2-21","sw2b2-22"])
+                json: () => Promise.resolve(["sw2b2-20", "sw2b2-21", "sw2b2-22"])
             })
-        )});
-        render(
-            <div id="root">
-                <UserContext.Provider value={signedInUser}>
+        )})
+        render([
+            <div key="root" data-testid="root" id="root"/>,
+                <UserContext.Provider key="form" value={signedInUser}>
                     <SkemabrikForm/>
                 </UserContext.Provider>
-            </div>
-            )
-    });
+            ])
+    })
+    afterEach(cleanup)
 
     test('form has correct inital values', () =>{
         const formElement = document.getElementsByClassName("formContainer")[0];
@@ -433,7 +433,9 @@ describe.skip('skemabrikForm tests', () =>{
             })
         });
     })
-    test('submit button is only enabled when all fields have been filled', () =>{
+    test('submit button is only enabled when all fields have been filled', async () =>{
+        const flushPromises = () => new Promise(setImmediate);
+        const rootElement = screen.getByTestId("root");
         const formElement = document.getElementsByClassName("formContainer")[0];
         const submitElement = screen.getByTestId("submit");
         const dateElement = screen.getByTestId("date");
@@ -466,5 +468,10 @@ describe.skip('skemabrikForm tests', () =>{
         });
 
         expect(submitElement).not.toHaveAttribute("disabled")
+        fireEvent.click(submitElement)
+        await flushPromises(); /* Venter på at compoment er blevet renderet */
+        const didSubmitModalElement = screen.getByText("Time tilføjet")
+        expect(formElement).not.toContainElement(didSubmitModalElement)
+        expect(rootElement).toContainElement(didSubmitModalElement)
     })
 }) 
