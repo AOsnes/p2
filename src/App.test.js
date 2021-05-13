@@ -11,6 +11,7 @@ import NoMatchError from './components/noMatchError.component';
 import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
+import getWeekday from './utils/getWeekday';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup);
@@ -641,3 +642,13 @@ describe('skemabrikForm tests', () =>{
         });
     })
 })
+
+test('getWeekday returns correct weekday', () => {
+    const weekDays = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
+    const weekDayNumbers = [0, 1, 2, 3, 4, 5, 6];
+    weekDayNumbers.forEach(weekDayNumber => {
+        expect(getWeekday(weekDayNumber)).toBe(weekDays[weekDayNumber])
+    });
+    /* An empty string is returned if the number doesn't match a date */
+    expect(getWeekday(7)).toBe('');
+});
