@@ -1,6 +1,7 @@
 const ObjectId = require("mongodb").ObjectId
-const { MongoClient } = require("mongodb");
+const {MongoClient, GridFSBucket} = require("mongodb");
 const bodyParser = require('body-parser')
+const busboy = require('connect-busboy');
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -286,6 +287,17 @@ exports.deleteAssignment = async function deleteAssignment(id){
     });
 }
 
+exports.saveFile = async function saveFile(filename){
+    const database = client.db('P2');
+    let bucket = new GridFSBucket(database);
+    let fileID = new ObjectId();
+    fs.createReadStream(`${__dirname}/tmp/${filename}`)
+    .pipe(bucket.openUploadStreamWithId(fileID, filename))
+    .on('error', () => console.log("Lortet virker ikke >:c"))
+    .on('finish', () => console.log("SUCCess"));
+    return fileID;
+}
+
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
     next();
@@ -307,6 +319,7 @@ let restrict = (req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(busboy());
 app.use(requestTime);
 app.use(logger);
 
@@ -316,13 +329,13 @@ const loginRouter = require('./routes/login');
 const userinfoRouter = require('./routes/userinfo');
 const scheduleRouter = require('./routes/schedule');
 const assignmentsRouter = require('./routes/assignments');
-const upload = require('./routes/upload');
+const uploadRouter = require('./routes/upload');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
 app.use('/schedule', scheduleRouter);
 app.use('/assignments', assignmentsRouter);
-app.use('/upload', upload);
+app.use('/upload', uploadRouter);
 
 client.connect()
 

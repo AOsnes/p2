@@ -124,6 +124,7 @@ dist
 /.vscode
 /.idea
 JaronCeller.png
+/server/tmp
 
 npm-debug.log*
 yarn-debug.log*
