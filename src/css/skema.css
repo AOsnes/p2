@@ -153,7 +153,7 @@
     color: white;
     position: relative;
     top: 55%;
-    left: calc(50% + 70px);
+    left: calc(50% + 70px + 55px);
     transform: translate(-50%, -50%);
 }
 
