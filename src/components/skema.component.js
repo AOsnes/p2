@@ -71,7 +71,7 @@ export default class Skema extends Component{
 
     scheduleBorders(weekday, currentDay, isFiveDayView){
         return(
-            <div className={`weekdayStyling ${((currentDay === weekday) && isFiveDayView) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`} id={weekday}>
+            <div className={`weekdayStyling ${((currentDay === weekday) && isFiveDayView && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`} id={weekday}>
                 <div className="scheduleBordersHour scheduleBorderFirst"></div>
                 <div className="scheduleBordersHalfHour"></div>
                 <div className="scheduleBordersHour"></div>
@@ -110,11 +110,11 @@ export default class Skema extends Component{
                     </div>
                     <div className="weekContainerFiveDay">
                         <h1 className="weekNumberText">Uge {getWeek(this.state.date)}</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Mandag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Tirsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Onsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Torsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Fredag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Mandag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Tirsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Onsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Torsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Fredag</h1>
                     </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
