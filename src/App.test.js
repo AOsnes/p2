@@ -339,7 +339,6 @@ describe('skemabrikModal tests', () =>{
         expect(rootElement).toContainElement(modalElement);
     })
     test('modal closes when X is clicked', () =>{
-        const rootElement = screen.getByTestId("root")
         const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
         fireEvent.click(skemabrikElement)
         const modalXElement = screen.getByTestId("Xelement");
