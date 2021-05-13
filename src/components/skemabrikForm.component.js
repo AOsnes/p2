@@ -108,7 +108,7 @@ export default class SkemabrikForm extends Component{
                             return <option key={klasse} value={klasse}>{klasse}</option>
                         })}
                     </select>
-
+                    
                     <label className="inputText twoColumnWide" htmlFor="description">Beskrivelse:</label>
                     <textarea className="twoColumnWide" name="description" maxLength="512" onChange={this.handleChange}></textarea> 
                     <input disabled={this.validateAll()} className="twoColumnWide submitButton" type="submit" name="submit" value="Opret"></input>
