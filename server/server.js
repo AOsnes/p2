@@ -278,24 +278,25 @@ exports.deleteAssignment = async function deleteAssignment(id){
             const database = client.db('P2');
             const doc = database.collection("assigments");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
-            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
+            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { reject(new Error("No such lesson"))}})
             .catch(console.dir)
             .finally(() => { resolve(); });
         } catch (error) {
-            throw error;
+            throw reject(error);
         }
     });
 }
 
 exports.saveFile = async function saveFile(filename){
-    const database = client.db('P2');
-    let bucket = new GridFSBucket(database);
-    let fileID = new ObjectId();
-    fs.createReadStream(`${__dirname}/tmp/${filename}`)
-    .pipe(bucket.openUploadStreamWithId(fileID, filename))
-    .on('error', () => console.log("Lortet virker ikke >:c"))
-    .on('finish', () => console.log("SUCCess"));
-    return fileID;
+    return new Promise ((resolve, reject) => {
+        const database = client.db('P2');
+        let bucket = new GridFSBucket(database);
+        let fileID = new ObjectId();
+        fs.createReadStream(`${__dirname}/tmp/${filename}`)
+        .pipe(bucket.openUploadStreamWithId(fileID, filename))
+        .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
+        .on('finish', () => {console.log("SUCCes"); resolve(fileID)});
+    });
 }
 
 let logger = (req, res, next) => {
