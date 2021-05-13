@@ -1,5 +1,6 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
 import {BrowserRouter as Router} from "react-router-dom";
+import {MemoryRouter} from 'react-router';
 import App from './App';
 import Skemabrik from './components/skemabrik.component';
 import Header from './components/header.component';
@@ -14,15 +15,129 @@ import { clean } from 'semver';
 
 afterEach(cleanup);
 
+/* Mock af BrowserRouter for at kunne bruge MemoryRouter og ændre Route */
+jest.mock('react-router-dom', () => {
+    // Require the original module to not be mocked...
+    const originalModule = jest.requireActual('react-router-dom');
+  
+    return {
+        ...originalModule,
+        BrowserRouter: ({ children }) => <div>{children}</div>,
+    };
+});
+
+/* Tests for App */
+describe('app renders correctly', () => {
+    beforeEach(() => {
+        Object.defineProperty(document, 'cookie', {
+            configurable: true,
+            get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
+        });
+    });
+
+    afterEach(() => {
+        cleanup();
+    });
+
+    test('app renders Login() correctly', () => {
+        Object.defineProperty(document, 'cookie', {
+            configurable: true,
+            get: jest.fn().mockImplementation(() => { return undefined; }),
+        });
+
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <App />
+            </MemoryRouter>
+        );
+        const pageElement = screen.getByTestId("loginPage");
+        const loginFormElement = screen.getByTestId("loginForm");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(loginFormElement);
+    });
+
+    test('app renders Skemapage() correctly', () => {
+        render(
+            <MemoryRouter initialEntries={['/skema']}>
+                <App />
+            </MemoryRouter>
+        );
+
+        const pageElement = screen.getByTestId("skemaPage");
+        const headerElement = screen.getByTestId("header");
+        const sidebarElement = screen.getByTestId("sidebar");
+        const skemaElement = screen.getByText("Skema");
+        
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(skemaElement);
+    });
+
+    test('app renders Afleveringerpage() correctly', () => { 
+        render(
+            <MemoryRouter initialEntries={['/afleveringer']}>
+                <App />
+            </MemoryRouter>
+        );
+
+        const pageElement = screen.getByTestId("afleveringerPage");
+        const headerElement = screen.getByTestId("header");
+        const sidebarElement = screen.getByTestId("sidebar");
+        const assignmentsElement = screen.getByText("Afleveringer");
+        
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(assignmentsElement);
+    });
+
+    test('app renders RedigerSkema() correctly', () => { 
+        render(
+            <MemoryRouter initialEntries={['/redigerSkema']}>
+                <App />
+            </MemoryRouter>
+        );
+
+        const pageElement = screen.getByTestId("redigerSkemaPage");
+        const headerElement = screen.getByTestId("header");
+        const sidebarElement = screen.getByTestId("sidebar");
+        const redigerSkemaFormElement = screen.getByTestId("formContainer");
+        
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(redigerSkemaFormElement);
+    });
+
+    test('app renders noMatch() correctly', () => { 
+        render(
+            <MemoryRouter initialEntries={['/*']}>
+                <App />
+            </MemoryRouter>
+        );
+
+        const pageElement = screen.getByTestId("noMatchPage");
+        const headerElement = screen.getByTestId("header");
+        const sidebarElement = screen.getByTestId("sidebar");
+        const noMatchElement = screen.getByTestId("pageNotFoundContainer");
+        
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(noMatchElement);
+    });
+});
+
 /* Tests for header */
 test('header renders correctly with name', () => {
     const signedInUser = {name: 'Testy McTestFace', role: '', id: ''}
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
-                <Router>
+                <MemoryRouter>
                     <Header linkTo="/"/>
-                </Router>
+                </MemoryRouter>
             </UserContext.Provider>
         </div>
     );
@@ -47,15 +162,15 @@ test('sidebar renders correctly with context', () => {
     let signedInUser = {role: 'student', name: 'Sigurd', id: '123123'};
     /* Mocking document.cookie, essentially setting the cookie to the return value of get */
     Object.defineProperty(document, 'cookie', {
+        configurable: true,
         get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
-        set: jest.fn().mockImplementation(() => {}),
       });
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
-                <Router>
+                <MemoryRouter>
                     <Sidebar/>
-                </Router>
+                </MemoryRouter>
             </UserContext.Provider>
         </div>
     );
@@ -73,9 +188,9 @@ test('sidebar renders correctly with context', () => {
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
-                <Router>
+                <MemoryRouter>
                     <Sidebar/>
-                </Router>
+                </MemoryRouter>
             </UserContext.Provider>
         </div>
     );
@@ -105,12 +220,10 @@ test('noMatchError renders correctly', () => {
 /* Tests for loginform */
 describe('loginform renders correctly', () => {
     /* Tear down the the window after each test */
-    afterEach(() =>{
-        cleanup();
-    });
+    afterEach(cleanup);
 
-    test('app renders loginform correctly', () => {
-        render(<App />);
+    test('loginform renders correct elements', () => {
+        render(<LoginForm />);
         const linkElement = screen.getByTestId('loginForm');
         const h2element = screen.getByText("Skema.dk");
         const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
@@ -169,9 +282,7 @@ describe('loginform renders correctly', () => {
 /* Tests for userContext */
 describe('UserContext is set correctly', () =>{
     /* Tear down the the window after each test */
-    afterEach(() =>{
-        cleanup();
-    });
+    afterEach(cleanup);
 
     test('finds the correct id value in cookie', () => {
         const expected = "60608f0389177a0bb0679e78"
@@ -308,9 +419,7 @@ describe('skemabrikModal component renders correctly', () =>{
         )
     })
     /* Tear down the the window after each test */
-    afterEach(() =>{
-        cleanup();
-    })    
+    afterEach(cleanup);   
     
     test('modal opens when skemabrik is clicked', () =>{
         const rootElement = screen.getByTestId("root")
@@ -321,7 +430,6 @@ describe('skemabrikModal component renders correctly', () =>{
         expect(rootElement).toContainElement(modalElement);
     })
     test('modal closes when X is clicked', () =>{
-        const rootElement = screen.getByTestId("root")
         const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
         fireEvent.click(skemabrikElement)
         const modalXElement = screen.getByTestId("Xelement");
@@ -386,3 +494,5 @@ test('toggle day view component changes when clicked', () =>{
     expect(sliderTextElement).toHaveTextContent("1-Dag")
     fireEvent.click(inputElement)
 });
+
+

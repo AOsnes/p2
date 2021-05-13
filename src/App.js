@@ -56,8 +56,7 @@ class App extends React.Component{
 fx Login() bliver rendered når vi rammer "/" ruten */
 function Login(){
     return (
-        <div>
-            {/* TODO: Skal ikke render header, men en velkommen besked i stedet for */}
+        <div data-testid="loginPage">
             <LoginForm/>
         </div>
     )
@@ -65,7 +64,7 @@ function Login(){
 
 function Skemapage(){
     return(
-        <div>
+        <div data-testid="skemaPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Skema/>
@@ -75,7 +74,7 @@ function Skemapage(){
 
 function Afleveringerpage(){
     return(
-        <div>
+        <div data-testid="afleveringerPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Afleveringer/>
@@ -85,7 +84,7 @@ function Afleveringerpage(){
 
 function RedigerSkema(){
     return(
-        <div>
+        <div data-testid="redigerSkemaPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <SkemabrikForm/>
@@ -96,7 +95,7 @@ function RedigerSkema(){
 function NoMatch(){
     let location = useLocation();
     return(
-        <div>
+        <div data-testid="noMatchPage">
             <Header linkTo="/"/>
             <Sidebar/>
             <NoMatchError location={location.pathname}/>

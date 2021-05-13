@@ -83,7 +83,7 @@ export default class SkemabrikForm extends Component{
         const fag = ["Dansk", "Matematik", "Engelsk", "Religion", "Historie", "N/T", "Billedkunst", "Idræt", "Pause"]
         
         return(
-            <form className="formContainer" onSubmit={this.handleSubmit}>
+            <form className="formContainer" data-testid="formContainer" onSubmit={this.handleSubmit}>
                 {this.state.didSubmit ? <DidSubmitModal/> : null}
                 <fieldset className="opretSkemabrik">
                     <label className="inputText" htmlFor="date">Vælg dag</label>
