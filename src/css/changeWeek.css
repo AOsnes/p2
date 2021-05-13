@@ -5,6 +5,7 @@
     height: 30px;
     width: 100px;
     background: white;
+    border-radius: 5px;
 }
 
 .button {
@@ -24,4 +25,14 @@
     opacity: 80%;
     cursor: pointer;
     border: none;
+}
+
+.previousWeek{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.nextWeek{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
