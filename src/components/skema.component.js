@@ -109,7 +109,7 @@ export default class Skema extends Component{
                         <Dagsvisning dayView = {this.state.view} handleClick = {this.handleClick}/>
                     </div>
                     <div className="weekContainerFiveDay">
-                        <h1 className="weekContainerBorderFix"> </h1>
+                        <h1 className="weekNumberText">Uge {getWeek(this.state.date)}</h1>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Mandag</h1>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Tirsdag</h1>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Onsdag</h1>
@@ -157,7 +157,7 @@ export default class Skema extends Component{
                         <Dagsvisning dayView = {this.state.view} handleClick = {this.handleClick}/>
                     </div>
                     <div className="weekContainerOneDay">
-                        <div className="weekNumberText">Uge {getWeek(this.state.date)}</div>
+                        <div className="weekNumberText"> </div>
                         <h1 className="textCenter oneDayText"><p className="oneDayTextPosition">{this.state.viewText}</p></h1>
                     </div>
                     <div className="gridContainerOneDay">
