@@ -18,6 +18,7 @@ export default class Skema extends Component{
         this.changeWeekClick = this.changeWeekClick.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.scheduleBorders = this.scheduleBorders.bind(this);
+        this.dayHighlight = this.dayHighlight.bind(this);
     }
 
     componentDidMount(){
@@ -69,9 +70,9 @@ export default class Skema extends Component{
         });
     }
 
-    scheduleBorders(weekday, currentDay, isFiveDayView){
+    scheduleBorders(weekday, isFiveDayView){
         return(
-            <div className={`weekdayStyling ${((currentDay === weekday) && isFiveDayView && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`} id={weekday}>
+            <div className={`weekdayStyling ${isFiveDayView ? this.dayHighlight(weekday) : ""}`} id={weekday}>
                 <div className="scheduleBordersHour scheduleBorderFirst"></div>
                 <div className="scheduleBordersHalfHour"></div>
                 <div className="scheduleBordersHour"></div>
@@ -92,6 +93,25 @@ export default class Skema extends Component{
         )
     }
 
+    dayHighlight(weekday) {
+        let today = new Date().getDate();
+        let currentDate = this.state.date.getDate();
+        let role = this.context.role;
+        let currentWeekday = currentDay();
+        
+        if(currentDate === today){
+            if(role === "teacher"){
+                return "currentDayHighlightTeacher";
+            } 
+            else if(currentWeekday === weekday){
+                return "currentDayHighlightPupil";
+            }
+        }
+        else {
+            return "";
+        }
+    }
+
     render(){
         if(!this.state.isLoaded){
             return(
@@ -110,11 +130,11 @@ export default class Skema extends Component{
                     </div>
                     <div className="weekContainerFiveDay">
                         <h1 className="weekNumberText">Uge {getWeek(this.state.date)}</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Mandag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Tirsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Onsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Torsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag" && this.state.date.getDate() === new Date().getDate()) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Fredag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Mandag")}`}>Mandag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Tirsdag")}`}>Tirsdag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Onsdag")}`}>Onsdag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Torsdag")}`}>Torsdag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Fredag")}`}>Fredag</h1>
                     </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
