@@ -81,6 +81,7 @@ function Afleveringerpage(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Afleveringer/>
+            <LogoutModal/>
         </div>
     )
 }
@@ -91,6 +92,7 @@ function RedigerSkema(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <SkemabrikForm/>
+            <LogoutModal/>
         </div>
     )
 }
