@@ -85,8 +85,12 @@
     height: 40.625px;
 }
 
-.currentDayHighlight{
+.currentDayHighlightPupil{
     background: #0077ff1f;
+}
+
+.currentDayHighlightTeacher{
+    background: #00cc0021;
 }
 
 /*Top of schedule things */
@@ -131,12 +135,12 @@
     border-top-right-radius: 10px;
 }
 
-.scheduleContainerHeaderTeacher{
+.scheduleContainerHeaderTeacherColour{
     background: #00cc00;
     opacity: 80%;
 }
 
-.scheduleContainerHeaderPupil{
+.scheduleContainerHeaderPupilColour{
     background: #0075ff;
     opacity: 80%;
 }
