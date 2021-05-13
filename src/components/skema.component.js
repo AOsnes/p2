@@ -100,7 +100,7 @@ export default class Skema extends Component{
         let currentWeekday = currentDay();
         
         if(currentDate === today){
-            if(role === "teacher"){
+            if(currentWeekday === weekday && role === "teacher"){
                 return "currentDayHighlightTeacher";
             } 
             else if(currentWeekday === weekday){
