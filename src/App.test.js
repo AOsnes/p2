@@ -44,7 +44,6 @@ describe('app renders correctly', () => {
             configurable: true,
             get: jest.fn().mockImplementation(() => { return undefined; }),
         });
-
         render(
             <MemoryRouter initialEntries={['/']}>
                 <App />
