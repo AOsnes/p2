@@ -22,6 +22,7 @@ import NoMatchError from "./components/noMatchError.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Afleveringer from "./components/assignments.component";
 import Skema from "./components/skema.component";
+import LogoutModal from "./components/logoutModal.component";
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -57,8 +58,7 @@ class App extends React.Component{
 fx Login() bliver rendered når vi rammer "/" ruten */
 function Login(){
     return (
-        <div>
-            {/* TODO: Skal ikke render header, men en velkommen besked i stedet for */}
+        <div data-testid="loginPage">
             <LoginForm/>
         </div>
     )
@@ -66,30 +66,33 @@ function Login(){
 
 function Skemapage(){
     return(
-        <div>
+        <div data-testid="skemaPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Skema/>
+            <LogoutModal/>
         </div>
     )
 }
 
 function Afleveringerpage(){
     return(
-        <div>
+        <div data-testid="afleveringerPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Afleveringer/>
+            <LogoutModal/>
         </div>
     )
 }
 
 function RedigerSkema(){
     return(
-        <div>
+        <div data-testid="redigerSkemaPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <SkemabrikForm/>
+            <LogoutModal/>
         </div>
     )
 }
@@ -97,7 +100,7 @@ function RedigerSkema(){
 function NoMatch(){
     let location = useLocation();
     return(
-        <div>
+        <div data-testid="noMatchPage">
             <Header linkTo="/"/>
             <Sidebar/>
             <NoMatchError location={location.pathname}/>

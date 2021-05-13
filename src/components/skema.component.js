@@ -71,7 +71,7 @@ export default class Skema extends Component{
 
     scheduleBorders(weekday, currentDay, isFiveDayView){
         return(
-            <div className={`weekdayStyling ${((currentDay === weekday) && isFiveDayView) ? "currentDayHighlight" : ""}`} id={weekday}>
+            <div className={`weekdayStyling ${((currentDay === weekday) && isFiveDayView) ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`} id={weekday}>
                 <div className="scheduleBordersHour scheduleBorderFirst"></div>
                 <div className="scheduleBordersHalfHour"></div>
                 <div className="scheduleBordersHour"></div>
@@ -103,18 +103,18 @@ export default class Skema extends Component{
         else if(this.state.view === 5){
             return(
                 <div className="scheduleContainer">
-                    <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacher" : "scheduleContainerHeaderPupil"}`}>
+                    <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacherColour" : "scheduleContainerHeaderPupilColour"}`}>
                         <h1 className="textCenter scheduleContainerHeaderText">Skema</h1>
                         <ChangeWeekButton changeWeekClick={this.changeWeekClick}/>
                         <Dagsvisning dayView = {this.state.view} handleClick = {this.handleClick}/>
                     </div>
                     <div className="weekContainerFiveDay">
-                        <div className="weekNumberText">Uge {getWeek(this.state.date)}</div>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag") ? "currentDayHighlight" : ""}`}>Mandag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag") ? "currentDayHighlight" : ""}`}>Tirsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag") ? "currentDayHighlight" : ""}`}>Onsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag") ? "currentDayHighlight" : ""}`}>Torsdag</h1>
-                        <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag") ? "currentDayHighlight" : ""}`}>Fredag</h1>
+                        <h1 className="weekContainerBorderFix"> </h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Mandag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Tirsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Onsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Torsdag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Torsdag</h1>
+                        <h1 className={`textCenter weekText ${(this.state.viewText === "Fredag") ? (this.context.role === "teacher") ? "currentDayHighlightTeacher" : "currentDayHighlightPupil" : ""}`}>Fredag</h1>
                     </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
@@ -152,7 +152,7 @@ export default class Skema extends Component{
         else if(this.state.view === 1){
             return(
                 <div className="scheduleContainer">
-                    <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacher" : "scheduleContainerHeaderPupil"}`}>
+                    <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacherColour" : "scheduleContainerHeaderPupilColour"}`}>
                         <h1 className="textCenter scheduleContainerHeaderText">Skema</h1>
                         <Dagsvisning dayView = {this.state.view} handleClick = {this.handleClick}/>
                     </div>

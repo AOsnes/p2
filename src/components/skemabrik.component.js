@@ -62,7 +62,7 @@ export default class Skemabrik extends Component {
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
                 </div>,
                 ReactDOM.createPortal(
-                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                     <p className="skemabrikTitleText">
                         <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                         {subject}
@@ -78,7 +78,7 @@ export default class Skemabrik extends Component {
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
                 </div>,
                 ReactDOM.createPortal(
-                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                    <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                         <p className="skemabrikTitleText">
                             <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                             {subject}
