@@ -116,14 +116,9 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         }
 
         //Checks if the query had any results. 
-        let lessonCount = await cursor.count();
         await cursor.close();
-        if (lessonCount === 0) {
-            throw new Error("No documents found!");
-        } else {
-            return schedule;
-        }
 
+        return schedule;
     } catch(error){
         throw error;
     }
@@ -226,13 +221,9 @@ exports.getAssignments = async function getAssignments(user, date) {
         }
 
         //Checks if the query had any results. 
-        let assignmentsCount = await cursor.count();
         await cursor.close();
-        if (assignmentsCount === 0) {
-            throw new Error("No documents found!");
-        } else {
-            return assignments;
-        }
+        
+        return assignments;
 
     } catch(error){
         throw error;

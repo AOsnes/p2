@@ -13,7 +13,7 @@
 /*Top of assignments things */
 .assignmentsContainerHeader {
     display: grid;
-    grid-template-columns: 90% 10%;
+    grid-template-columns: auto 110px;
     height: 70px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;

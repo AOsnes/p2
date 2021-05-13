@@ -4,13 +4,17 @@ import TimeIndicator from './timeIndicator.component';
 import AssignmentBricks from './assignmentBricks.component';
 import currentDay from '../utils/currentDay';
 import getWeekday from '../utils/getWeekday';
+import ChangeWeekButton from './changeWeekButton.component';
+import addDays from '../utils/addDays';
+import getWeek from '../utils/getWeek';
 
 export default class Afleveringer extends Component {
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {id: '', date: '', viewText: "",  assignments:{}, isLoaded: false};
+        this.state = {id: '', date: '', viewText: '',  assignments:{}, isLoaded: false};
         this.getAssignments = this.getAssignments.bind(this);
+        this.changeWeekClick = this.changeWeekClick.bind(this);
         this.scheduleBorders = this.scheduleBorders.bind(this);
     }
 
@@ -20,10 +24,10 @@ export default class Afleveringer extends Component {
 
         this.setState({
             id: user.id,
-            date: new Date().toISOString(),
+            date: new Date(),
             viewText: weekday
         }, () =>{
-            let requestString = `${this.state.id}/${this.state.date}`;
+            let requestString = `${this.state.id}/${this.state.date.toISOString()}`;
             this.getAssignments(requestString)
         })
     }
@@ -37,6 +41,23 @@ export default class Afleveringer extends Component {
             this.setState({assignments: response},()=>{this.setState({isLoaded:true})});
         });
     }  
+
+    changeWeekClick(e){
+        let change = 0;
+        if(e.target.name === "Forward"){
+            change = 7;
+        } 
+        else if(e.target.name === "Backwards"){
+            change = -7;
+        }        
+        this.setState({
+            date: addDays(this.state.date, change),
+            isLoaded: false,
+        }, () =>{
+            let requestString = `${this.state.id}/${this.state.date.toISOString()}`;
+            this.getAssignments(requestString)
+        });
+    }
 
     scheduleBorders(weekday, currentDay, isFiveDayView){
         return(
@@ -74,9 +95,10 @@ export default class Afleveringer extends Component {
                 <div className="assignmentsContainer">
                     <div className={`assignmentsContainerHeader ${(this.context.role === "teacher") ? "assignmentsContainerHeaderTeacher" : "assignmentsContainerHeaderPupil"}`}>
                         <h1 className="textCenter assignmentsContainerHeaderText">Afleveringer</h1>
+                        <ChangeWeekButton changeWeekClick={this.changeWeekClick}/>
                     </div>
                     <div className="weekContainerFiveDay">
-                        <h1 className="weekContainerBorderFix"> </h1>
+                        <div className="weekNumberText">Uge {getWeek(this.state.date)}</div>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Mandag") ? "currentDayHighlight" : ""}`}>Mandag</h1>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Tirsdag") ? "currentDayHighlight" : ""}`}>Tirsdag</h1>
                         <h1 className={`textCenter weekText ${(this.state.viewText === "Onsdag") ? "currentDayHighlight" : ""}`}>Onsdag</h1>
