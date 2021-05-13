@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
-import LogoutModal from "./logoutModal.component";
 
 export default class Header extends Component {
     constructor(props){
@@ -34,7 +33,6 @@ export default class Header extends Component {
                                             </li>
                                             <li className="headerItem">
                                                 <img id="headerProfilePicture" src="profilePicture.jpg" onError={this.standby} alt="profilBillede"></img>
-                                                <LogoutModal/>
                                             </li>
                                         </div>
                                     );
