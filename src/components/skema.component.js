@@ -157,7 +157,7 @@ export default class Skema extends Component{
                         <Dagsvisning dayView = {this.state.view} handleClick = {this.handleClick}/>
                     </div>
                     <div className="weekContainerOneDay">
-                        <div className="weekNumberText"> </div>
+                        <div className="weekNumberText">Uge {getWeek(this.state.date)}</div>
                         <h1 className="textCenter oneDayText"><p className="oneDayTextPosition">{this.state.viewText}</p></h1>
                     </div>
                     <div className="gridContainerOneDay">
