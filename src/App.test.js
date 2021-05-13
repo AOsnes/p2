@@ -211,7 +211,7 @@ test('skema component renders correctly', () => {
 });
 
 /* Tests for skemabrik */
-test('skemabrik component renders correctly', () => {
+test('skemabrik component portals to  correct day', () => {
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '', startTime: '', endTime: ''}
     render([
@@ -221,7 +221,7 @@ test('skemabrik component renders correctly', () => {
         <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
         <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
         <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-        <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5}weekday="Onsdag"/>
+        <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
     ])
 
     const skemabrikElementDansk = screen.getByText('Dansk');
@@ -252,8 +252,26 @@ test('skemabrik component renders correctly', () => {
     /* Test af disableModal og onSkemaClick mangler */
 });
 
+test('skemabrik alert renders if there is a description', () =>{
+    const noAlert = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
+    const alert = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: ''}
+    render([
+        <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+        <Skemabrik key="skemabrik1" skemabrik={noAlert} dayView={1} weekday="Mandag"/>,
+        <Skemabrik key="skemabrik2" skemabrik={alert} dayView={5} weekday="Mandag"/>
+    ])
+    const mandagElement = screen.getByTestId("Mandag")
+    const noAlertSkemabrik = document.getElementsByClassName("skemabrik Dansk")[0];
+    const alertSkemabrik = document.getElementsByClassName("skemabrik Matematik")[0];
+    const descriptionAlertElement = document.getElementsByClassName("descriptionAlert")[0];
 
-describe('skemabrikModal component renders correctly', () =>{
+    expect(mandagElement).toContainElement(noAlertSkemabrik)
+    expect(mandagElement).toContainElement(alertSkemabrik)
+    expect(alertSkemabrik).toContainElement(descriptionAlertElement)
+    expect(noAlertSkemabrik).not.toContainElement(descriptionAlertElement)
+})
+
+describe('skemabrikModal tests', () =>{
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
     /* Render the test window before each test */
     beforeEach(() =>{
@@ -361,7 +379,7 @@ test('toggle day view component changes when clicked', () =>{
     expect(handleClick).toHaveBeenCalledTimes(2);
 })
 
-describe.only('skemabrikForm tests', () =>{    
+describe('skemabrikForm tests', () =>{    
     let signedInUser = {role: 'teacher', name: 'Sigurd', id: '123'};
     beforeEach(() =>{
         global.fetch = jest.fn(() => {
@@ -433,8 +451,7 @@ describe.only('skemabrikForm tests', () =>{
             })
         });
     })
-    test('submit button is only enabled when all fields have been filled', async () =>{
-        const flushPromises = () => new Promise(setImmediate);
+    test('submit button is only enabled when all fields have been filled', () =>{
         const rootElement = screen.getByTestId("root");
         const formElement = document.getElementsByClassName("formContainer")[0];
         const submitElement = screen.getByTestId("submit");
@@ -469,9 +486,10 @@ describe.only('skemabrikForm tests', () =>{
 
         expect(submitElement).not.toHaveAttribute("disabled")
         fireEvent.click(submitElement)
-        await flushPromises(); /* Venter på at compoment er blevet renderet */
-        const didSubmitModalElement = screen.getByText("Time tilføjet")
-        expect(formElement).not.toContainElement(didSubmitModalElement)
-        expect(rootElement).toContainElement(didSubmitModalElement)
+        setTimeout(() => {
+            const didSubmitModalElement = screen.getByText("Time tilføjet")
+            expect(formElement).not.toContainElement(didSubmitModalElement)
+            expect(rootElement).toContainElement(didSubmitModalElement)
+        });
     })
-}) 
+})
