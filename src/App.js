@@ -38,9 +38,7 @@ class App extends React.Component{
                         <Route path="/afleveringer">
                             <Afleveringerpage/>
                         </Route>
-                        <Route path="/redigerSkema">
-                            <RedigerSkema/>
-                        </Route>
+                        {signedInUser.role === 'teacher' ? <Route path="/redigerSkema"><RedigerSkema/></Route> : null}
                         <Route exact path="/">
                             <Login/>
                         </Route>
@@ -104,6 +102,7 @@ function NoMatch(){
             <Header linkTo="/"/>
             <Sidebar/>
             <NoMatchError location={location.pathname}/>
+            <LogoutModal/>
         </div>
     )
 }
