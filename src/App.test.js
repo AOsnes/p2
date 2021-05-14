@@ -28,7 +28,7 @@ jest.mock('react-router-dom', () => {
 });
 
 /* Tests for App */
-describe('app renders correctly', () => {
+describe('app renders correctly based on path', () => {
     beforeEach(() => {
         Object.defineProperty(document, 'cookie', {
             configurable: true,
@@ -61,13 +61,30 @@ describe('app renders correctly', () => {
             <MemoryRouter initialEntries={['/skema']}>
                 <App />
             </MemoryRouter>
-        );
-
-        const pageElement = screen.getByTestId("skemaPage");
-        const headerElement = screen.getByTestId("header");
-        const sidebarElement = screen.getByTestId("sidebar");
-        const skemaElement = screen.getByText("Skema");
-        
+        )
+        let pageElement = screen.getByTestId("skemaPage");
+        let headerElement = screen.getByTestId("header");
+        let sidebarElement = screen.getByTestId("sidebar");
+        let skemaElement = screen.getByText("Skema");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(skemaElement);
+        /* Cleanup to test if it renders for student */
+        cleanup();
+        Object.defineProperty(document, 'cookie', {
+            configurable: true,
+            get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=student; name=Testy McTestFace; Secure'; }),
+        });
+        render(
+            <MemoryRouter initialEntries={['/skema']}>
+                <App />
+            </MemoryRouter>
+        )
+        pageElement = screen.getByTestId("skemaPage");
+        headerElement = screen.getByTestId("header");
+        sidebarElement = screen.getByTestId("sidebar");
+        skemaElement = screen.getByText("Skema");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -80,12 +97,29 @@ describe('app renders correctly', () => {
                 <App />
             </MemoryRouter>
         );
-
-        const pageElement = screen.getByTestId("afleveringerPage");
-        const headerElement = screen.getByTestId("header");
-        const sidebarElement = screen.getByTestId("sidebar");
-        const assignmentsElement = screen.getByText("Afleveringer");
-        
+        let pageElement = screen.getByTestId("afleveringerPage");
+        let headerElement = screen.getByTestId("header");
+        let sidebarElement = screen.getByTestId("sidebar");
+        let assignmentsElement = screen.getByText("Afleveringer");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(assignmentsElement);
+        /* Cleanup to test if it renders for student */
+        cleanup();
+        Object.defineProperty(document, 'cookie', {
+            configurable: true,
+            get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=student; name=Testy McTestFace; Secure'; }),
+        });
+        render(
+            <MemoryRouter initialEntries={['/afleveringer']}>
+                <App />
+            </MemoryRouter>
+        );
+        pageElement = screen.getByTestId("afleveringerPage");
+        headerElement = screen.getByTestId("header");
+        sidebarElement = screen.getByTestId("sidebar");
+        assignmentsElement = screen.getByText("Afleveringer");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -98,16 +132,15 @@ describe('app renders correctly', () => {
                 <App />
             </MemoryRouter>
         );
-
         const pageElement = screen.getByTestId("redigerSkemaPage");
         const headerElement = screen.getByTestId("header");
         const sidebarElement = screen.getByTestId("sidebar");
         const redigerSkemaFormElement = screen.getByTestId("formContainer");
-        
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
         expect(pageElement).toContainElement(redigerSkemaFormElement);
+        /* Burde nok også teste om redigerskema bliver renderet for elever (SKAL IKKE SKE) */
     });
 
     test('app renders noMatch() correctly', () => { 
@@ -115,13 +148,11 @@ describe('app renders correctly', () => {
             <MemoryRouter initialEntries={['/*']}>
                 <App />
             </MemoryRouter>
-        );
-
+        )
         const pageElement = screen.getByTestId("noMatchPage");
         const headerElement = screen.getByTestId("header");
         const sidebarElement = screen.getByTestId("sidebar");
         const noMatchElement = screen.getByTestId("pageNotFoundContainer");
-        
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -141,13 +172,11 @@ test('header renders correctly with name', () => {
             </UserContext.Provider>
         </div>
     );
-
     const standby = jest.fn();
     const linkElement = screen.getByTestId("header");
     const logoElement = screen.getByTestId("headerButton");
     const profilePictureElement = screen.getByAltText("profilBillede");
     const profileNameElement = screen.getByText("Testy McTestFace");
-
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(logoElement);
     expect(linkElement).toContainElement(profilePictureElement);
@@ -177,7 +206,6 @@ test('sidebar renders correctly with context', () => {
     const linkElement = screen.getByTestId("sidebar");
     const skemaElement = screen.getByText("Skema");
     const afleveringerElement = screen.getByText("Afleveringer");
-
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(skemaElement);
     expect(linkElement).toContainElement(afleveringerElement);
@@ -211,7 +239,6 @@ test('noMatchError renders correctly', () => {
     const linkElement = screen.getByTestId('pageNotFoundContainer');
     const pElement = screen.getByTestId('pageNotFound');
     const expectedElementContent = "404: Siden blev ikke fundet, kunne ikke finde side: /skemas";
-
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(pElement);
     expect(pElement).toHaveTextContent(expectedElementContent);
@@ -229,7 +256,6 @@ describe('loginform renders correctly', () => {
         const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
         const adgangskodeElement = screen.getByPlaceholderText("Adgangskode");
         const loginElement = screen.getByDisplayValue("Log ind");
-        
         expect(linkElement).toBeInTheDocument();
         expect(linkElement).toContainElement(h2element);
         expect(linkElement).toContainElement(brugernavnElement);
@@ -416,7 +442,6 @@ test('skemabrik alert renders if there is a description', () =>{
     const noAlertSkemabrik = document.getElementsByClassName("skemabrik Dansk")[0];
     const alertSkemabrik = document.getElementsByClassName("skemabrik Matematik")[0];
     const descriptionAlertElement = document.getElementsByClassName("descriptionAlert")[0];
-
     expect(mandagElement).toContainElement(noAlertSkemabrik)
     expect(mandagElement).toContainElement(alertSkemabrik)
     expect(alertSkemabrik).toContainElement(descriptionAlertElement)
@@ -444,7 +469,6 @@ describe('skemabrikModal tests', () =>{
         const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
         fireEvent.click(skemabrikElement)
         const modalElement = document.getElementsByClassName("detailsModal")[0];
-
         expect(rootElement).toContainElement(modalElement);
     })
     test('modal closes when X is clicked', () =>{
