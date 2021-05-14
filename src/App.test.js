@@ -12,6 +12,7 @@ import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import getWeekday from './utils/getWeekday';
+import React from 'react';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup);
@@ -29,16 +30,17 @@ jest.mock('react-router-dom', () => {
 
 /* Tests for App */
 describe('app renders correctly based on path', () => {
+    let signedInTeacher = {id: "", role: "teacher", name: ""};
+    let signedInStudent = {id: "", role: "student", name: ""};
     beforeEach(() => {
+        /* Mocking a cookie in order to render other pages than login */
         Object.defineProperty(document, 'cookie', {
             configurable: true,
             get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
         });
     });
 
-    afterEach(() => {
-        cleanup();
-    });
+    afterEach(cleanup);
 
     test('app renders Login() correctly', () => {
         Object.defineProperty(document, 'cookie', {
@@ -58,10 +60,12 @@ describe('app renders correctly based on path', () => {
 
     test('app renders Skemapage() correctly', () => {
         render(
-            <MemoryRouter initialEntries={['/skema']}>
-                <App />
-            </MemoryRouter>
-        )
+            <UserContext.Provider value={signedInTeacher}>
+                <MemoryRouter initialEntries={['/skema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
         let pageElement = screen.getByTestId("skemaPage");
         let headerElement = screen.getByTestId("header");
         let sidebarElement = screen.getByTestId("sidebar");
@@ -72,15 +76,13 @@ describe('app renders correctly based on path', () => {
         expect(pageElement).toContainElement(skemaElement);
         /* Cleanup to test if it renders for student */
         cleanup();
-        Object.defineProperty(document, 'cookie', {
-            configurable: true,
-            get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=student; name=Testy McTestFace; Secure'; }),
-        });
         render(
-            <MemoryRouter initialEntries={['/skema']}>
-                <App />
-            </MemoryRouter>
-        )
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/skema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
         pageElement = screen.getByTestId("skemaPage");
         headerElement = screen.getByTestId("header");
         sidebarElement = screen.getByTestId("sidebar");
@@ -93,9 +95,11 @@ describe('app renders correctly based on path', () => {
 
     test('app renders Afleveringerpage() correctly', () => { 
         render(
-            <MemoryRouter initialEntries={['/afleveringer']}>
-                <App />
-            </MemoryRouter>
+            <UserContext.Provider value={signedInTeacher}>
+                <MemoryRouter initialEntries={['/afleveringer']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
         );
         let pageElement = screen.getByTestId("afleveringerPage");
         let headerElement = screen.getByTestId("header");
@@ -107,14 +111,12 @@ describe('app renders correctly based on path', () => {
         expect(pageElement).toContainElement(assignmentsElement);
         /* Cleanup to test if it renders for student */
         cleanup();
-        Object.defineProperty(document, 'cookie', {
-            configurable: true,
-            get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=student; name=Testy McTestFace; Secure'; }),
-        });
         render(
-            <MemoryRouter initialEntries={['/afleveringer']}>
-                <App />
-            </MemoryRouter>
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/afleveringer']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
         );
         pageElement = screen.getByTestId("afleveringerPage");
         headerElement = screen.getByTestId("header");
@@ -126,21 +128,40 @@ describe('app renders correctly based on path', () => {
         expect(pageElement).toContainElement(assignmentsElement);
     });
 
-    test('app renders RedigerSkema() correctly', () => { 
+    test('app renders RedigerSkema() correctly', () => {
         render(
-            <MemoryRouter initialEntries={['/redigerSkema']}>
-                <App />
-            </MemoryRouter>
+            <UserContext.Provider value={signedInTeacher}>
+                <MemoryRouter initialEntries={['/redigerSkema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
         );
-        const pageElement = screen.getByTestId("redigerSkemaPage");
-        const headerElement = screen.getByTestId("header");
-        const sidebarElement = screen.getByTestId("sidebar");
+        const redigerSkemaPageElement = screen.getByTestId("redigerSkemaPage");
+        let headerElement = screen.getByTestId("header");
+        let sidebarElement = screen.getByTestId("sidebar");
         const redigerSkemaFormElement = screen.getByTestId("formContainer");
-        expect(pageElement).toBeInTheDocument();
-        expect(pageElement).toContainElement(headerElement);
-        expect(pageElement).toContainElement(sidebarElement);
-        expect(pageElement).toContainElement(redigerSkemaFormElement);
+        expect(redigerSkemaPageElement).toBeInTheDocument();
+        expect(redigerSkemaPageElement).toContainElement(headerElement);
+        expect(redigerSkemaPageElement).toContainElement(sidebarElement);
+        expect(redigerSkemaPageElement).toContainElement(redigerSkemaFormElement);
         /* Burde nok også teste om redigerskema bliver renderet for elever (SKAL IKKE SKE) */
+        cleanup();
+        render(
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/redigerSkema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        const noMatchPageElement = screen.getByTestId("noMatchPage");
+        const noMatchElement = screen.getByTestId("pageNotFoundContainer");
+        headerElement = screen.getByTestId("header");
+        sidebarElement = screen.getByTestId("sidebar");
+        expect(redigerSkemaPageElement).not.toBeInTheDocument();
+        expect(noMatchPageElement).toContainElement(headerElement);
+        expect(noMatchPageElement).toContainElement(sidebarElement);
+        expect(noMatchPageElement).not.toContainElement(redigerSkemaFormElement);
+        expect(noMatchPageElement).toContainElement(noMatchElement);
     });
 
     test('app renders noMatch() correctly', () => { 
