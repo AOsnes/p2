@@ -44,7 +44,7 @@ export default class SkemabrikModal extends Component{
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     <form onSubmit={this.handleSubmit}>
                     <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
-                    <input name="submitButton" type="submit"s ></input>
+                    <input name="submitButton" type="submit"></input>
                     
                     </form>
                     {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
