@@ -1,151 +1,42 @@
-//const ObjectId = require("mongodb").ObjectId
-//const { MongoClient } = require("mongodb");
-//require('dotenv').config();
-//const uri = process.env.URI;
-//const client = new MongoClient(uri, {useUnifiedTopology: true});
-//const {getUserinfo, getSchedule, getDateInterval, oneDayInterval, fiveDayInterval} = require('./server');
-import {getUserinfo, getSchedule, oneDayInterval, fiveDayInterval, getDateInterval} from './server';
+import {oneDayInterval, fiveDayInterval, getDateInterval} from './server';
 
-test('oneDayIntervalMonday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 19, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(oneDayInterval(new Date (2021, 3, 19))).toEqual(expectedObject);
-})
+describe('Server tests', () =>{
+    describe('oneDayInterval tests', () =>{
+        test.each([
+            ["Monday",    new Date(2021, 3, 19), {"end": new Date(2021, 3, 19, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Tuesday",   new Date(2021, 3, 20), {"end": new Date(2021, 3, 20, 23, 59, 59), "start": new Date(2021, 3, 20, 0, 0, 0)} ],
+            ["Wednesday", new Date(2021, 3, 21), {"end": new Date(2021, 3, 21, 23, 59, 59), "start": new Date(2021, 3, 21, 0, 0, 0)} ],
+            ["Thursday",  new Date(2021, 3, 22), {"end": new Date(2021, 3, 22, 23, 59, 59), "start": new Date(2021, 3, 22, 0, 0, 0)} ],
+            ["Friday",    new Date(2021, 3, 23), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 23, 0, 0, 0)} ],
+        ])('#%# oneDayInterval %s', (formattet, date, expected) => {
+            expect(oneDayInterval(date)).toStrictEqual(expected);
+        });
+    })
 
-test('oneDayIntervalTuesday', () =>{
-    let start = new Date(2021, 3, 20, 0, 0, 0);
-    let end = new Date(2021, 3, 20, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(oneDayInterval(new Date (2021, 3, 20))).toEqual(expectedObject);
-})
+    describe('fiveDayInterval tests', () =>{
+        test.each([
+            ["Monday",    new Date(2021, 3, 19), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Tuesday",   new Date(2021, 3, 20), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Wednesday", new Date(2021, 3, 21), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Thursday",  new Date(2021, 3, 22), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Friday",    new Date(2021, 3, 23), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+        ])('#%# fiveDayInterval %s', (formattet, date, expected) => {
+            expect(fiveDayInterval(date)).toStrictEqual(expected);
+        });
+    })
 
-test('oneDayIntervalWednesday', () =>{
-    let start = new Date(2021, 3, 21, 0, 0, 0);
-    let end = new Date(2021, 3, 21, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(oneDayInterval(new Date (2021, 3, 21))).toEqual(expectedObject);
-})
-
-test('oneDayIntervalThursday', () =>{
-    let start = new Date(2021, 3, 22, 0, 0, 0);
-    let end = new Date(2021, 3, 22, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(oneDayInterval(new Date (2021, 3, 22))).toEqual(expectedObject);
-})
-
-test('oneDayIntervalFriday', () =>{
-    let start = new Date(2021, 3, 23, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(oneDayInterval(new Date (2021, 3, 23))).toEqual(expectedObject);
-})
-
-test('fiveDayIntervalMonday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(fiveDayInterval(new Date (2021, 3, 19))).toEqual(expectedObject);
-})
-
-test('fiveDayIntervalTuesday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(fiveDayInterval(new Date (2021, 3, 20))).toEqual(expectedObject);
-})
-
-test('fiveDayIntervalWednesday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(fiveDayInterval(new Date (2021, 3, 21))).toEqual(expectedObject);
-})
-
-test('fiveDayIntervalThursday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(fiveDayInterval(new Date (2021, 3, 22))).toEqual(expectedObject);
-})
-
-test('fiveDayIntervalFriday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(fiveDayInterval(new Date (2021, 3, 23))).toEqual(expectedObject);
-})
-
-/* Same as above??!?
-test('fiveDayIntervalFriday', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    expect(fiveDayInterval(new Date (2021, 3, 23))).toEqual(expectedObject);
-}) */
-
-
-test('getDateIntervalMonday1', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 19, 23, 59, 59);
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 19);
-    expect(getDateInterval(testTime, '1')).toEqual(expectedObject);
-})
-
-test('getDateIntervalFriday1', () =>{
-    let start = new Date(2021, 3, 23, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59);
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 23);
-    expect(getDateInterval(testTime, '1')).toEqual(expectedObject);
-})
-
-test('getDateIntervalSaturday1', () =>{
-    let start = new Date(2021, 3, 26, 0, 0, 0);
-    let end = new Date(2021, 3, 26, 23, 59, 59);
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 24);
-    expect(getDateInterval(testTime, '1')).toEqual(expectedObject);
-})
-
-test('getDateIntervalSunday1', () =>{
-    let start = new Date(2021, 3, 26, 0, 0, 0);
-    let end = new Date(2021, 3, 26, 23, 59, 59);
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 25);
-    expect(getDateInterval(testTime, '1')).toEqual(expectedObject);
-})
-
-test('getDateIntervalMonday5', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59)
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 19);
-    expect(getDateInterval(testTime, '5')).toEqual(expectedObject);
-})
-
-test('getDateIntervalFriday5', () =>{
-    let start = new Date(2021, 3, 19, 0, 0, 0);
-    let end = new Date(2021, 3, 23, 23, 59, 59)
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 23);
-    expect(getDateInterval(testTime, '5')).toEqual(expectedObject);
-})
-
-test('getDateIntervalSaturday5', () =>{
-    let start = new Date(2021, 3, 26, 0, 0, 0);
-    let end = new Date(2021, 3, 30, 23, 59, 59);
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 24);
-    expect(getDateInterval(testTime, '5')).toEqual(expectedObject);
-})
-
-test('getDateIntervalSunday5', () =>{
-    let start = new Date(2021, 3, 26, 0, 0, 0);
-    let end = new Date(2021, 3, 30, 23, 59, 59);
-    let expectedObject = {start, end};
-    let testTime = new Date (2021, 3, 25);
-    expect(getDateInterval(testTime, '5')).toEqual(expectedObject);
-})
-
+    describe('getDateInterval tests', () =>{
+        test.each([
+            ["Monday",    '1', new Date(2021, 3, 19), {"end": new Date(2021, 3, 19, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Friday",    '1', new Date(2021, 3, 23), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 23, 0, 0, 0)} ],
+            ["Saturday",  '1', new Date(2021, 3, 24), {"end": new Date(2021, 3, 26, 23, 59, 59), "start": new Date(2021, 3, 26, 0, 0, 0)} ],
+            ["Sunday",    '1', new Date(2021, 3, 25), {"end": new Date(2021, 3, 26, 23, 59, 59), "start": new Date(2021, 3, 26, 0, 0, 0)} ],
+            ["Monday",    '5', new Date(2021, 3, 19), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Friday",    '5', new Date(2021, 3, 23), {"end": new Date(2021, 3, 23, 23, 59, 59), "start": new Date(2021, 3, 19, 0, 0, 0)} ],
+            ["Saturday",  '5', new Date(2021, 3, 24), {"end": new Date(2021, 3, 30, 23, 59, 59), "start": new Date(2021, 3, 26, 0, 0, 0)} ],
+            ["Thursday",  '5', new Date(2021, 3, 25), {"end": new Date(2021, 3, 30, 23, 59, 59), "start": new Date(2021, 3, 26, 0, 0, 0)} ],
+        ])('#%# getDateInterval %s', (formattet, days, date, expected) => {
+            expect(getDateInterval(date, days)).toStrictEqual(expected);
+        });
+    })
+}) 

@@ -8,20 +8,26 @@ const app = express();
 require('dotenv').config();
 
 const port = process.env.PORT || 5000
-const uri = process.env.URI;
+const uri = process.env.URI
 let connection;
+let database;
+/* Dont open server connection if we are running tests */
+if (process.env.NODE_ENV !== 'test') {
+    MongoClient.connect(uri, {useUnifiedTopology: true}, (error, client) => {
+        if(error) {
+            console.error(error)
+        } else{
+            connection = client;
+            database = connection.db('P2');
+            app.listen(port, () => {
+                console.log(`Server is listening on port ${port}`);
+            });
+        }
+    })
+}
 
-MongoClient.connect(uri, {useUnifiedTopology: true}, (error, client) =>{
-    connection = client
-    app.listen(port, () =>{
-        console.log(`Server is listening on port ${port}`);
-    });
-})
-    
- 
 exports.authenticate = async function authenticate(username, password){
     try {
-        const database = connection.db('P2');
         const doc = database.collection("users");
         const result = await doc.findOne({username, password}, {projection: {name: 1, role: 1, class: 1}});
         if (result === null) {
@@ -38,7 +44,6 @@ exports.authenticate = async function authenticate(username, password){
 information returned here MUST NOT be confidential! maybe very cursed :)*/
 exports.getUserinfo = async function getUserinfo(id){
     try {
-        const database = connection.db('P2');
         const doc = database.collection("users");
         const result = await doc.findOne({"_id": ObjectId(id)}, {projection: {name: 1, role: 1, class: 1}});
         if (result === null) {
@@ -102,7 +107,6 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 //This function queries lessons for a given user at a given interval and date
 exports.getSchedule = async function getSchedule(user, date, days) {
     try {
-        const database = connection.db('P2');
         const collection = database.collection("lessons");
         //Calculates the time interval using the passed date and amount of days
         let interval = getDateInterval(date, days);
@@ -133,7 +137,6 @@ exports.getSchedule = async function getSchedule(user, date, days) {
 exports.createLesson = async function createLesson(id, className, subject, start, end, description, recurrences, interval){
     return new Promise ((resolve, reject) => {
         try {
-            const database = connection.db('P2');
             const doc = database.collection("lessons");
             let result;
             if (recurrences > 1){
@@ -175,7 +178,6 @@ exports.createLesson = async function createLesson(id, className, subject, start
 exports.updateLesson = async function updateLesson(id, changes){
     return new Promise ((resolve, reject) => {
         try {
-            const database = connection.db('P2');
             const doc = database.collection("lessons");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
             .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
@@ -190,7 +192,6 @@ exports.updateLesson = async function updateLesson(id, changes){
 exports.deleteLesson = async function deleteLesson(id){
     return new Promise((resolve, reject) => {
         try {
-            const database = connection.db('P2');
             const doc = database.collection("lessons");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
             .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
@@ -205,7 +206,6 @@ exports.deleteLesson = async function deleteLesson(id){
 //This function queries assignments for a given user at a 5 day interval and date
 exports.getAssignments = async function getAssignments(user, date) {
     try {
-        const database = connection.db('P2');
         const collection = database.collection("assignments");
         //Calculates the time interval using the passed date and amount of days
         let interval = getDateInterval(date, "5");
@@ -253,7 +253,6 @@ exports.createAssignment = async function createAssignment(id, lessonID, subject
 exports.updateAssignment = async function updateAssignment(id, changes){
     return new Promise ((resolve, reject) => {
         try {
-            const database = connection.db('P2');
             const doc = database.collection("assigments");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
             .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
@@ -268,7 +267,6 @@ exports.updateAssignment = async function updateAssignment(id, changes){
 exports.deleteAssignment = async function deleteAssignment(id){
     return new Promise((resolve, reject) => {
         try {
-            const database = connection.db('P2');
             const doc = database.collection("assigments");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
             .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
@@ -288,15 +286,6 @@ let logger = (req, res, next) => {
 let requestTime = (req, res, next) => {
     req.requestTime = Date.now();
     next();
-}
-
-let restrict = (req, res, next) => {
-    if(req.session.user) {
-        next(); //We fine, user is authenticated
-    } else {
-        req.session.error = 'Access denied';
-        res.redirect('/'); //TODO: change?
-    }
 }
 
 app.use(bodyParser.json());
