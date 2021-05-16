@@ -41,7 +41,6 @@ describe('app renders correctly based on path', () => {
     });
 
     afterEach(cleanup);
-
     test('app renders Login() correctly', () => {
         Object.defineProperty(document, 'cookie', {
             configurable: true,
