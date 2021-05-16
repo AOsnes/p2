@@ -6,7 +6,6 @@
 //const {getUserinfo, getSchedule, getDateInterval, oneDayInterval, fiveDayInterval} = require('./server');
 import {getUserinfo, getSchedule, oneDayInterval, fiveDayInterval, getDateInterval} from './server';
 
-
 test('oneDayIntervalMonday', () =>{
     let start = new Date(2021, 3, 19, 0, 0, 0);
     let end = new Date(2021, 3, 19, 23, 59, 59);
