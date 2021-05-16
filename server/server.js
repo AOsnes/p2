@@ -1,5 +1,4 @@
-const ObjectId = require("mongodb").ObjectId
-const { MongoClient } = require("mongodb");
+const {MongoClient, ObjectId} = require('mongodb');
 const bodyParser = require('body-parser')
 const express = require('express');
 const cors = require('cors');
