@@ -36,11 +36,14 @@ export default class Sidebar extends Component {
                     <UserContext.Consumer>
                         {user => {
                             if (user.role === 'teacher') {
-                                return (
-                                    <li className="sideItem" data-testid="redigerSkema">
-                                        <Link className="sideButton" to="/redigerSkema"> <BiEdit className="sideIcon" />Rediger Skema</Link>
+                                return ([
+                                    <li key="redigerSkema" className="sideItem" data-testid="redigerSkema">
+                                        <Link className="sideButton" to="/redigerSkema"> <BiEdit className="sideIcon" />Opret Skemabrik</Link>
+                                    </li>,
+                                    <li key="afleveringer" className="sideItem" data-testid="afleveringer">
+                                        <Link className="sideButton" to="/afleveringer"> <BiEdit className="sideIcon" />Afleveringer</Link>
                                     </li>
-                                );
+                                ]);
                             }
                         }}
                     </UserContext.Consumer>

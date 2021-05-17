@@ -42,8 +42,6 @@ export default class SkemabrikModal extends Component{
             })
         }
     }
-    
-
 
     render(){
         const user = this.context;
@@ -60,13 +58,15 @@ export default class SkemabrikModal extends Component{
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     {user.role === "teacher"
                         ? <p className="skemabrikModalText textLeft">Klasse: {classes}</p>
-                        : <div>
-                            <p className="skemabrikModalText textLeft">Aflever:</p>
-                            <form onSubmit={this.handleSubmit}>
-                                <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
-                                <input name="submitButton" type="submit"></input>
-                            </form>
-                        </div>
+                        : this.props.type === "assignments" 
+                            ? <div>
+                                <p className="skemabrikModalText textLeft">Aflever:</p>
+                                <form onSubmit={this.handleSubmit}>
+                                    <input name="assignmentUpload" onChange={this.handleChange} type="file"/>
+                                    <input name="submitButton" value="Aflever" type="submit"></input>
+                                </form>
+                            </div>
+                        : null
                     }
                 </div>,
                 document.getElementById('root')
