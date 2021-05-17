@@ -24,7 +24,7 @@ export default class Skemabrik extends Component {
         this.setState({
             showSkemabrikModal: false
         }, () => {
-            document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
+            document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.remove('blur-filter')
         })
     }
 
@@ -33,7 +33,7 @@ export default class Skemabrik extends Component {
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal,
         }), () => {
-            this.state.showSkemabrikModal ? document.getElementsByClassName('scheduleContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
+            this.state.showSkemabrikModal ? document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
         
     }
@@ -51,13 +51,14 @@ export default class Skemabrik extends Component {
         const endTime = new Date(this.props.skemabrik.endTime);
         const description = this.props.skemabrik.description;
         let startTime;
-        if(this.props.skemabrik.startTime){
+        if(this.props.type === "schedule"){
             startTime = new Date(this.props.skemabrik.startTime)
-        } else {
+        } else if(this.props.type === "assignments"){
             startTime =  new Date(this.props.skemabrik.dueDate);
         }
+
         const style = {
-            height: calculateHeight(startTime, endTime),
+            height: this.props.type === "schedule" ? calculateHeight(startTime, endTime) : "81.25px",
             position: 'absolute',
             top: calculatePosition(startTime, 0),
         }
