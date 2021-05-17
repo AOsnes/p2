@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import SkemabrikModal from './skemabrikModal.component';
+import DescriptionAlert from './descriptionAlert.component';
 import { UserContext } from '../UserContext';
 import ReactDOM from 'react-dom';
+import calculatePosition from '../utils/calculatePosition';
+import calculateHeight from '../utils/calculateHeight';
 
 export default class Skemabrik extends Component {
     static contextType = UserContext;
@@ -10,33 +13,10 @@ export default class Skemabrik extends Component {
         this.state = {
             showSkemabrikModal: false,
             isLoaded: false,
+            read: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
-        this.toHHMM = this.toHHMM.bind(this);
-    }
-
-    /* Beregn hvor stor højde der skal være på elemented ud fra end time - start time,*/
-    calculateHeight(startTime, endTime){
-        /* This is how long every class is in milliseconds */
-        let deltaTime = endTime - startTime;
-        
-        /* One hour is 100 px, change this to change the size of the classes */
-        let scale = 100;
-        /* We calculate how many hours the deltaTime translates to and we multiply it with the scale */
-        let height = deltaTime / 1000000 / 3.6 * scale;
-        return `${height}px`;
-    }
-
-    /* Takes a date object and returns a string formatted by HH:MM where H = hours and M = minutes */
-    toHHMM(date){
-        let hhmm;
-
-        /* 0 will be added before if time is under 10 for both hours and minutes */
-        let hh = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-        let mm = date.getMinutes()  < 10 ? '0' + date.getMinutes() : date.getMinutes()
-        hhmm = hh + ':' + mm;
-        return hhmm
     }
 
     /* Called from the child component */
@@ -44,24 +24,18 @@ export default class Skemabrik extends Component {
         this.setState({
             showSkemabrikModal: false
         }, () => {
-            document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
+            document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         })
     }
 
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
-            showSkemabrikModal: !prevState.showSkemabrikModal
+            showSkemabrikModal: !prevState.showSkemabrikModal,
         }), () => {
-            this.state.showSkemabrikModal ? document.getElementsByClassName('skemaContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('skemaContainer')[0].classList.remove('blur-filter')
+            this.state.showSkemabrikModal ? document.getElementsByClassName('scheduleContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
         
-    }
-
-    calculatePosition(date){
-        let deltaHours = date.getHours() - 8;
-        let minutesPercentage = (100 - (((8*60 - ((deltaHours*60 + date.getMinutes())))/(8*60))*100));
-        return `calc(${minutesPercentage}% + ${minutesPercentage ? "1px": "0px"})`;
     }
 
     componentDidMount(){
@@ -75,38 +49,30 @@ export default class Skemabrik extends Component {
     render(){
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
-        const startTime = new Date(this.props.skemabrik.startTime);
+        const description = this.props.skemabrik.description;
+        let startTime;
+        if(this.props.skemabrik.startTime){
+            startTime = new Date(this.props.skemabrik.startTime)
+        } else {
+            startTime =  new Date(this.props.skemabrik.dueDate);
+        }
         const style = {
-            height: this.calculateHeight(startTime, endTime),
+            height: calculateHeight(startTime, endTime),
             position: 'absolute',
-            top: this.calculatePosition(startTime),
+            top: calculatePosition(startTime, 0),
         }
-        if(this.props.dayView === true && this.state.isLoaded){
+        if(this.state.isLoaded){
             return([
-                <div>
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} toHHMM={this.toHHMM} skemabrikContext={this.props.skemabrik}/> : null} 
+                <div key="modal">
+                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
                 </div>,
                 ReactDOM.createPortal(
-                <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
-                    <p className="skemabrikTitleText">
-                        <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                        {subject}
-                    </p>
-                </div>,
-                document.getElementById(`${this.props.weekday}`))]
-            )
-        }
-        else if (this.props.dayView === false && this.state.isLoaded){
-            return([
-                <div>
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} toHHMM={this.toHHMM}/> : null}
-                </div>,
-                ReactDOM.createPortal(
-                    <div key="brik" style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
+                    <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
                         <p className="skemabrikTitleText">
                             <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                             {subject}
                         </p>
+                        {description ? <DescriptionAlert/> : null}
                 </div>,
                 document.getElementById(`${this.props.weekday}`))]
             )

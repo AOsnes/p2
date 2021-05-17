@@ -1,13 +1,15 @@
 /*  General Schedule Styling */
-.skemaContainer{
+.scheduleContainer{
     position: relative;
-    background-color:#E5E5E5;
-    left: 10%;
+    background-color: white;
+    left: 100px;
     width: 85%;
     height: 80%;
-    margin-top: 3.5%;
+    margin-top: 2%;
+    margin-bottom: 1.5%;
+    margin-left: 4%;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.5));
 }
 
 /* grid style */
@@ -35,14 +37,15 @@
 .gridContainerFiveDay {
     position: relative;
     display: grid;
-    grid-template-columns: 7.5% auto auto auto auto auto;
+    grid-template-columns: 7.5% 18.5% 18.5% 18.5% 18.5% 18.5%;
+    height: 650px;
 }
 
 .gridItemContainer {
     position: relative;
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 800px;
+    height: 100%;
     border-left: none;
     border-bottom: none;
 }
@@ -53,7 +56,7 @@
     padding-right: 5px;
     font-size: 30px;
     text-align: center;
-    height: 49px;
+    height: 39.625px;
     border: 1px solid rgba(0, 0, 0, 0.8);
     border-right: none;
     border-left: none;
@@ -66,7 +69,7 @@
     padding-right: 5px;
     font-size: 30px;
     text-align: center;
-    height: 49px;
+    height: 39.625px;
     border: 1px dotted rgba(0, 0, 0, 0.8);
     border-right: none;
     border-left: none;
@@ -79,14 +82,85 @@
 
 .timeOne {
     border-top: none;
-    height: 50px;
+    height: 40.625px;
 }
 
+.currentDayHighlightPupil{
+    background: #0077ff1f;
+}
+
+.currentDayHighlightTeacher{
+    background: #00cc0021;
+}
+
+/*Top of schedule things */
+.weekContainerFiveDay {
+    display: grid;
+    grid-template-columns: 7.5% 18.5% 18.5% 18.5% 18.5% 18.5%;
+}
+
+.weekContainerOneDay {
+    display: grid;
+    grid-template-columns: 7.5% 92.5%;
+}
+
+.weekText {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: none;
+    border-right: none;
+}
+
+.oneDayText {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: none;
+    border-right: none;
+}
+
+.oneDayTextPosition {
+    position: relative;
+    left: -3.75%;
+}
+
+.weekNumberText {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: none;
+    border-left: none;
+    font-size: 1.333em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.scheduleContainerHeader {
+    display: grid;
+    grid-template-columns: auto 110px 140px;
+    height: 70px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.scheduleContainerHeaderTeacherColour{
+    background: #00cc00;
+    opacity: 80%;
+}
+
+.scheduleContainerHeaderPupilColour{
+    background: #0075ff;
+    opacity: 80%;
+}
+
+.scheduleContainerHeaderText {
+    font-size: 3.157em;
+    color: white;
+    position: relative;
+    top: 55%;
+    left: calc(50% + 70px + 55px);
+    transform: translate(-50%, -50%);
+}
 
 /*Schedule layout css */
 .scheduleBordersHour {
     position: relative;
-    height: 49px;
+    height: 39.625px;
     border: 1px solid rgba(0, 0, 0, 0.8);
     border-right: none;
     border-left: none;
@@ -95,7 +169,7 @@
 
 .scheduleBordersHalfHour {
     position: relative;
-    height: 49px;
+    height: 39.625px;
     border: 1px dotted rgba(0, 0, 0, 0.8);
     border-right: none;
     border-left: none;
@@ -104,50 +178,14 @@
 
 .scheduleBorderFirst {
     border-top: none;
-    height: 50px;
+    height: 40.625px;
 }
 
-.Mandag{
+.weekdayStyling{
     position: relative;
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 800px;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Tirsdag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 800px;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Onsdag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 800px;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Torsdag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 800px;
-    border-bottom: none;
-    border-right: none;
-}
-
-.Fredag{
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    height: 800px;
+    height: 100%;
     border-bottom: none;
     border-right: none;
 }

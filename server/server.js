@@ -1,5 +1,4 @@
-const ObjectId = require("mongodb").ObjectId
-const { MongoClient } = require("mongodb");
+const {MongoClient, ObjectId} = require('mongodb');
 const bodyParser = require('body-parser')
 const express = require('express');
 const cors = require('cors');
@@ -8,13 +7,26 @@ const app = express();
 require('dotenv').config();
 
 const port = process.env.PORT || 5000
-const uri = process.env.URI;
-
-const client = new MongoClient(uri, {useUnifiedTopology: true});
+const uri = process.env.URI
+let connection;
+let database;
+/* Dont open server connection if we are running tests */
+if (process.env.NODE_ENV !== 'test') {
+    MongoClient.connect(uri, {useUnifiedTopology: true}, (error, client) => {
+        if(error) {
+            console.error(error)
+        } else{
+            connection = client;
+            database = connection.db('P2');
+            app.listen(port, () => {
+                console.log(`Server is listening on port ${port}`);
+            });
+        }
+    })
+}
 
 exports.authenticate = async function authenticate(username, password){
     try {
-        const database = client.db('P2');
         const doc = database.collection("users");
         const result = await doc.findOne({username, password}, {projection: {name: 1, role: 1, class: 1}});
         if (result === null) {
@@ -31,7 +43,6 @@ exports.authenticate = async function authenticate(username, password){
 information returned here MUST NOT be confidential! maybe very cursed :)*/
 exports.getUserinfo = async function getUserinfo(id){
     try {
-        const database = client.db('P2');
         const doc = database.collection("users");
         const result = await doc.findOne({"_id": ObjectId(id)}, {projection: {name: 1, role: 1, class: 1}});
         if (result === null) {
@@ -95,8 +106,6 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 //This function queries lessons for a given user at a given interval and date
 exports.getSchedule = async function getSchedule(user, date, days) {
     try {
-        /* await client.connect(); */
-        const database = client.db('P2');
         const collection = database.collection("lessons");
         //Calculates the time interval using the passed date and amount of days
         let interval = getDateInterval(date, days);
@@ -108,7 +117,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
 
         //Determines the role of the user as each role needs a different query to the correct lessons.
         if (user.role === "teacher") {
-            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "startTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
+            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
             schedule = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
@@ -116,14 +125,9 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         }
 
         //Checks if the query had any results. 
-        let lessonCount = await cursor.count();
         await cursor.close();
-        if (lessonCount === 0) {
-            throw new Error("No documents found!");
-        } else {
-            return schedule;
-        }
 
+        return schedule;
     } catch(error){
         throw error;
     }
@@ -132,8 +136,6 @@ exports.getSchedule = async function getSchedule(user, date, days) {
 exports.createLesson = async function createLesson(id, className, subject, start, end, description, recurrences, interval){
     return new Promise ((resolve, reject) => {
         try {
-            //await client.connect();
-            const database = client.db('P2');
             const doc = database.collection("lessons");
             let result;
             if (recurrences > 1){
@@ -175,7 +177,6 @@ exports.createLesson = async function createLesson(id, className, subject, start
 exports.updateLesson = async function updateLesson(id, changes){
     return new Promise ((resolve, reject) => {
         try {
-            const database = client.db('P2');
             const doc = database.collection("lessons");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
             .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
@@ -190,7 +191,6 @@ exports.updateLesson = async function updateLesson(id, changes){
 exports.deleteLesson = async function deleteLesson(id){
     return new Promise((resolve, reject) => {
         try {
-            const database = client.db('P2');
             const doc = database.collection("lessons");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
             .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
@@ -202,18 +202,48 @@ exports.deleteLesson = async function deleteLesson(id){
     });
 }
 
+//This function queries assignments for a given user at a 5 day interval and date
+exports.getAssignments = async function getAssignments(user, date) {
+    try {
+        const collection = database.collection("assignments");
+        //Calculates the time interval using the passed date and amount of days
+        let interval = getDateInterval(date, "5");
+
+        let start = interval.start;
+        let end = interval.end;
+        let cursor;
+        let assignments;
+
+        //Determines the role of the user as each role needs a different query to the correct assignments.
+        if (user.role === "teacher") {
+            cursor = await collection.find({ "teacherID": user._id.toString(),  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
+            assignments = await cursor.toArray();
+        } else {
+            cursor = await collection.find({ "class": { $in: user.class },  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } });
+            assignments = await cursor.toArray();
+        }
+
+        //Checks if the query had any results. 
+        await cursor.close();
+        
+        return assignments;
+
+    } catch(error){
+        throw error;
+    }
+}
+
 exports.createAssignment = async function createAssignment(id, lessonID, subject, description, dueDate, optionalFile){
     return new Promise ((resolve, reject) => {
         try {
-            //await client.connect();
-            const database = client.db('P2');
+            const database = connection.db('P2');
             const doc = database.collection("assignments");
             doc.insertOne({ "teacherID": id.toString(), "lessonID" : lessonID, "subject": subject, "description": description, "dueDate": dueDate, "fileID": optionalFile, })
             .then(result => console.log(result.insertedCount))
             .then(() => { resolve(); })
             .catch(console.dir);
         } finally {
-            // Ensures that the client will close when you finish/error
+            // Ensures that the connection will close when you finish/error
             
         }
     });
@@ -222,7 +252,6 @@ exports.createAssignment = async function createAssignment(id, lessonID, subject
 exports.updateAssignment = async function updateAssignment(id, changes){
     return new Promise ((resolve, reject) => {
         try {
-            const database = client.db('P2');
             const doc = database.collection("assigments");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
             .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
@@ -237,7 +266,6 @@ exports.updateAssignment = async function updateAssignment(id, changes){
 exports.deleteAssignment = async function deleteAssignment(id){
     return new Promise((resolve, reject) => {
         try {
-            const database = client.db('P2');
             const doc = database.collection("assigments");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
             .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
@@ -259,15 +287,6 @@ let requestTime = (req, res, next) => {
     next();
 }
 
-let restrict = (req, res, next) => {
-    if(req.session.user) {
-        next(); //We fine, user is authenticated
-    } else {
-        req.session.error = 'Access denied';
-        res.redirect('/'); //TODO: change?
-    }
-}
-
 app.use(bodyParser.json());
 app.use(cors());
 app.use(requestTime);
@@ -278,15 +297,11 @@ const classesRouter = require('./routes/classes');
 const loginRouter = require('./routes/login');
 const userinfoRouter = require('./routes/userinfo');
 const scheduleRouter = require('./routes/schedule');
+const assignmentsRouter = require('./routes/assignments');
 const upload = require('./routes/upload');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
 app.use('/schedule', scheduleRouter);
+app.use('/assignments', assignmentsRouter);
 app.use('/upload', upload);
-
-client.connect()
-
-app.listen(port, () =>{
-    console.log(`Server is listening on port ${port}`);
-});

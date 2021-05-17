@@ -1,0 +1,38 @@
+.changeWeekButton {
+    position: relative;
+    top: 39.5%;
+    transform: translate(0, -25%);
+    height: 30px;
+    width: 100px;
+    background: white;
+    border-radius: 5px;
+}
+
+.button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #06142F;
+    color: white;
+}
+
+.currentWeek {
+    width: 40px;
+}
+
+.button:hover {
+    background: #06142F;
+    opacity: 80%;
+    cursor: pointer;
+    border: none;
+}
+
+.previousWeek{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.nextWeek{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

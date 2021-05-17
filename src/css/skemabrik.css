@@ -1,6 +1,5 @@
 /* General Skemabrik Style */
 .skemabrik{
-    position: relative;
     left: 0.75%;
     width: 98.5%;
     display: flex;
@@ -34,6 +33,17 @@
 .skemabrikIcon{
     position: relative;
     width: 40px;
+}
+
+.descriptionAlert{
+    position:absolute;
+    height: 1em;
+    width: 1em;
+    background-color: #F0BF13;
+    border-radius: 50%;
+    top: 10px;
+    right: 10px;
+    border: solid 1px black;
 }
 
 /* Colours of Subjects */
