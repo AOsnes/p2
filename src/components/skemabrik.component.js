@@ -35,7 +35,6 @@ export default class Skemabrik extends Component {
         }), () => {
             this.state.showSkemabrikModal ? document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
-        
     }
 
     componentDidMount(){
