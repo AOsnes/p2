@@ -158,13 +158,15 @@ export default class SkemabrikForm extends Component{
                         <label className="inputText advancedText" htmlFor="advanced">Avanceret</label>
                         <input className="checkbox" type="checkbox" name="advanced" value={this.state.advanced} data-testid="advanced" onChange={this.handleChange}></input>
                     </div>
-                    <select defaultValue={fag[0]} name="subject" data-testid="subject" onChange={this.handleChange}>
+                    <select name="subject" data-testid="subject" onChange={this.handleChange}>
+                        <option value="" selected disabled hidden>Fag</option>
                         {fag.map(fag => {
                             return <option key={fag} data-testid="subjectOption" value={fag}>{fag}</option>
                         })}
                     </select>
                     <label className="inputText" htmlFor="class">Klasse</label>
-                    <select defaultValue={this.state.klasser[0]} name="class" data-testid="class" onChange={this.handleChange}>
+                    <select name="class" data-testid="class" onChange={this.handleChange}>
+                        <option value="" selected disabled hidden>Klasse</option>
                         {this.state.klasser.map(klasse =>{
                             return <option key={klasse} data-testid="classOption" value={klasse}>{klasse}</option>
                         })}

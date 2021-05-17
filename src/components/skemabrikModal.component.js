@@ -3,21 +3,24 @@ import ReactDOM from 'react-dom';
 import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
 import isValidDate from '../utils/isValidDate';
+import EditLessonModal from './editLesson.component';
 
 export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {fileSelected: false, file: null}
+        this.state = {fileSelected: false, file: null, showEditLessonModal: false}
 
-        this.handleClick = this.handleClick.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleClick = this.handleClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
+        this.editLessonClick = this.editLessonClick.bind(this);
     }
 
-     handleClick(event){
+    handleClick(event){
         event.preventDefault();
-        this.props.disableModal()
+        this.props.disableModal();
     }
 
     handleChange(event){
@@ -43,6 +46,18 @@ export default class SkemabrikModal extends Component{
         }
     }
 
+    disableEditLessonModal(){
+        this.setState({
+            showEditLessonModal: false
+        })
+    }
+    
+    editLessonClick(){
+        this.setState(({
+            showEditLessonModal: true,
+        }));
+    }
+
     render(){
         const user = this.context;
         const details = this.props.skemabrikContext.description;
@@ -51,13 +66,20 @@ export default class SkemabrikModal extends Component{
         const startTime = new Date(this.props.skemabrikContext.startTime);
         const endTime = new Date(this.props.skemabrikContext.endTime);
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
-        return( ReactDOM.createPortal(
+        return([
+            <div key="modal">
+                {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal}/> : null}
+            </div>,
+            ReactDOM.createPortal(
                 <div className={`detailsModal ${subject}`}>
                     <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
                     <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) :  `${toHHMM(startTime)} - ${toHHMM(endTime)}`}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     {user.role === "teacher"
-                        ? <p className="skemabrikModalText textLeft">Klasse: {classes}</p>
+                        ? [<p className="skemabrikModalText textLeft">Klasse: {classes}</p>,
+                          <div className="editLessonButton">
+                              <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
+                          </div>]
                         : this.props.type === "assignments" 
                             ? <div>
                                 <p className="skemabrikModalText textLeft">Aflever:</p>
@@ -71,6 +93,6 @@ export default class SkemabrikModal extends Component{
                 </div>,
                 document.getElementById('root')
             )
-        )
+        ])
     }
 }

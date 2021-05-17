@@ -35,7 +35,6 @@ export default class Skemabrik extends Component {
         }), () => {
             this.state.showSkemabrikModal ? document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
-        
     }
 
     componentDidMount(){
@@ -60,7 +59,7 @@ export default class Skemabrik extends Component {
         const style = {
             height: this.props.type === "schedule" ? calculateHeight(startTime, endTime) : "81.25px",
             position: 'absolute',
-            top: calculatePosition(startTime, 0),
+            top: calculatePosition(startTime, this.props.type === "assignments" ? 1 : 0),
         }
         if(this.state.isLoaded){
             return([
