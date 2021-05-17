@@ -45,13 +45,16 @@ export default class SkemabrikModal extends Component{
                     <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) :  `${toHHMM(startTime)} - ${toHHMM(endTime)}`}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     
-                    {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
-                    <p className="skemabrikModalText " >Aflever</p>
-                    <form onSubmit={this.handleSubmit}>
-                        <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
-                        <input name="submitButton" type="submit"></input>
-                    </form>
-                    
+                    {user.role === "teacher"
+                        ? <p className="skemabrikModalText textLeft">Klasse: {classes}</p>
+                        : <div>
+                            <p className="skemabrikModalText textLeft">Aflever:</p>
+                            <form onSubmit={this.handleSubmit}>
+                                <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
+                                <input name="submitButton" type="submit"></input>
+                            </form>
+                        </div>
+                    }
                 </div>,
                 document.getElementById('root')
             )
