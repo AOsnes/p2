@@ -28,13 +28,14 @@ export default class Skema extends Component{
             date: new Date(),
             viewText: weekday
         }, () =>{
-            let requestString = `${this.state.id}/${this.state.date.toISOString()}/5`;
+            let requestString = `${this.props.type}/${this.state.id}/${this.state.date.toISOString()}`
+            this.props.type === 'assignments' ? requestString += '': requestString += '/5';
             this.getSchedule(requestString)
         })
     }   
 
     getSchedule(requestString){
-        fetch(`http://localhost:5000/schedule/${requestString}`,{
+        fetch(`http://localhost:5000/${requestString}`,{
             method:'GET',
         })
         .then(response => response.json())
@@ -55,7 +56,8 @@ export default class Skema extends Component{
             date: addDays(this.state.date, change),
             isLoaded: false,
         }, () =>{
-            let requestString = `${this.state.id}/${this.state.date.toISOString()}/5`;
+            let requestString = `${this.props.type}/${this.state.id}/${this.state.date.toISOString()}`
+            this.props.type === 'assignments' ? requestString += '': requestString += '/5';
             this.getSchedule(requestString)
         });
     }
@@ -65,7 +67,8 @@ export default class Skema extends Component{
             date: this.state.view === 5 ? new Date() : this.state.date,
             view: this.state.view === 5 ? 1 : 5,
         }, () =>{
-            let requestString = `${this.state.id}/${this.state.date.toISOString()}/5`;
+            let requestString = `${this.props.type}/${this.state.id}/${this.state.date.toISOString()}`
+            this.props.type === 'assignments' ? requestString += '': requestString += '/5';
             this.getSchedule(requestString)
         });
     }
@@ -161,9 +164,8 @@ export default class Skema extends Component{
                         {this.scheduleBorders("Onsdag", currentDay(), 1)}
                         {this.scheduleBorders("Torsdag", currentDay(), 1)}
                         {this.scheduleBorders("Fredag", currentDay(), 1)}
-                        
                         {this.state.skema.map((skemabrik) => { 
-                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.state.view}/>
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}  weekday={this.props.type === 'schedule' ? getWeekday(new Date(skemabrik.startTime).getDay()) : getWeekday(new Date(skemabrik.dueDate).getDay())} dayView={this.state.view} type={this.props.type}/>
                         })}
                     </div>
                 </div>

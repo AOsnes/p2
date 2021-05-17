@@ -20,7 +20,6 @@ import LoginForm from "./components/loginform.component";
 import Sidebar from "./components/sidebar.component";
 import NoMatchError from "./components/noMatchError.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
-import Afleveringer from "./components/assignments.component";
 import Skema from "./components/skema.component";
 import LogoutModal from "./components/logoutModal.component";
 
@@ -67,7 +66,7 @@ function Skemapage(){
         <div data-testid="skemaPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
-            <Skema/>
+            <Skema type="schedule"/>
             <LogoutModal/>
         </div>
     )
@@ -78,7 +77,7 @@ function Afleveringerpage(){
         <div data-testid="afleveringerPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
-            <Afleveringer/>
+            <Skema type="assignments"/>
             <LogoutModal/>
         </div>
     )
