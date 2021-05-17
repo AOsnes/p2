@@ -343,6 +343,32 @@ async function getFile(){
 
 }
 
+async function turnInAssignment(userID, assignmentID, fileID){
+    return new Promise ((resolve, reject) => {
+        try {
+            const database = client.db('P2');
+            const doc = database.collection("assigments");
+            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .catch(console.dir)
+            .finally(() => {resolve();});
+        } catch(error) {
+            throw error;
+        }
+    });
+
+}
+
+async function getTurnedInAssignments(){
+
+}
+
+async function addFeedback(fileID){
+
+
+}
+
+
 
 
 saveFile("Pog", "60608f0389177a0bb0679e79", "6094ff5ab402ab19a8417a1e").then(console.log("Pog")).catch(console.dir);
