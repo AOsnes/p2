@@ -49,30 +49,19 @@ export default class Skemabrik extends Component {
     render(){
         const subject = this.props.skemabrik.subject;
         const endTime = new Date(this.props.skemabrik.endTime);
-        const startTime = new Date(this.props.skemabrik.startTime);
         const description = this.props.skemabrik.description;
+        let startTime;
+        if(this.props.skemabrik.startTime){
+            startTime = new Date(this.props.skemabrik.startTime)
+        } else {
+            startTime =  new Date(this.props.skemabrik.dueDate);
+        }
         const style = {
             height: calculateHeight(startTime, endTime),
             position: 'absolute',
             top: calculatePosition(startTime, 0),
         }
-        if(this.props.dayView === 1 && this.state.isLoaded){
-            return([
-                <div key="modal">
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null} 
-                </div>,
-                ReactDOM.createPortal(
-                <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
-                    <p className="skemabrikTitleText">
-                        <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
-                        {subject}
-                    </p>
-                    {description ? <DescriptionAlert/> : null}
-                </div>,
-                document.getElementById(`${this.props.weekday}`))]
-            )
-        }
-        else if (this.props.dayView === 5 && this.state.isLoaded){
+        if(this.state.isLoaded){
             return([
                 <div key="modal">
                     {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}

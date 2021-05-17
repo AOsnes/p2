@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
+import isValidDate from '../utils/isValidDate';
 
 export default class SkemabrikModal extends Component{
     static contextType = UserContext;
@@ -37,10 +38,11 @@ export default class SkemabrikModal extends Component{
         const subject = this.props.skemabrikContext.subject;
         const startTime = new Date(this.props.skemabrikContext.startTime);
         const endTime = new Date(this.props.skemabrikContext.endTime);
+        const dueDate = new Date(this.props.skemabrikContext.dueDate);
         return( ReactDOM.createPortal(
                 <div className={`detailsModal ${subject}`}>
                     <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
-                    <div className="skemabrikModalText textCenter">{toHHMM(startTime)} - {toHHMM(endTime)}</div>
+                    <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) : toHHMM(startTime) - toHHMM(endTime)}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     <form onSubmit={this.handleSubmit}>
                     <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
