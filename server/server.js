@@ -1,5 +1,6 @@
 const {MongoClient, ObjectId} = require('mongodb');
 const bodyParser = require('body-parser')
+const busboy = require('connect-busboy');
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -268,12 +269,24 @@ exports.deleteAssignment = async function deleteAssignment(id){
         try {
             const doc = database.collection("assigments");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
-            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
+            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { reject(new Error("No such lesson"))}})
             .catch(console.dir)
             .finally(() => { resolve(); });
         } catch (error) {
-            throw error;
+            throw reject(error);
         }
+    });
+}
+
+exports.saveFile = async function saveFile(filename){
+    return new Promise ((resolve, reject) => {
+        const database = client.db('P2');
+        let bucket = new GridFSBucket(database);
+        let fileID = new ObjectId();
+        fs.createReadStream(`${__dirname}/tmp/${filename}`)
+        .pipe(bucket.openUploadStreamWithId(fileID, filename))
+        .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
+        .on('finish', () => {console.log("SUCCes"); resolve(fileID)});
     });
 }
 
@@ -289,6 +302,7 @@ let requestTime = (req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(busboy());
 app.use(requestTime);
 app.use(logger);
 
@@ -298,10 +312,10 @@ const loginRouter = require('./routes/login');
 const userinfoRouter = require('./routes/userinfo');
 const scheduleRouter = require('./routes/schedule');
 const assignmentsRouter = require('./routes/assignments');
-const upload = require('./routes/upload');
+const uploadRouter = require('./routes/upload');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
 app.use('/schedule', scheduleRouter);
 app.use('/assignments', assignmentsRouter);
-app.use('/upload', upload);
+app.use('/upload', uploadRouter);

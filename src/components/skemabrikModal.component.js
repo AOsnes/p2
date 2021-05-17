@@ -8,28 +8,42 @@ export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
+        this.state = {fileSelected: false, file: null}
 
         this.handleClick = this.handleClick.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-     handleClick(e){
-        e.preventDefault();
+     handleClick(event){
+        event.preventDefault();
         this.props.disableModal()
     }
-    
-    /*
-    handleSubmit(event) {
-        const formData = new FormData();
-        const fileField = document.querySelector('input[type="file"]');
-        event.preventDefault();
-        console.log("hey i just commited this file")
 
-            fetch("http://localhost:5000/upload"),{
+    handleChange(event){
+        let file = event.target.files[0]
+        
+        this.setState({
+            fileSelected: true,
+            file: file
+        })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        let formData = new FormData();
+        formData.append("file", this.state.file)
+        formData.append("id", this.context.id)
+        formData.append("assignmentID", this.props.skemabrikContext._id)
+        if(this.state.fileSelected){
+            fetch("http://localhost:5000/upload",{
                 method: 'POST',
-                body: myInput.files[0],
-            }
-    } 
-    */
+                body: formData,
+            })
+        }
+    }
+    
+
 
     render(){
         const user = this.context;
@@ -45,9 +59,8 @@ export default class SkemabrikModal extends Component{
                     <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) : toHHMM(startTime) - toHHMM(endTime)}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     <form onSubmit={this.handleSubmit}>
-                    <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
-                    <input name="submitButton" type="submit"></input>
-                    
+                        <input name="assignmentUpload" onChange={this.handleChange} type="file"/>
+                        <input name="submitButton" type="submit"/>
                     </form>
                     {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
                     
