@@ -60,7 +60,7 @@ export default class Skemabrik extends Component {
         const style = {
             height: this.props.type === "schedule" ? calculateHeight(startTime, endTime) : "81.25px",
             position: 'absolute',
-            top: calculatePosition(startTime, 0),
+            top: calculatePosition(startTime, this.props.type === "assignments" ? 1 : 0),
         }
         if(this.state.isLoaded){
             return([
