@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { UserContext } from '../UserContext';
 
 export default class Dagsvisning extends Component{
-    static contextType= UserContext;
-    constructor(props, context){
+    constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }

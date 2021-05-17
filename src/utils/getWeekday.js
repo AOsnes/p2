@@ -1,6 +1,6 @@
-/* returns the name of the day depending, day parameter should come from Date.getDay method. */
+/* returns the name of the day as a string, day parameter should come from Date.getDay method. */
 function getWeekday(day){
-    let weekday = '';
+    let weekday = null;
     switch(day){
         case 0: weekday = "Søndag"; break;
         case 1: weekday = "Mandag"; break;

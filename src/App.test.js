@@ -1,5 +1,6 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
 import {BrowserRouter as Router} from "react-router-dom";
+import {MemoryRouter} from 'react-router';
 import App from './App';
 import Skemabrik from './components/skemabrik.component';
 import Header from './components/header.component';
@@ -10,9 +11,175 @@ import NoMatchError from './components/noMatchError.component';
 import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
+import React from 'react';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup);
+
+/* Mock af BrowserRouter for at kunne bruge MemoryRouter og ændre Route */
+jest.mock('react-router-dom', () => {
+    // Require the original module to not be mocked...
+    const originalModule = jest.requireActual('react-router-dom');
+  
+    return {
+        ...originalModule,
+        BrowserRouter: ({ children }) => <div>{children}</div>,
+    };
+});
+
+/* Tests for App */
+describe('app renders correctly based on path', () => {
+    let signedInTeacher = {id: "", role: "teacher", name: ""};
+    let signedInStudent = {id: "", role: "student", name: ""};
+    beforeEach(() => {
+        /* Mocking a cookie in order to render other pages than login */
+        Object.defineProperty(document, 'cookie', {
+            configurable: true,
+            get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
+            set: jest.fn().mockImplementation(() => {})
+        });
+    });
+
+    afterEach(cleanup);
+    test('app renders Login() correctly', () => {
+        Object.defineProperty(document, 'cookie', {
+            configurable: true,
+            get: jest.fn().mockImplementation(() => { return undefined; }),
+            set: jest.fn().mockImplementation(() => {})
+        });
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <App />
+            </MemoryRouter>
+        );
+        const pageElement = screen.getByTestId("loginPage");
+        const loginFormElement = screen.getByTestId("loginForm");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(loginFormElement);
+    });
+
+    test('app renders Skemapage() correctly', () => {
+        render(
+            <UserContext.Provider value={signedInTeacher}>
+                <MemoryRouter initialEntries={['/skema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        let pageElement = screen.getByTestId("skemaPage");
+        let headerElement = screen.getByTestId("header");
+        let sidebarElement = screen.getByTestId("sidebar");
+        let skemaElement = screen.getByText("Skema");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(skemaElement);
+        /* Cleanup to test if it renders for student */
+        cleanup();
+        render(
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/skema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        pageElement = screen.getByTestId("skemaPage");
+        headerElement = screen.getByTestId("header");
+        sidebarElement = screen.getByTestId("sidebar");
+        skemaElement = screen.getByText("Skema");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(skemaElement);
+    });
+
+    test('app renders Afleveringerpage() correctly', () => { 
+        render(
+            <UserContext.Provider value={signedInTeacher}>
+                <MemoryRouter initialEntries={['/afleveringer']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        let pageElement = screen.getByTestId("afleveringerPage");
+        let headerElement = screen.getByTestId("header");
+        let sidebarElement = screen.getByTestId("sidebar");
+        let assignmentsElement = screen.getByText("Afleveringer");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(assignmentsElement);
+        /* Cleanup to test if it renders for student */
+        cleanup();
+        render(
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/afleveringer']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        pageElement = screen.getByTestId("afleveringerPage");
+        headerElement = screen.getByTestId("header");
+        sidebarElement = screen.getByTestId("sidebar");
+        assignmentsElement = screen.getByText("Afleveringer");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(assignmentsElement);
+    });
+
+    test('app renders RedigerSkema() correctly', () => {
+        render(
+            <UserContext.Provider value={signedInTeacher}>
+                <MemoryRouter initialEntries={['/redigerSkema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        const redigerSkemaPageElement = screen.getByTestId("redigerSkemaPage");
+        let headerElement = screen.getByTestId("header");
+        let sidebarElement = screen.getByTestId("sidebar");
+        const redigerSkemaFormElement = screen.getByTestId("formContainer");
+        expect(redigerSkemaPageElement).toBeInTheDocument();
+        expect(redigerSkemaPageElement).toContainElement(headerElement);
+        expect(redigerSkemaPageElement).toContainElement(sidebarElement);
+        expect(redigerSkemaPageElement).toContainElement(redigerSkemaFormElement);
+        /* Burde nok også teste om redigerskema bliver renderet for elever (SKAL IKKE SKE) */
+        cleanup();
+        render(
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/redigerSkema']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        const noMatchPageElement = screen.getByTestId("noMatchPage");
+        const noMatchElement = screen.getByTestId("pageNotFoundContainer");
+        headerElement = screen.getByTestId("header");
+        sidebarElement = screen.getByTestId("sidebar");
+        expect(redigerSkemaPageElement).not.toBeInTheDocument();
+        expect(noMatchPageElement).toContainElement(headerElement);
+        expect(noMatchPageElement).toContainElement(sidebarElement);
+        expect(noMatchPageElement).not.toContainElement(redigerSkemaFormElement);
+        expect(noMatchPageElement).toContainElement(noMatchElement);
+    });
+
+    test('app renders noMatch() correctly', () => { 
+        render(
+            <MemoryRouter initialEntries={['/*']}>
+                <App />
+            </MemoryRouter>
+        )
+        const pageElement = screen.getByTestId("noMatchPage");
+        const headerElement = screen.getByTestId("header");
+        const sidebarElement = screen.getByTestId("sidebar");
+        const noMatchElement = screen.getByTestId("pageNotFoundContainer");
+        expect(pageElement).toBeInTheDocument();
+        expect(pageElement).toContainElement(headerElement);
+        expect(pageElement).toContainElement(sidebarElement);
+        expect(pageElement).toContainElement(noMatchElement);
+    });
+});
 
 /* Tests for header */
 test('header renders correctly with name', () => {
@@ -20,19 +187,17 @@ test('header renders correctly with name', () => {
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
-                <Router>
+                <MemoryRouter>
                     <Header linkTo="/"/>
-                </Router>
+                </MemoryRouter>
             </UserContext.Provider>
         </div>
     );
-
     const standby = jest.fn();
     const linkElement = screen.getByTestId("header");
     const logoElement = screen.getByTestId("headerButton");
     const profilePictureElement = screen.getByAltText("profilBillede");
     const profileNameElement = screen.getByText("Testy McTestFace");
-
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(logoElement);
     expect(linkElement).toContainElement(profilePictureElement);
@@ -47,22 +212,22 @@ test('sidebar renders correctly with context', () => {
     let signedInUser = {role: 'student', name: 'Sigurd', id: '123123'};
     /* Mocking document.cookie, essentially setting the cookie to the return value of get */
     Object.defineProperty(document, 'cookie', {
+        configurable: true,
         get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
-        set: jest.fn().mockImplementation(() => {}),
+        set: jest.fn().mockImplementation(() => {})
       });
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
-                <Router>
+                <MemoryRouter>
                     <Sidebar/>
-                </Router>
+                </MemoryRouter>
             </UserContext.Provider>
         </div>
     );
     const linkElement = screen.getByTestId("sidebar");
     const skemaElement = screen.getByText("Skema");
     const afleveringerElement = screen.getByText("Afleveringer");
-
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(skemaElement);
     expect(linkElement).toContainElement(afleveringerElement);
@@ -73,9 +238,9 @@ test('sidebar renders correctly with context', () => {
     render(
         <div>
             <UserContext.Provider value={signedInUser}>
-                <Router>
+                <MemoryRouter>
                     <Sidebar/>
-                </Router>
+                </MemoryRouter>
             </UserContext.Provider>
         </div>
     );
@@ -96,7 +261,6 @@ test('noMatchError renders correctly', () => {
     const linkElement = screen.getByTestId('pageNotFoundContainer');
     const pElement = screen.getByTestId('pageNotFound');
     const expectedElementContent = "404: Siden blev ikke fundet, kunne ikke finde side: /skemas";
-
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toContainElement(pElement);
     expect(pElement).toHaveTextContent(expectedElementContent);
@@ -105,18 +269,15 @@ test('noMatchError renders correctly', () => {
 /* Tests for loginform */
 describe('loginform renders correctly', () => {
     /* Tear down the the window after each test */
-    afterEach(() =>{
-        cleanup();
-    });
+    afterEach(cleanup);
 
-    test('app renders loginform correctly', () => {
-        render(<App />);
+    test('loginform renders correct elements', () => {
+        render(<LoginForm />);
         const linkElement = screen.getByTestId('loginForm');
         const h2element = screen.getByText("Skema.dk");
         const brugernavnElement = screen.getByPlaceholderText("Brugernavn");
         const adgangskodeElement = screen.getByPlaceholderText("Adgangskode");
         const loginElement = screen.getByDisplayValue("Log ind");
-        
         expect(linkElement).toBeInTheDocument();
         expect(linkElement).toContainElement(h2element);
         expect(linkElement).toContainElement(brugernavnElement);
@@ -169,9 +330,7 @@ describe('loginform renders correctly', () => {
 /* Tests for userContext */
 describe('UserContext is set correctly', () =>{
     /* Tear down the the window after each test */
-    afterEach(() =>{
-        cleanup();
-    });
+    afterEach(cleanup);
 
     test('finds the correct id value in cookie', () => {
         const expected = "60608f0389177a0bb0679e78"
@@ -252,102 +411,83 @@ test('skema component renders correctly', () => {
 });
 
 /* Tests for skemabrik */
-test('skemabrik component portals to  correct day', () => {
+describe('Skemabrik tests', () =>{
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '', startTime: '', endTime: ''}
-    render([
-        <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-        <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
-        <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
-        <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
-        <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
-        <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-        <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
-    ])
-
-    const skemabrikElementDansk = screen.getByText('Dansk');
-    const skemabrikLogoDansk = screen.getByAltText('Dansk Logo');
-    const skemabrikElementMatematik = screen.getByText('Matematik');
-    const skemabrikLogoMatematik = screen.getByAltText('Matematik Logo');
-
-    function dayDivsContain(subjectElement, subjectLogo, subjectDay) {
-        const weekDays = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"]
-        weekDays.forEach(weekDay => {
-            const weekDayDiv = screen.getByTestId(weekDay);
-            if(weekDay === subjectDay){
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).toContainElement(subjectElement);
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).toContainElement(subjectLogo);
-            } else{
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).not.toContainElement(subjectElement);
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).not.toContainElement(subjectLogo);
-            }
-        })
-    }
-
-    dayDivsContain(skemabrikElementDansk, skemabrikLogoDansk, "Mandag");
-    dayDivsContain(skemabrikElementMatematik, skemabrikLogoMatematik, "Onsdag");
-    /* Test af disableModal og onSkemaClick mangler */
-});
-
-test('skemabrik alert renders if there is a description', () =>{
-    const noAlert = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    const alert = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: ''}
-    render([
-        <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-        <Skemabrik key="skemabrik1" skemabrik={noAlert} dayView={1} weekday="Mandag"/>,
-        <Skemabrik key="skemabrik2" skemabrik={alert} dayView={5} weekday="Mandag"/>
-    ])
-    const mandagElement = screen.getByTestId("Mandag")
-    const noAlertSkemabrik = document.getElementsByClassName("skemabrik Dansk")[0];
-    const alertSkemabrik = document.getElementsByClassName("skemabrik Matematik")[0];
-    const descriptionAlertElement = document.getElementsByClassName("descriptionAlert")[0];
-
-    expect(mandagElement).toContainElement(noAlertSkemabrik)
-    expect(mandagElement).toContainElement(alertSkemabrik)
-    expect(alertSkemabrik).toContainElement(descriptionAlertElement)
-    expect(noAlertSkemabrik).not.toContainElement(descriptionAlertElement)
-})
-
-describe('skemabrikModal tests', () =>{
-    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    /* Render the test window before each test */
+    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: ''}
     beforeEach(() =>{
-        render(
-            <div id="root" data-testid="root">
-                <div className="scheduleContainer">
-                    <div id="Mandag"/>
-                </div>
-                <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>
-            </div>
-        )
+        render([
+            <div key="root" id="root" data-testid="root"/>,
+            <div key="container" className="scheduleContainer"/>,
+            <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+            <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
+            <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+            <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
+            <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
+            <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
+            <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
+        ])
     })
-    /* Tear down the the window after each test */
-    afterEach(() =>{
-        cleanup();
-    })    
-    
-    test('modal opens when skemabrik is clicked', () =>{
-        const rootElement = screen.getByTestId("root")
-        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-        fireEvent.click(skemabrikElement)
-        const modalElement = document.getElementsByClassName("detailsModal")[0];
+    test('skemabrik component portals to  correct day', () => {    
+        const skemabrikElementDansk = screen.getByText('Dansk');
+        const skemabrikLogoDansk = screen.getByAltText('Dansk Logo');
+        const skemabrikElementMatematik = screen.getByText('Matematik');
+        const skemabrikLogoMatematik = screen.getByAltText('Matematik Logo');
 
-        expect(rootElement).toContainElement(modalElement);
+        function dayDivsContain(subjectElement, subjectLogo, subjectDay) {
+            const weekDays = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"]
+            weekDays.forEach(weekDay => {
+                const weekDayDiv = screen.getByTestId(weekDay);
+                if(weekDay === subjectDay){
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).toContainElement(subjectElement);
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).toContainElement(subjectLogo);
+                } else{
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).not.toContainElement(subjectElement);
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).not.toContainElement(subjectLogo);
+                }
+            })
+        }
+
+        dayDivsContain(skemabrikElementDansk, skemabrikLogoDansk, "Mandag");
+        dayDivsContain(skemabrikElementMatematik, skemabrikLogoMatematik, "Onsdag");
+        /* Test af disableModal og onSkemaClick mangler */
+    });
+
+    test('skemabrik alert renders if there is a description', () =>{
+        const mandagElement = screen.getByTestId("Mandag")
+        const onsdagElement = screen.getByTestId("Onsdag")
+        const noAlertSkemabrik = document.getElementsByClassName("skemabrik Dansk")[0];
+        const alertSkemabrik = document.getElementsByClassName("skemabrik Matematik")[0];
+        const descriptionAlertElement = document.getElementsByClassName("descriptionAlert")[0];
+        expect(mandagElement).toContainElement(noAlertSkemabrik);
+        expect(onsdagElement).toContainElement(alertSkemabrik);
+        expect(alertSkemabrik).toContainElement(descriptionAlertElement);
+        expect(noAlertSkemabrik).not.toContainElement(descriptionAlertElement);
     })
-    test('modal closes when X is clicked', () =>{
-        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-        fireEvent.click(skemabrikElement)
-        const modalXElement = screen.getByTestId("Xelement");
-        expect(modalXElement).toBeVisible()
-        fireEvent.click(modalXElement)
-        expect(modalXElement).not.toBeInTheDocument()
-        expect(skemabrikElement).toBeInTheDocument()
-    })
-});
+
+    describe('skemabrikModal tests', () =>{
+        /* Render the test window before each test */
+        test('modal opens when skemabrik is clicked', () =>{
+            const rootElement = screen.getByTestId("root")
+            const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+            fireEvent.click(skemabrikElement)
+            const modalElement = document.getElementsByClassName("detailsModal")[0];
+            expect(rootElement).toContainElement(modalElement);
+        })
+        test('modal closes when X is clicked', () =>{
+            const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+            fireEvent.click(skemabrikElement)
+            const modalXElement = screen.getByTestId("Xelement");
+            expect(modalXElement).toBeVisible()
+            fireEvent.click(modalXElement)
+            expect(modalXElement).not.toBeInTheDocument()
+            expect(skemabrikElement).toBeInTheDocument()
+        })
+    });
+})
 
 test('timeIndicator renders on the correct percentage on the schedule', () =>{
     jest.useFakeTimers()
