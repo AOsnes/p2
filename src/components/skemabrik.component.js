@@ -64,7 +64,7 @@ export default class Skemabrik extends Component {
         if(this.state.isLoaded){
             return([
                 <div key="modal">
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
+                    {this.state.showSkemabrikModal ? <SkemabrikModal type={this.props.type} disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
                 </div>,
                 ReactDOM.createPortal(
                     <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>
