@@ -158,15 +158,15 @@ export default class SkemabrikForm extends Component{
                         <label className="inputText advancedText" htmlFor="advanced">Avanceret</label>
                         <input className="checkbox" type="checkbox" name="advanced" value={this.state.advanced} data-testid="advanced" onChange={this.handleChange}></input>
                     </div>
-                    <select name="subject" data-testid="subject" onChange={this.handleChange}>
-                        <option value="" selected disabled hidden>Fag</option>
+                    <select name="subject" defaultValue="" data-testid="subject" onChange={this.handleChange}>
+                        <option value="" disabled hidden>Fag</option>
                         {fag.map(fag => {
                             return <option key={fag} data-testid="subjectOption" value={fag}>{fag}</option>
                         })}
                     </select>
                     <label className="inputText" htmlFor="class">Klasse</label>
-                    <select name="class" data-testid="class" onChange={this.handleChange}>
-                        <option value="" selected disabled hidden>Klasse</option>
+                    <select name="class" defaultValue="" data-testid="class" onChange={this.handleChange}>
+                        <option value="" disabled hidden>Klasse</option>
                         {this.state.klasser.map(klasse =>{
                             return <option key={klasse} data-testid="classOption" value={klasse}>{klasse}</option>
                         })}
@@ -177,13 +177,13 @@ export default class SkemabrikForm extends Component{
                     </div>
                     
                     <label className="inputText twoColumnWide" htmlFor="classDescription">Beskrivelse af time:</label>
-                    <textarea className="twoColumnWide" name="classDescription" maxLength="512" data-testid="description" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>
+                    <textarea className="twoColumnWide" name="classDescription" maxLength="512" data-testid="classDescription" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>
                     {this.state.assignmentToggle ?[
                         <label key="dateLabel" className="inputText" htmlFor="dueDate">Vælg afleverings dag</label>,
-                        <input key="date"type="date" name="dueDate" data-testid="date" value={this.state.dueDate} onChange={this.handleChange}></input>,
+                        <input key="date"type="date" name="dueDate" data-testid="dueDate" value={this.state.dueDate} onChange={this.handleChange}></input>,
                         <label key="startTimeLabel" className="inputText" htmlFor="dueTime">Afleverings tidspunkt</label>,
-                        <input key="startTime" type="time" name="dueTime" data-testid="startTime" value={this.state.dueTime} onChange={this.handleChange}></input>,
-                        <textarea key="description" className="twoColumnWide" name="assignmentDescription" maxLength="512" data-testid="description" placeholder="Beskrivelse af aflevering" onChange={this.handleChange}></textarea>
+                        <input key="startTime" type="time" name="dueTime" data-testid="dueTime" value={this.state.dueTime} onChange={this.handleChange}></input>,
+                        <textarea key="description" className="twoColumnWide" name="assignmentDescription" maxLength="512" data-testid="assignmentDescription" placeholder="Beskrivelse af aflevering" onChange={this.handleChange}></textarea>
                     ]: null}
                     <input name="file" type="file" onChange={this.handleChange}></input>
                     <input disabled={this.validateAll() ? null : 'disabled'} className="twoColumnWide submitButton" type="submit" name="submit" data-testid="submit" value="Opret"></input>
