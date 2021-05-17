@@ -11,7 +11,6 @@ import NoMatchError from './components/noMatchError.component';
 import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
-import getWeekday from './utils/getWeekday';
 import React from 'react';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
@@ -37,15 +36,16 @@ describe('app renders correctly based on path', () => {
         Object.defineProperty(document, 'cookie', {
             configurable: true,
             get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
+            set: jest.fn().mockImplementation(() => {})
         });
     });
 
     afterEach(cleanup);
-
     test('app renders Login() correctly', () => {
         Object.defineProperty(document, 'cookie', {
             configurable: true,
             get: jest.fn().mockImplementation(() => { return undefined; }),
+            set: jest.fn().mockImplementation(() => {})
         });
         render(
             <MemoryRouter initialEntries={['/']}>
@@ -214,6 +214,7 @@ test('sidebar renders correctly with context', () => {
     Object.defineProperty(document, 'cookie', {
         configurable: true,
         get: jest.fn().mockImplementation(() => { return 'id=60608f0389177a0bb0679e78; role=teacher; name=Testy McTestFace; Secure'; }),
+        set: jest.fn().mockImplementation(() => {})
       });
     render(
         <div>
@@ -410,98 +411,83 @@ test('skema component renders correctly', () => {
 });
 
 /* Tests for skemabrik */
-test('skemabrik component portals to  correct day', () => {
+describe('Skemabrik tests', () =>{
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '', startTime: '', endTime: ''}
-    render([
-        <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-        <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
-        <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
-        <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
-        <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
-        <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-        <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
-    ])
-
-    const skemabrikElementDansk = screen.getByText('Dansk');
-    const skemabrikLogoDansk = screen.getByAltText('Dansk Logo');
-    const skemabrikElementMatematik = screen.getByText('Matematik');
-    const skemabrikLogoMatematik = screen.getByAltText('Matematik Logo');
-
-    function dayDivsContain(subjectElement, subjectLogo, subjectDay) {
-        const weekDays = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"]
-        weekDays.forEach(weekDay => {
-            const weekDayDiv = screen.getByTestId(weekDay);
-            if(weekDay === subjectDay){
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).toContainElement(subjectElement);
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).toContainElement(subjectLogo);
-            } else{
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).not.toContainElement(subjectElement);
-                // eslint-disable-next-line jest/no-conditional-expect
-                expect(weekDayDiv).not.toContainElement(subjectLogo);
-            }
-        })
-    }
-
-    dayDivsContain(skemabrikElementDansk, skemabrikLogoDansk, "Mandag");
-    dayDivsContain(skemabrikElementMatematik, skemabrikLogoMatematik, "Onsdag");
-    /* Test af disableModal og onSkemaClick mangler */
-});
-
-test('skemabrik alert renders if there is a description', () =>{
-    const noAlert = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    const alert = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: ''}
-    render([
-        <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-        <Skemabrik key="skemabrik1" skemabrik={noAlert} dayView={1} weekday="Mandag"/>,
-        <Skemabrik key="skemabrik2" skemabrik={alert} dayView={5} weekday="Mandag"/>
-    ])
-    const mandagElement = screen.getByTestId("Mandag")
-    const noAlertSkemabrik = document.getElementsByClassName("skemabrik Dansk")[0];
-    const alertSkemabrik = document.getElementsByClassName("skemabrik Matematik")[0];
-    const descriptionAlertElement = document.getElementsByClassName("descriptionAlert")[0];
-    expect(mandagElement).toContainElement(noAlertSkemabrik)
-    expect(mandagElement).toContainElement(alertSkemabrik)
-    expect(alertSkemabrik).toContainElement(descriptionAlertElement)
-    expect(noAlertSkemabrik).not.toContainElement(descriptionAlertElement)
-})
-
-describe('skemabrikModal tests', () =>{
-    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: ''}
-    /* Render the test window before each test */
+    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: ''}
     beforeEach(() =>{
-        render(
-            <div id="root" data-testid="root">
-                <div className="scheduleContainer">
-                    <div id="Mandag"/>
-                </div>
-                <Skemabrik skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>
-            </div>
-        )
+        render([
+            <div key="root" id="root" data-testid="root"/>,
+            <div key="container" className="scheduleContainer"/>,
+            <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+            <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
+            <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+            <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
+            <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
+            <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
+            <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
+        ])
     })
-    /* Tear down the the window after each test */
-    afterEach(cleanup);   
-    
-    test('modal opens when skemabrik is clicked', () =>{
-        const rootElement = screen.getByTestId("root")
-        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-        fireEvent.click(skemabrikElement)
-        const modalElement = document.getElementsByClassName("detailsModal")[0];
-        expect(rootElement).toContainElement(modalElement);
+    test('skemabrik component portals to  correct day', () => {    
+        const skemabrikElementDansk = screen.getByText('Dansk');
+        const skemabrikLogoDansk = screen.getByAltText('Dansk Logo');
+        const skemabrikElementMatematik = screen.getByText('Matematik');
+        const skemabrikLogoMatematik = screen.getByAltText('Matematik Logo');
+
+        function dayDivsContain(subjectElement, subjectLogo, subjectDay) {
+            const weekDays = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"]
+            weekDays.forEach(weekDay => {
+                const weekDayDiv = screen.getByTestId(weekDay);
+                if(weekDay === subjectDay){
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).toContainElement(subjectElement);
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).toContainElement(subjectLogo);
+                } else{
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).not.toContainElement(subjectElement);
+                    // eslint-disable-next-line jest/no-conditional-expect
+                    expect(weekDayDiv).not.toContainElement(subjectLogo);
+                }
+            })
+        }
+
+        dayDivsContain(skemabrikElementDansk, skemabrikLogoDansk, "Mandag");
+        dayDivsContain(skemabrikElementMatematik, skemabrikLogoMatematik, "Onsdag");
+        /* Test af disableModal og onSkemaClick mangler */
+    });
+
+    test('skemabrik alert renders if there is a description', () =>{
+        const mandagElement = screen.getByTestId("Mandag")
+        const onsdagElement = screen.getByTestId("Onsdag")
+        const noAlertSkemabrik = document.getElementsByClassName("skemabrik Dansk")[0];
+        const alertSkemabrik = document.getElementsByClassName("skemabrik Matematik")[0];
+        const descriptionAlertElement = document.getElementsByClassName("descriptionAlert")[0];
+        expect(mandagElement).toContainElement(noAlertSkemabrik);
+        expect(onsdagElement).toContainElement(alertSkemabrik);
+        expect(alertSkemabrik).toContainElement(descriptionAlertElement);
+        expect(noAlertSkemabrik).not.toContainElement(descriptionAlertElement);
     })
-    test('modal closes when X is clicked', () =>{
-        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-        fireEvent.click(skemabrikElement)
-        const modalXElement = screen.getByTestId("Xelement");
-        expect(modalXElement).toBeVisible()
-        fireEvent.click(modalXElement)
-        expect(modalXElement).not.toBeInTheDocument()
-        expect(skemabrikElement).toBeInTheDocument()
-    })
-});
+
+    describe('skemabrikModal tests', () =>{
+        /* Render the test window before each test */
+        test('modal opens when skemabrik is clicked', () =>{
+            const rootElement = screen.getByTestId("root")
+            const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+            fireEvent.click(skemabrikElement)
+            const modalElement = document.getElementsByClassName("detailsModal")[0];
+            expect(rootElement).toContainElement(modalElement);
+        })
+        test('modal closes when X is clicked', () =>{
+            const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+            fireEvent.click(skemabrikElement)
+            const modalXElement = screen.getByTestId("Xelement");
+            expect(modalXElement).toBeVisible()
+            fireEvent.click(modalXElement)
+            expect(modalXElement).not.toBeInTheDocument()
+            expect(skemabrikElement).toBeInTheDocument()
+        })
+    });
+})
 
 test('timeIndicator renders on the correct percentage on the schedule', () =>{
     jest.useFakeTimers()
@@ -687,13 +673,3 @@ describe('skemabrikForm tests', () =>{
         });
     })
 })
-
-test('getWeekday returns correct weekday', () => {
-    const weekDays = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
-    const weekDayNumbers = [0, 1, 2, 3, 4, 5, 6];
-    weekDayNumbers.forEach(weekDayNumber => {
-        expect(getWeekday(weekDayNumber)).toBe(weekDays[weekDayNumber])
-    });
-    /* An empty string is returned if the number doesn't match a date */
-    expect(getWeekday(7)).toBe('');
-});

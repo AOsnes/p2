@@ -104,7 +104,9 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts",
       "server/**/*.{js,jsx,ts,tsx}",
-      "!server/**/*.d.ts"
+      "!server/**/*.d.ts",
+      "!src/index.js",
+      "!server/dbtest.js"
     ],
     "setupFiles": [
       "react-app-polyfill/jsdom"

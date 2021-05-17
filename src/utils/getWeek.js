@@ -1,5 +1,5 @@
 /*Fucntion to get the current week number */
-function getWeek(date) {
+function getWeek(date){
     // Thursday in current week decides the year.
     date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
     // January 4 is always in week 1.
