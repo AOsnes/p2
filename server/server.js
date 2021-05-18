@@ -118,7 +118,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
 
         //Determines the role of the user as each role needs a different query to the correct lessons.
         if (user.role === "teacher") {
-            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
+            cursor = await collection.find({ "teacherID": ObjectId(user._id), $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
             schedule = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
