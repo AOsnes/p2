@@ -21,8 +21,9 @@ export default class SkemabrikForm extends Component{
             advanced: false,
             didSubmit: false,
             assignmentToggle: false,
-            fileSelected: false, 
-            file: null
+            classFile: null,
+            assignmentFile: null,
+            fileCount: 0,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -36,13 +37,13 @@ export default class SkemabrikForm extends Component{
     jsonfilter(key, val){
         if(this.state.assignmentToggle){
             switch (key){
-                case "advanced": case "klasser": case "didSubmit": case "file": case "fileSelected":
+                case "advanced": case "klasser": case "didSubmit": case "classFile": case "assignmentFile": case "fileSelected":
                      return undefined;
                 default: return val;
             }
         } else {
             switch (key) {
-                case "advanced": case "klasser": case "didSubmit": case "file": case "fileSelected":
+                case "advanced": case "klasser": case "didSubmit": case "classFile": case "assignmentFile": case "fileSelected":
                 case "classDescription": case "assignmentDescription":
                     return undefined;
                 default: return val;
@@ -52,29 +53,46 @@ export default class SkemabrikForm extends Component{
 
     handleSubmit(event){
         event.preventDefault();
-        let formData = new FormData();
-        formData.append("file", this.state.file)
-
-        if(this.state.fileSelected){
-            fetch("http://localhost:5000/upload",{
-                method: 'POST',
-                body: formData,
-            }).then(response => response.json())
-            .then(fileId =>{
-                this.setState({
-                    fileId: fileId
-                }, () =>{
-                    let requestBody = JSON.stringify(this.state, this.jsonfilter)
-                    console.log(requestBody);
-                    this.uploadClass(requestBody);
-                })
-            })
+        let fileCount = null;
+        /* if any of these two are true, then we need to upload files,
+        also keep track of how many files that are selected and send this to the server */
+        if(this.state.classFile){
+            fileCount++;
         }
-        else{
+        if(this.state.assignmentFile){
+            fileCount++
+        }
+        if(fileCount){
+            this.setState({
+                fileCount: fileCount
+            })
+            let formData = new FormData();
+            formData.append("fileCount", fileCount)
+            formData.append("classFile", this.state.classFile)
+            formData.append("assignmentFile", this.state.assignmentFile)
+            this.uploadClassWithFiles(formData, fileCount)
+        } else{
+            /* We dont have any files, just upload the class & optional assignment */
             let requestBody = JSON.stringify(this.state, this.jsonfilter)
             this.uploadClass(requestBody)
         }
         
+    }
+
+    uploadClassWithFiles(requestBody){
+        fetch("http://localhost:5000/upload",{
+            method: 'POST',
+            body: requestBody,
+        }).then(response => response.json())
+        .then(fileInfo =>{
+            this.setState({
+                files: fileInfo
+            }, () =>{
+                let requestBody = JSON.stringify(this.state, this.jsonfilter)
+                console.log(requestBody);
+                this.uploadClass(requestBody);
+            })
+        })
     }
 
     uploadClass(requestBody){
@@ -97,10 +115,13 @@ export default class SkemabrikForm extends Component{
             this.setState(prevState =>({
                 [target]: !prevState[target]
             }));
-        } else if(target === "file"){
+        } else if(target === "assignmentFile"){
             this.setState({
-                fileSelected: true,
-                file: event.target.files[0],
+                assignmentFile: event.target.files[0],
+            })
+        } else if(target === "classFile"){
+            this.setState({
+                classFile: event.target.files[0],
             })
         }
         else {
@@ -178,14 +199,15 @@ export default class SkemabrikForm extends Component{
                     
                     <label className="inputText twoColumnWide" htmlFor="classDescription">Beskrivelse af time:</label>
                     <textarea className="twoColumnWide" name="classDescription" maxLength="512" data-testid="classDescription" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>
+                    <input className="twoColumnWide" name="classFile" type="file" onChange={this.handleChange}></input>
                     {this.state.assignmentToggle ?[
                         <label key="dateLabel" className="inputText" htmlFor="dueDate">Vælg afleverings dag</label>,
                         <input key="date"type="date" name="dueDate" data-testid="dueDate" value={this.state.dueDate} onChange={this.handleChange}></input>,
                         <label key="startTimeLabel" className="inputText" htmlFor="dueTime">Afleverings tidspunkt</label>,
                         <input key="startTime" type="time" name="dueTime" data-testid="dueTime" value={this.state.dueTime} onChange={this.handleChange}></input>,
-                        <textarea key="description" className="twoColumnWide" name="assignmentDescription" maxLength="512" data-testid="assignmentDescription" placeholder="Beskrivelse af aflevering" onChange={this.handleChange}></textarea>
+                        <textarea key="description" className="twoColumnWide" name="assignmentDescription" maxLength="512" data-testid="assignmentDescription" placeholder="Beskrivelse af aflevering" onChange={this.handleChange}></textarea>,
+                        <input key="assignmentFile" name="assignmentFile" type="file" onChange={this.handleChange}></input>
                     ]: null}
-                    <input name="file" type="file" onChange={this.handleChange}></input>
                     <input disabled={this.validateAll() ? null : 'disabled'} className="twoColumnWide submitButton" type="submit" name="submit" data-testid="submit" value="Opret"></input>
                 </fieldset>
                 {this.state.didSubmit ? <DidSubmitModal/> : null}

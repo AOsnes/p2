@@ -134,7 +134,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
     }
 }
 
-exports.createLesson = async function createLesson(id, className, subject, start, end, description, recurrences, interval){
+exports.createLesson = async function createLesson(id, className, subject, start, end, description, fileId, recurrences, interval){
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("lessons");
@@ -150,8 +150,9 @@ exports.createLesson = async function createLesson(id, className, subject, start
                     lessonInserts[i] = {
                         "subject": subject,
                         "class": className,
-                        "teacherID": id.toString(),
+                        "teacherID": id,
                         "description": description,
+                        "fileId": fileId,
                         "startTime": start1,
                         "endTime": end1,
                     }
@@ -162,7 +163,7 @@ exports.createLesson = async function createLesson(id, className, subject, start
                 .catch((error) => reject(new Error(error)));
     
             } else {
-                doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+                doc.insertOne({"subject": subject, "class": className, "teacherID": id, "description": description, "fileId": fileId, "startTime": start, "endTime": end,})
                 .then(result => resolve({id: result.insertedId}))
                 .catch((error) => reject(new Error(error)))
             }

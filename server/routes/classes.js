@@ -11,7 +11,7 @@ router.route('/:id').get((req, res) =>{
 });
 
 router.route('/').post((req, res) => {
-    let id = ObjectId.createFromHexString(req.body.id);
+    let teacherId = ObjectId.createFromHexString(req.body.id);
     let date = new Date(req.body.date);
     let startTime = req.body.startTime.split(":");
     let endTime = req.body.endTime.split(":");
@@ -21,23 +21,36 @@ router.route('/').post((req, res) => {
     let assignmentDescription = req.body.assignmentDescription;
     let assignmentToggle = req.body.assignmentToggle;
     let dueDate = req.body.dueDate;
-    let fileId = req.body.fileId;
+    let files = req.body.files;
+    let classFileId = null;
+    let assignmentFileId = null;
     startTime = new Date(date.setHours(startTime[0], startTime[1]))
     endTime = new Date(date.setHours(endTime[0], endTime[1]))
 
-    getUserinfo(id).then(user =>{
+    /* If we got any information about files, we need to check if the 
+    fileId is valid and then if it is for a lecture or for an assignment */
+    if(files){
+        files.forEach(file => {
+            if(ObjectId.isValid(file.fileId)){
+                file.fileId = ObjectId.createFromHexString(file.fileId);
+                if(file.filefor === "classFile"){
+                    classFileId = file.fileId
+                } else {
+                    assignmentFileId = file.fileId
+                }
+            } else {
+                /* Most likely, the request did not send a fileId, for this creation (either lesson or assignment)
+                meaning there is no file associated with the assignment */
+                file.fileId = null;
+            }
+        });
+    }
+    getUserinfo(teacherId).then(user =>{
         if(user.role === "teacher"){
-            createLesson(id, className, subject, startTime, endTime, classDescription, 1, 0)
+            createLesson(teacherId, className, subject, startTime, endTime, classDescription, classFileId, 1, 0)
             .then( result => {
                 if(assignmentToggle){
-                    if(ObjectId.isValid(fileId)){
-                        fileId = ObjectId.createFromHexString(fileId);
-                    } else {
-                        /* Most likely, the request did not send a fileId, 
-                        meaning there is no file associated with the assignemtn */
-                        fileId = null;
-                    }
-                    createAssignment(id, result.id, className, subject, assignmentDescription, dueDate, fileId)
+                    createAssignment(teacherId, result.id, subject, assignmentDescription, dueDate, assignmentFileId)
                     .then(result =>{
                         res.status(200).json(result);
                         res.end();
