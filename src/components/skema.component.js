@@ -19,6 +19,7 @@ export default class Skema extends Component{
         this.handleClick = this.handleClick.bind(this);
         this.scheduleBorders = this.scheduleBorders.bind(this);
         this.dayHighlight = this.dayHighlight.bind(this);
+        this.timeGrid = this.timeGrid.bind(this);
     }
 
     componentDidMount(){
@@ -114,6 +115,29 @@ export default class Skema extends Component{
         }
     }
 
+    timeGrid(){
+        return(
+            <div className="gridItemContainer">
+                <div className="gridItemHour timeOne">8:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">9:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">10:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">11:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">12:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">13:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">14:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">15:00</div>
+                <div className="gridItemHalfHour"></div>
+            </div>
+        )
+    }
+
     render(){
         if(!this.state.isLoaded){
             return(
@@ -140,24 +164,7 @@ export default class Skema extends Component{
                     </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
-                        <div className="gridItemContainer">
-                            <div className="gridItemHour timeOne">8:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">9:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">10:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">11:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">12:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">13:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">14:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">15:00</div>
-                            <div className="gridItemHalfHour"></div>
-                        </div>
+                        {this.timeGrid()}
                         {this.scheduleBorders("Mandag", currentDay(), 1)}
                         {this.scheduleBorders("Tirsdag", currentDay(), 1)}
                         {this.scheduleBorders("Onsdag", currentDay(), 1)}
@@ -183,24 +190,7 @@ export default class Skema extends Component{
                     </div>
                     <div className="gridContainerOneDay">
                         <TimeIndicator/>
-                        <div className="gridItemContainer">
-                            <div className="gridItemHour timeOne">8:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">9:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">10:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">11:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">12:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">13:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">14:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">15:00</div>
-                            <div className="gridItemHalfHour"></div>
-                        </div>
+                        {this.timeGrid()}
                         {/* This is done to make sure that there is a schedule before trying to map it,
                             without this the platform will crash if there are no lessons for that day*/}
                         {this.scheduleBorders(currentDay())}
@@ -235,24 +225,7 @@ export default class Skema extends Component{
                     </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
-                        <div className="gridItemContainer">
-                            <div className="gridItemHour timeOne">8:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">9:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">10:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">11:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">12:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">13:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">14:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">15:00</div>
-                            <div className="gridItemHalfHour"></div>
-                        </div>
+                        {this.timeGrid()}
                         {this.scheduleBorders("Mandag", currentDay(), 1)}
                         {this.scheduleBorders("Tirsdag", currentDay(), 1)}
                         {this.scheduleBorders("Onsdag", currentDay(), 1)}
