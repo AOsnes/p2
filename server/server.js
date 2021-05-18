@@ -54,34 +54,33 @@ exports.getUserinfo = async function getUserinfo(id){
         throw error;
     }
 }
-//Finds the time interval for the one day view and one week view. Defaults to the next monday if the date passed is a Saturday or Sunday
+
+//Cursed crusty code to get the schedule:
+//Finds the time interval for the one day view and one week view. Defaults to the next Monday if the date passed is a Saturday or Sunday
 let getDateInterval = exports.getDateInterval = function (date, days){
     if (days === '1'){
         if (date.getDay() >= 1 && date.getDay() <= 5){
             let interval = oneDayInterval(date);
-            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
             return interval;
         } else {
+            //If the date is Saturday or Sunday the date will get changed to Monday in the following week
             date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
             let interval = oneDayInterval(date);
-            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
             return interval;
         }
     } else {
         if (date.getDay() >= 1 && date.getDay() <= 5) {
             let interval = fiveDayInterval(date);
-            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
             return interval;
         } else {
+            //If the date is Saturday or Sunday the date will get changed to Monday in the following week
             date.setDate(date.getDate() + ((date.getDay() === 0) ? 1 : 2));
             let interval = fiveDayInterval(date);
-            //console.log("Start: " + interval.start + "\n" + "End: " + interval.end);
             return interval;
         }
     }
 }
 
-//Cursed crusty code to get the schedule:
 //Takes the passed date and creates an interval starting at 00:00:00 and ends at 23:59:59
 let oneDayInterval = exports.oneDayInterval = function (date){
     let start = new Date(date.getTime());
@@ -115,18 +114,14 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         let cursor;
         let schedule;
 
-        //Determines the role of the user as each role needs a different query to the correct lessons.
+        //Determines the role of the user as each role needs a different query to find the correct lessons.
         if (user.role === "teacher") {
             cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
-            schedule = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
-            schedule = await cursor.toArray();
         }
-
-        //Checks if the query had any results. 
+        schedule = await cursor.toArray();
         await cursor.close();
-
         return schedule;
     } catch(error){
         throw error;
@@ -216,7 +211,7 @@ exports.getAssignments = async function getAssignments(user, date) {
 
         //Determines the role of the user as each role needs a different query to the correct assignments.
         if (user.role === "teacher") {
-            cursor = await collection.find({ "teacherID": user._id.toString(),  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
+            cursor = await collection.find({ "teacherID": user._id,  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
             assignments = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class },  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } });
@@ -236,7 +231,6 @@ exports.getAssignments = async function getAssignments(user, date) {
 exports.createAssignment = async function createAssignment(id, lessonID, subject, description, dueDate, optionalFile){
     return new Promise ((resolve, reject) => {
         try {
-            const database = connection.db('P2');
             const doc = database.collection("assignments");
             doc.insertOne({ "teacherID": id.toString(), "lessonID" : lessonID, "subject": subject, "description": description, "dueDate": dueDate, "fileID": optionalFile, })
             .then(result => console.log(result.insertedCount))

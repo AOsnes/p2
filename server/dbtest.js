@@ -313,13 +313,6 @@ async function deleteAssignment(id){
     });
 }
 
-
-
-
-
-
-
-
 async function saveFile(file, collection, documentID){
     await client.connect();
     const database = client.db('P2');
@@ -346,9 +339,40 @@ async function getFile(){
 async function turnInAssignment(userID, assignmentID, fileID){
     return new Promise ((resolve, reject) => {
         try {
-            const database = client.db('P2');
-            const doc = database.collection("assigments");
-            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            const doc = database.collection("turnedInAssignments");
+            doc.insertOne({ "assignmentID": ObjectId.createFromHexString(assignmentID), "studentID" : ObjectId.createFromHexString(userID), "fileID": fileID, "feedback": ""})
+            .then(result => console.log(result.insertedCount))
+            .then(() => { resolve(); })
+            .catch(console.dir);
+        } catch(error) {
+            throw error;
+        }
+    });
+}
+
+async function getTurnedInAssignments(user, assignmentID){
+    try {
+        const doc = database.collection("turnedInAssignments");
+        let result;
+
+        if (user.role === "teacher") {
+            cursor = await doc.find({"assignmentID": ObjectId.createFromHexString(assignmentID)});
+            result = await cursor.toArray();
+            await cursor.close();
+        } else {
+            result = await doc.findOne({$and: [{"studentID": ObjectId.createFromHexString(user._id)}, {"assignmentID": ObjectId.createFromHexString(assignmentID)}]});
+        }
+        return result;
+    } catch(error) {
+        throw error;
+    }
+}
+
+async function addFeedback(turnedInID, fileID){
+    return new Promise ((resolve, reject) => {
+        try {
+            const doc = database.collection("turnedInAssignments");
+            doc.updateOne({"_id": ObjectId.createFromHexString(turnedInID)}, {$set: {feedback: fileID}})
             .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
             .catch(console.dir)
             .finally(() => {resolve();});
@@ -356,20 +380,7 @@ async function turnInAssignment(userID, assignmentID, fileID){
             throw error;
         }
     });
-
 }
-
-async function getTurnedInAssignments(){
-
-}
-
-async function addFeedback(fileID){
-
-
-}
-
-
-
 
 saveFile("Pog", "60608f0389177a0bb0679e79", "6094ff5ab402ab19a8417a1e").then(console.log("Pog")).catch(console.dir);
 //getFile().then(console.log("Pog"));
