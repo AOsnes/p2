@@ -165,11 +165,11 @@ export default class Skema extends Component{
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
                         {this.timeGrid()}
-                        {this.scheduleBorders("Mandag", currentDay(), 1)}
-                        {this.scheduleBorders("Tirsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Onsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Torsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Fredag", currentDay(), 1)}
+                        {this.scheduleBorders("Mandag", 1)}
+                        {this.scheduleBorders("Tirsdag", 1)}
+                        {this.scheduleBorders("Onsdag", 1)}
+                        {this.scheduleBorders("Torsdag", 1)}
+                        {this.scheduleBorders("Fredag", 1)}
                         {this.state.skema.map((skemabrik) => { 
                             return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}  weekday={getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.state.view} type={this.props.type}/>
                         })}
@@ -226,11 +226,11 @@ export default class Skema extends Component{
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
                         {this.timeGrid()}
-                        {this.scheduleBorders("Mandag", currentDay(), 1)}
-                        {this.scheduleBorders("Tirsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Onsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Torsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Fredag", currentDay(), 1)}
+                        {this.scheduleBorders("Mandag", 1)}
+                        {this.scheduleBorders("Tirsdag", 1)}
+                        {this.scheduleBorders("Onsdag", 1)}
+                        {this.scheduleBorders("Torsdag", 1)}
+                        {this.scheduleBorders("Fredag", 1)}
                         {this.state.skema.map((skemabrik) => { 
                             return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}  weekday={getWeekday(new Date(skemabrik.dueDate).getDay())} type={this.props.type}/>
                         })}
