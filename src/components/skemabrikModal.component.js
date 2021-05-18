@@ -3,33 +3,60 @@ import ReactDOM from 'react-dom';
 import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
 import isValidDate from '../utils/isValidDate';
+import EditLessonModal from './editLesson.component';
 
 export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
+        this.state = {fileSelected: false, file: null, showEditLessonModal: false}
 
-        this.handleClick = this.handleClick.bind(this)
+        this.handleClick = this.handleClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
+        this.editLessonClick = this.editLessonClick.bind(this);
     }
 
-     handleClick(e){
-        e.preventDefault();
-        this.props.disableModal()
+    handleClick(event){
+        event.preventDefault();
+        this.props.disableModal();
+    }
+
+    handleChange(event){
+        let file = event.target.files[0]
+        
+        this.setState({
+            fileSelected: true,
+            file: file
+        })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        let formData = new FormData();
+        formData.append("file", this.state.file)
+        formData.append("id", this.context.id)
+        formData.append("assignmentID", this.props.skemabrikContext._id)
+        if(this.state.fileSelected){
+            fetch("http://localhost:5000/upload",{
+                method: 'POST',
+                body: formData,
+            })
+        }
+    }
+
+    disableEditLessonModal(){
+        this.setState({
+            showEditLessonModal: false
+        })
     }
     
-    /*
-    handleSubmit(event) {
-        const formData = new FormData();
-        const fileField = document.querySelector('input[type="file"]');
-        event.preventDefault();
-        console.log("hey i just commited this file")
-
-            fetch("http://localhost:5000/upload"),{
-                method: 'POST',
-                body: myInput.files[0],
-            }
-    } 
-    */
+    editLessonClick(){
+        this.setState(({
+            showEditLessonModal: true,
+        }));
+    }
 
     render(){
         const user = this.context;
@@ -39,21 +66,27 @@ export default class SkemabrikModal extends Component{
         const startTime = new Date(this.props.skemabrikContext.startTime);
         const endTime = new Date(this.props.skemabrikContext.endTime);
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
-        return( ReactDOM.createPortal(
+        return([
+            <div key="modal">
+                {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal}/> : null}
+            </div>,
+            ReactDOM.createPortal(
                 <div className={`detailsModal ${subject}`}>
                     <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
                     <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) : toHHMM(startTime) - toHHMM(endTime)}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     <form onSubmit={this.handleSubmit}>
-                    <input name="assignmentUpload" onChange={this.handleFileUpload} type="file"></input>
-                    <input name="submitButton" type="submit"></input>
-                    
+                        <input name="assignmentUpload" onChange={this.handleChange} type="file"/>
+                        <input name="submitButton" type="submit"/>
                     </form>
+                    <div className="editLessonButton">
+                        <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
+                    </div>
                     {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
                     
                 </div>,
                 document.getElementById('root')
             )
-        )
+        ])
     }
 }

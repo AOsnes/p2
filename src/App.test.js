@@ -69,7 +69,8 @@ describe('app renders correctly based on path', () => {
         let pageElement = screen.getByTestId("skemaPage");
         let headerElement = screen.getByTestId("header");
         let sidebarElement = screen.getByTestId("sidebar");
-        let skemaElement = screen.getByText("Skema");
+        /* Skemaet render fejlmeddelelse, da der ikke kan oprettes forbindelse til server */
+        let skemaElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -86,7 +87,7 @@ describe('app renders correctly based on path', () => {
         pageElement = screen.getByTestId("skemaPage");
         headerElement = screen.getByTestId("header");
         sidebarElement = screen.getByTestId("sidebar");
-        skemaElement = screen.getByText("Skema");
+        skemaElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -104,7 +105,8 @@ describe('app renders correctly based on path', () => {
         let pageElement = screen.getByTestId("afleveringerPage");
         let headerElement = screen.getByTestId("header");
         let sidebarElement = screen.getByTestId("sidebar");
-        let assignmentsElement = screen.getByText("Afleveringer");
+        /* Skemaet render fejlmeddelelse, da der ikke kan oprettes forbindelse til server */
+        let assignmentsElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -121,7 +123,7 @@ describe('app renders correctly based on path', () => {
         pageElement = screen.getByTestId("afleveringerPage");
         headerElement = screen.getByTestId("header");
         sidebarElement = screen.getByTestId("sidebar");
-        assignmentsElement = screen.getByText("Afleveringer");
+        assignmentsElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);

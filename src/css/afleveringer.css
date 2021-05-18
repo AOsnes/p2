@@ -21,12 +21,12 @@
     border-top-right-radius: 10px;
 }
 
-.assignmentsContainerHeaderTeacher{
+.assignmentsContainerHeaderTeacherColour{
     background: #00cc00;
     opacity: 80%;
 }
 
-.assignmentsContainerHeaderPupil{
+.assignmentsContainerHeaderPupilColour{
     background: #0075ff;
     opacity: 80%;
 }
@@ -40,39 +40,3 @@
     transform: translate(-50%, -50%);
 }
 
-/* Afleveringsbrikker css*/
-.assignmentBrick{
-    left: 0.75%;
-    width: 98.5%;
-    height: 81.25px;
-    display: flex;
-    background: lightslategray;
-    align-items: center;
-    border-radius: 5px;
-    z-index: 1;
-}
-
-/* Hovering on assignmentBrick */
-.assignmentBrick:hover{
-    cursor: pointer;
-    filter:brightness(80%);
-}
-
-/* Text */
-.assignmentBrickTitleText{
-    display: flex;
-    align-items: center;
-    position: relative;
-    font-weight: 900;
-    font-size: 2.369em;
-    border: none;
-    margin: none;
-    -webkit-text-fill-color: white;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: black;
-}
-
-.assignmentBrickIcon{
-    position: relative;
-    width: 40px;
-}

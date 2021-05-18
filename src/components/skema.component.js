@@ -19,6 +19,7 @@ export default class Skema extends Component{
         this.handleClick = this.handleClick.bind(this);
         this.scheduleBorders = this.scheduleBorders.bind(this);
         this.dayHighlight = this.dayHighlight.bind(this);
+        this.timeGrid = this.timeGrid.bind(this);
     }
 
     componentDidMount(){
@@ -101,7 +102,6 @@ export default class Skema extends Component{
         let currentDate = this.state.date.getDate();
         let role = this.context.role;
         let currentWeekday = currentDay();
-        
         if(currentDate === today){
             if(currentWeekday === weekday && role === "teacher"){
                 return "currentDayHighlightTeacher";
@@ -115,6 +115,29 @@ export default class Skema extends Component{
         }
     }
 
+    timeGrid(){
+        return(
+            <div className="gridItemContainer">
+                <div className="gridItemHour timeOne">8:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">9:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">10:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">11:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">12:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">13:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">14:00</div>
+                <div className="gridItemHalfHour"></div>
+                <div className="gridItemHour">15:00</div>
+                <div className="gridItemHalfHour"></div>
+            </div>
+        )
+    }
+
     render(){
         if(!this.state.isLoaded){
             return(
@@ -123,7 +146,7 @@ export default class Skema extends Component{
                 </div>
             );
         }
-        else if(this.state.view === 5){
+        else if(this.state.view === 5 && this.props.type === "schedule"){
             return(
                 <div className="scheduleContainer">
                     <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacherColour" : "scheduleContainerHeaderPupilColour"}`}>
@@ -141,37 +164,20 @@ export default class Skema extends Component{
                     </div>
                     <div className="gridContainerFiveDay">
                         <TimeIndicator/>
-                        <div className="gridItemContainer">
-                            <div className="gridItemHour timeOne">8:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">9:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">10:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">11:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">12:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">13:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">14:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">15:00</div>
-                            <div className="gridItemHalfHour"></div>
-                        </div>
-                        {this.scheduleBorders("Mandag", currentDay(), 1)}
-                        {this.scheduleBorders("Tirsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Onsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Torsdag", currentDay(), 1)}
-                        {this.scheduleBorders("Fredag", currentDay(), 1)}
+                        {this.timeGrid()}
+                        {this.scheduleBorders("Mandag", 1)}
+                        {this.scheduleBorders("Tirsdag", 1)}
+                        {this.scheduleBorders("Onsdag", 1)}
+                        {this.scheduleBorders("Torsdag", 1)}
+                        {this.scheduleBorders("Fredag", 1)}
                         {this.state.skema.map((skemabrik) => { 
-                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}  weekday={this.props.type === 'schedule' ? getWeekday(new Date(skemabrik.startTime).getDay()) : getWeekday(new Date(skemabrik.dueDate).getDay())} dayView={this.state.view} type={this.props.type}/>
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}  weekday={getWeekday(new Date(skemabrik.startTime).getDay())} dayView={this.state.view} type={this.props.type}/>
                         })}
                     </div>
                 </div>
             )
         }
-        else if(this.state.view === 1){
+        else if(this.state.view === 1 && this.props.type === "schedule"){
             return(
                 <div className="scheduleContainer">
                     <div className={`scheduleContainerHeader ${(this.context.role === "teacher") ? "scheduleContainerHeaderTeacherColour" : "scheduleContainerHeaderPupilColour"}`}>
@@ -184,37 +190,50 @@ export default class Skema extends Component{
                     </div>
                     <div className="gridContainerOneDay">
                         <TimeIndicator/>
-                        <div className="gridItemContainer">
-                            <div className="gridItemHour timeOne">8:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">9:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">10:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">11:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">12:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">13:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">14:00</div>
-                            <div className="gridItemHalfHour"></div>
-                            <div className="gridItemHour">15:00</div>
-                            <div className="gridItemHalfHour"></div>
-                        </div>
+                        {this.timeGrid()}
+                        {this.scheduleBorders(currentDay())}
                         {/* This is done to make sure that there is a schedule before trying to map it,
                             without this the platform will crash if there are no lessons for that day*/}
-                        {this.scheduleBorders(currentDay())}
                         {(this.state.skema !== null) ? 
                             this.state.skema.map((skemabrik) => {
                                 let lessonDate = new Date(skemabrik.startTime).getDay();
                                 if(lessonDate === new Date().getDay())
-                                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.state.view} weekday={getWeekday(lessonDate)}/>
+                                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.state.view} weekday={getWeekday(lessonDate)} type={this.props.type}/>
                                 else
                                     return null;
                             }) 
                             : {}
                         }
+                    </div>
+                </div>
+            )
+        }
+        else if(this.props.type === "assignments"){
+            return(
+                <div className="assignmentsContainer">
+                    <div className={`assignmentsContainerHeader ${(this.context.role === "teacher") ? "assignmentsContainerHeaderTeacherColour" : "assignmentsContainerHeaderPupilColour"}`}>
+                        <h1 className="textCenter assignmentsContainerHeaderText">Afleveringer</h1>
+                        <ChangeWeekButton changeWeekClick={this.changeWeekClick}/>
+                    </div>
+                    <div className="weekContainerFiveDay">
+                        <h1 className="weekNumberText">Uge {getWeek(this.state.date)}</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Mandag")}`}>Mandag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Tirsdag")}`}>Tirsdag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Onsdag")}`}>Onsdag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Torsdag")}`}>Torsdag</h1>
+                        <h1 className={`textCenter weekText ${this.dayHighlight("Fredag")}`}>Fredag</h1>
+                    </div>
+                    <div className="gridContainerFiveDay">
+                        <TimeIndicator/>
+                        {this.timeGrid()}
+                        {this.scheduleBorders("Mandag", 1)}
+                        {this.scheduleBorders("Tirsdag", 1)}
+                        {this.scheduleBorders("Onsdag", 1)}
+                        {this.scheduleBorders("Torsdag", 1)}
+                        {this.scheduleBorders("Fredag", 1)}
+                        {this.state.skema.map((skemabrik) => { 
+                            return <Skemabrik key={skemabrik._id} skemabrik={skemabrik}  weekday={getWeekday(new Date(skemabrik.dueDate).getDay())} type={this.props.type}/>
+                        })}
                     </div>
                 </div>
             )
