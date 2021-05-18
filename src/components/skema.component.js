@@ -33,7 +33,7 @@ export default class Skema extends Component{
             this.props.type === 'assignments' ? requestString += '': requestString += '/5';
             this.getSchedule(requestString)
         })
-    }   
+    }
 
     getSchedule(requestString){
         fetch(`http://localhost:5000/${requestString}`,{

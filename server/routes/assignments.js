@@ -20,4 +20,7 @@ router.route('/:id/:date').get((req, res) =>{
     });
 });
 
+router.route('/').post( (req, res) =>{
+})
+
 module.exports = router;

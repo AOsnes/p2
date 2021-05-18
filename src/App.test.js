@@ -14,7 +14,7 @@ import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './Us
 import React from 'react';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
-afterEach(cleanup);
+afterEach(cleanup)
 
 /* Mock af BrowserRouter for at kunne bruge MemoryRouter og ændre Route */
 jest.mock('react-router-dom', () => {
@@ -425,8 +425,8 @@ describe('Skemabrik tests', () =>{
             <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
             <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
             <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
-            <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag"/>,
-            <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag"/>
+            <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
+            <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="schedule"/>
         ])
     })
     test('skemabrik component portals to  correct day', () => {    
@@ -472,6 +472,7 @@ describe('Skemabrik tests', () =>{
 
     describe('skemabrikModal tests', () =>{
         /* Render the test window before each test */
+        
         test('modal opens when skemabrik is clicked', () =>{
             const rootElement = screen.getByTestId("root")
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
@@ -524,6 +525,9 @@ test('timeIndicator renders on the correct percentage on the schedule', () =>{
     })
     /* A total of 9 calls to clear interval will be made, please count :) */
     expect(clearInterval).toHaveBeenCalledTimes(9)
+    jest.useRealTimers();
+    global.Date.mockClear()
+    Date.now.mockClear()
 });
 
 test('toggle day view component changes when clicked', () =>{
@@ -586,9 +590,9 @@ describe('skemabrikForm tests', () =>{
             startTime: '',
             endTime: '',
             advanced: false,
-            subject: 'Dansk',
-            class: 'sw2b2-20',
-            description: '',
+            subject: '',
+            class: '',
+            classDescription: '',
         });
     })
     test('form has correct values when user changes values', () =>{
@@ -599,23 +603,23 @@ describe('skemabrikForm tests', () =>{
         const advancedElement = screen.getByTestId("advanced");
         const subjectSelectElement = screen.getByTestId("subject");
         const classSelectElement = screen.getByTestId("class");
-        const descriptionElement = screen.getByTestId("description");
+        const classDescriptionElement = screen.getByTestId("classDescription");
         const classOptionElements = screen.getAllByTestId("classOption");
         const subjectOptionElements = screen.getAllByTestId("subjectOption");
         
-        fireEvent.change(dateElement,        {target: {value: "2021-05-11"}})
-        fireEvent.change(startTimeElement,   {target: {value: "12:00:00"}})
-        fireEvent.change(endTimeElement,     {target: {value: "13:00:00"}})
-        fireEvent.change(descriptionElement, {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+        fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
+        fireEvent.change(startTimeElement,             {target: {value: "12:00:00"}})
+        fireEvent.change(endTimeElement,               {target: {value: "13:00:00"}})
+        fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
         fireEvent.click(advancedElement)
         expect(formElement).toHaveFormValues({
             date: '2021-05-11',
             startTime: '12:00:00',
             endTime: '13:00:00',
             advanced: true,
-            subject: 'Dansk',
-            class: 'sw2b2-20',
-            description: 'Vi skal bare blast fucking meget kode! WICKED',
+            subject: '',
+            class: '',
+            classDescription: 'Vi skal bare blast fucking meget kode! WICKED',
         });
         subjectOptionElements.forEach(subjectElement => {
             classOptionElements.forEach(classElement =>{
@@ -628,33 +632,34 @@ describe('skemabrikForm tests', () =>{
                     advanced: true,
                     subject: subjectElement.value,
                     class: classElement.value,
-                    description: 'Vi skal bare blast fucking meget kode! WICKED',
+                    classDescription: 'Vi skal bare blast fucking meget kode! WICKED',
                 });
             })
         });
     })
-    test('submit button is only enabled when all fields have been filled', () =>{
+    test('submit button is enabled if all fields for class is filled, and assignmentToggle has not been pressed', () =>{
         const rootElement = screen.getByTestId("root");
         const formElement = document.getElementsByClassName("formContainer")[0];
         const submitElement = screen.getByTestId("submit");
         const dateElement = screen.getByTestId("date");
         const startTimeElement = screen.getByTestId("startTime");
         const endTimeElement = screen.getByTestId("endTime");
-        const descriptionElement = screen.getByTestId("description");
+        const classDescriptionElement = screen.getByTestId("classDescription");
         const subjectSelectElement = screen.getByTestId("subject");
         const classSelectElement = screen.getByTestId("class");
+        const assignmentToggle = screen.getByTestId("assignmentToggle");
 
         expect(submitElement).toHaveAttribute("disabled");
         fireEvent.click(submitElement);
         expect(submitElement).toHaveAttribute("disabled");
         expect(screen.queryByText("Time tilføjet")).not.toBeInTheDocument();
       
-        fireEvent.change(dateElement,         {target: {value: "2021-05-11"}})
-        fireEvent.change(startTimeElement,    {target: {value: "12:00:00"}})
-        fireEvent.change(endTimeElement ,     {target: {value: "13:00:00"}})
-        fireEvent.change(subjectSelectElement,{target: {value: "Engelsk"}})
-        fireEvent.change(classSelectElement,  {target: {value: "sw2b2-21"}})
-        fireEvent.change(descriptionElement,  {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+        fireEvent.change(dateElement,               {target: {value: "2021-05-11"}})
+        fireEvent.change(startTimeElement,          {target: {value: "12:00:00"}})
+        fireEvent.change(endTimeElement ,           {target: {value: "13:00:00"}})
+        fireEvent.change(subjectSelectElement,      {target: {value: "Engelsk"}})
+        fireEvent.change(classSelectElement,        {target: {value: "sw2b2-21"}})
+        fireEvent.change(classDescriptionElement,   {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
         
         expect(formElement).toHaveFormValues({
             date: '2021-05-11',
@@ -663,15 +668,31 @@ describe('skemabrikForm tests', () =>{
             advanced: false,
             subject: 'Engelsk',
             class: 'sw2b2-21',
-            description: 'Vi skal bare blast fucking meget kode! WICKED',
+            classDescription: 'Vi skal bare blast fucking meget kode! WICKED',
+            assignmentToggle: false,
         });
+        expect(submitElement).not.toHaveAttribute("disabled");
+        fireEvent.click(assignmentToggle);
+        expect(formElement).toHaveFormValues({
+            assignmentToggle: true
+        });
+        expect(submitElement).toHaveAttribute("disabled");
+        const dueDateElement = screen.getByTestId("dueDate");
+        const dueTimeElement = screen.getByTestId("dueTime");
+        const assignmentDescriptionElement = screen.getByTestId("assignmentDescription");
+        expect(dueDateElement).toBeInTheDocument();
+        expect(dueTimeElement).toBeInTheDocument();
+        expect(assignmentDescriptionElement).toBeInTheDocument();
+        fireEvent.change(dueDateElement,                      {target: {value: "2021-05-11"}})
+        fireEvent.change(dueTimeElement,                      {target: {value: "14:00:00"}})
+        fireEvent.change(assignmentDescriptionElement,        {target: {value: "Just get good 4Head"}})
 
-        expect(submitElement).not.toHaveAttribute("disabled")
+        expect(formElement).toHaveFormValues({
+            dueDate: '2021-05-11',
+            dueTime: '14:00:00',
+            assignmentDescription: 'Just get good 4Head',
+        })
+        expect(submitElement).not.toHaveAttribute("disabled");
         fireEvent.click(submitElement)
-        setTimeout(() => {
-            const didSubmitModalElement = screen.getByText("Time tilføjet")
-            expect(formElement).not.toContainElement(didSubmitModalElement)
-            expect(rootElement).toContainElement(didSubmitModalElement)
-        });
     })
 })
