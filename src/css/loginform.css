@@ -54,6 +54,10 @@
     border: 2px solid dodgerblue;
 }
 
+.loginInputWrong{
+    border: 2px solid red;
+}
+
 /* Button */
 .loginButton{
     background-color: dodgerblue;
