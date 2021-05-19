@@ -27,14 +27,14 @@ export default class Skemabrik extends Component {
             })
         }
         if(this.props.skemabrik.fileId !== null){
-            console.log(`${this.props.skemabrik.fileId}`);
-            let requestString = `${this.props.type}/${this.props.skemabrik.fileId}`;
-            this.getFile(requestString);
+           /*  console.log(this.props.skemabrik.subject);
+            console.log(this.props.skemabrik.fileId); */
+            this.getFile(this.props.skemabrik.fileId);
         }
     }
 
-    getFile(requestString){
-        fetch(`http://localhost:5000/${requestString}`,{
+    getFile(fileId){
+        fetch(`http://localhost:5000/download/${fileId}`,{
             method:'GET',
         })
         .then(response => response.json())
