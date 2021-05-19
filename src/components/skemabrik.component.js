@@ -19,6 +19,14 @@ export default class Skemabrik extends Component {
         this.disableModal = this.disableModal.bind(this);
     }
 
+    componentDidMount(){
+        if(document.getElementsByClassName('gridContainerFiveDay') || document.getElementsByClassName('gridContainerOneDay')){
+            this.setState({
+                isLoaded: true,
+            })
+        }
+    }
+
     /* Called from the child component */
     disableModal(){
         this.setState({
@@ -35,14 +43,6 @@ export default class Skemabrik extends Component {
         }), () => {
             this.state.showSkemabrikModal ? document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
-    }
-
-    componentDidMount(){
-        if(document.getElementsByClassName('gridContainerFiveDay') || document.getElementsByClassName('gridContainerOneDay')){
-            this.setState({
-                isLoaded: true,
-            })
-        }
     }
 
     render(){
