@@ -50,6 +50,7 @@ export default class Skemabrik extends Component {
         const endTime = new Date(this.props.skemabrik.endTime);
         const description = this.props.skemabrik.description;
         let startTime;
+        let offset = this.props.type === "assignments" ? 1 : 0
         if(this.props.type === "schedule"){
             startTime = new Date(this.props.skemabrik.startTime)
         } else if(this.props.type === "assignments"){
@@ -59,12 +60,12 @@ export default class Skemabrik extends Component {
         const style = {
             height: this.props.type === "schedule" ? calculateHeight(startTime, endTime) : "81.25px",
             position: 'absolute',
-            top: calculatePosition(startTime, this.props.type === "assignments" ? 1 : 0),
+            top: calculatePosition(startTime, offset),
         }
         if(this.state.isLoaded){
             return([
                 <div key="modal">
-                    {this.state.showSkemabrikModal ? <SkemabrikModal disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
+                    {this.state.showSkemabrikModal ? <SkemabrikModal type={this.props.type} disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
                 </div>,
                 ReactDOM.createPortal(
                     <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>

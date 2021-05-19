@@ -1,4 +1,4 @@
-const {MongoClient, ObjectId} = require('mongodb');
+const {MongoClient, ObjectId, GridFSBucket} = require('mongodb');
 const bodyParser = require('body-parser')
 const busboy = require('connect-busboy');
 const express = require('express');
@@ -129,11 +129,10 @@ exports.getSchedule = async function getSchedule(user, date, days) {
     }
 }
 
-exports.createLesson = async function createLesson(id, className, subject, start, end, description, recurrences, interval){
+exports.createLesson = async function createLesson(id, className, subject, start, end, description, fileId, recurrences, interval){
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("lessons");
-            let result;
             if (recurrences > 1){
                 let lessonInserts = [];
     
@@ -146,26 +145,25 @@ exports.createLesson = async function createLesson(id, className, subject, start
                     lessonInserts[i] = {
                         "subject": subject,
                         "class": className,
-                        "teacherID": id.toString(),
+                        "teacherID": id,
                         "description": description,
+                        "fileId": fileId,
                         "startTime": start1,
                         "endTime": end1,
                     }
                 }
                 //console.log(lessonInserts);
                 doc.insertMany(lessonInserts)
-                .then(result => console.log(result.insertedCount))
-                .catch(console.dir);
+                .then(result => resolve(result.insertedId))
+                .catch((error) => reject(new Error(error)));
     
             } else {
-                doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
-                .then(result => console.log(result.insertedCount))
-                .catch(console.dir)
-                .finally(() => {resolve();});
+                doc.insertOne({"subject": subject, "class": className, "teacherID": id, "description": description, "fileId": fileId, "startTime": start, "endTime": end,})
+                .then(result => resolve({id: result.insertedId}))
+                .catch((error) => reject(new Error(error)))
             }
-        } finally {
-            // Ensures that the client will close when you finish/error
-            
+        } catch(error){
+            reject(new Error(error))
         }
     });
 }
@@ -229,14 +227,14 @@ exports.getAssignments = async function getAssignments(user, date) {
     }
 }
 
-exports.createAssignment = async function createAssignment(id, lessonID, subject, description, dueDate, optionalFile){
+exports.createAssignment = async function createAssignment(teacherID, lessonID, subject, description, className, dueDate, optionalFile){
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("assignments");
-            doc.insertOne({ "teacherID": id.toString(), "lessonID" : lessonID, "subject": subject, "description": description, "dueDate": dueDate, "fileID": optionalFile, })
-            .then(result => console.log(result.insertedCount))
-            .then(() => { resolve(); })
-            .catch(console.dir);
+            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileID": optionalFile, })
+            .then(result => resolve(new Promise( resolve, reject)))
+            .catch(error => reject(error));
+
         } finally {
             // Ensures that the connection will close when you finish/error
             
@@ -274,13 +272,12 @@ exports.deleteAssignment = async function deleteAssignment(id){
 
 exports.saveFile = async function saveFile(filename){
     return new Promise ((resolve, reject) => {
-        const database = client.db('P2');
         let bucket = new GridFSBucket(database);
         let fileID = new ObjectId();
         fs.createReadStream(`${__dirname}/tmp/${filename}`)
         .pipe(bucket.openUploadStreamWithId(fileID, filename))
         .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
-        .on('finish', () => {console.log("SUCCes"); resolve(fileID)});
+        .on('finish', () => resolve(fileID));
     });
 }
 

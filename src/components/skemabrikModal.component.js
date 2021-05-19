@@ -73,17 +73,23 @@ export default class SkemabrikModal extends Component{
             ReactDOM.createPortal(
                 <div className={`detailsModal ${subject}`}>
                     <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
-                    <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) : toHHMM(startTime) - toHHMM(endTime)}</div>
+                    <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) :  `${toHHMM(startTime)} - ${toHHMM(endTime)}`}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
-                    <form onSubmit={this.handleSubmit}>
-                        <input name="assignmentUpload" onChange={this.handleChange} type="file"/>
-                        <input name="submitButton" type="submit"/>
-                    </form>
-                    <div className="editLessonButton">
-                        <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
-                    </div>
-                    {user.role === "teacher" ? <p className="skemabrikModalText textLeft"> Klasse: {classes}</p>: null}
-                    
+                    {user.role === "teacher"
+                        ? [<p className="skemabrikModalText textLeft">Klasse: {classes}</p>,
+                          <div className="editLessonButton">
+                              <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
+                          </div>]
+                        : this.props.type === "assignments" 
+                            ? <div>
+                                <p className="skemabrikModalText textLeft">Aflever:</p>
+                                <form onSubmit={this.handleSubmit}>
+                                    <input name="assignmentUpload" onChange={this.handleChange} type="file"/>
+                                    <input name="submitButton" value="Aflever" type="submit"></input>
+                                </form>
+                            </div>
+                        : null
+                    }
                 </div>,
                 document.getElementById('root')
             )

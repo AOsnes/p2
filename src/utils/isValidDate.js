@@ -1,4 +1,4 @@
-function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
+function isValidDate(date) {
+    return date instanceof Date && !isNaN(date);
 }
 export default isValidDate;
