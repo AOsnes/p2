@@ -21,12 +21,13 @@ router.route('/').post((req, res) => {
     let assignmentDescription = req.body.assignmentDescription;
     let assignmentToggle = req.body.assignmentToggle;
     let dueDate = req.body.dueDate;
+    let dueTime = req.body.dueTime.split(":");;
     let files = req.body.files;
     let classFileId = null;
     let assignmentFileId = null;
     startTime = new Date(date.setHours(startTime[0], startTime[1]))
     endTime = new Date(date.setHours(endTime[0], endTime[1]))
-
+    dueDate = new Date(dueDate.setHours(dueTime[0], dueTime[1]))
     /* If we got any information about files, we need to check if the 
     fileId is valid and then if it is for a lecture or for an assignment */
     if(files){

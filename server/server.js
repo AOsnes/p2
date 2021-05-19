@@ -215,7 +215,7 @@ exports.getAssignments = async function getAssignments(user, date) {
 
         //Determines the role of the user as each role needs a different query to the correct assignments.
         if (user.role === "teacher") {
-            cursor = await collection.find({ "teacherID": user._id.toString(),  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
+            cursor = await collection.find({ "teacherID": user._id,  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
             assignments = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class },  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } });
