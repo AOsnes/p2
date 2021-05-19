@@ -192,18 +192,13 @@ export default class Skema extends Component{
                         <TimeIndicator/>
                         {this.timeGrid()}
                         {this.scheduleBorders(currentDay())}
-                        {/* This is done to make sure that there is a schedule before trying to map it,
-                            without this the platform will crash if there are no lessons for that day*/}
-                        {(this.state.skema !== null) ? 
-                            this.state.skema.map((skemabrik) => {
-                                let lessonDate = new Date(skemabrik.startTime).getDay();
-                                if(lessonDate === new Date().getDay())
-                                    return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.state.view} weekday={getWeekday(lessonDate)} type={this.props.type}/>
-                                else
-                                    return null;
-                            }) 
-                            : {}
-                        }
+                        {this.state.skema.map((skemabrik) => {
+                            let lessonDay = new Date(skemabrik.startTime).getDay();
+                            if(lessonDay === new Date().getDay())
+                                return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} dayView={this.state.view} weekday={getWeekday(lessonDay)} type={this.props.type}/>
+                            else
+                                return null;
+                        })}
                     </div>
                 </div>
             )
