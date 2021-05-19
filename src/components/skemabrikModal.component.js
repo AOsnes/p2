@@ -79,7 +79,9 @@ export default class SkemabrikModal extends Component{
                         ? [<p className="skemabrikModalText textLeft">Klasse: {classes}</p>,
                           <div className="editLessonButton">
                               <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
-                          </div>]
+                          </div>,
+                          this.props.file !== null ? <a href={this.props.file}>Download File</a> : null
+                        ]
                         : this.props.type === "assignments" 
                             ? <div>
                                 <p className="skemabrikModalText textLeft">Aflever:</p>

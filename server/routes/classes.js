@@ -34,7 +34,7 @@ router.route('/').post((req, res) => {
         files.forEach(file => {
             if(ObjectId.isValid(file.fileId)){
                 file.fileId = ObjectId.createFromHexString(file.fileId);
-                if(file.filefor === "classFile"){
+                if(file.fileFor === "classFile"){
                     classFileId = file.fileId
                 } else {
                     assignmentFileId = file.fileId

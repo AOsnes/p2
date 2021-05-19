@@ -1,5 +1,6 @@
+const {ObjectId} = require('mongodb');
 const router = require('express').Router();
-const {getUserinfo, getSchedule} = require('../server');
+const {getUserinfo, getSchedule, getFile} = require('../server');
 
 router.route('/:id/:date/:days').get((req, res) =>{
     let id = req.params.id;
@@ -20,5 +21,16 @@ router.route('/:id/:date/:days').get((req, res) =>{
         res.end();
     });
 });
+
+router.route('/:id').get((req, res) => {
+    let fileId = ObjectId(req.params.id);
+    getFile(fileId).then( path => {
+        res.status(200).json(path);
+        res.end();
+    }).catch(error => {
+        res.status(400).send({error: error.toString()});
+        res.end();
+    })
+})
 
 module.exports = router;
