@@ -325,15 +325,14 @@ async function saveFile(file, collection, documentID){
     return fileID;
 }
 
-async function getFile(){
-    await client.connect();
-    const database = client.db('P2');
+async function getFile(fileID){
     let bucket = new GridFSBucket(database);
-    bucket.openDownloadStreamByName('.jaronceller.png')
-    .pipe(fs.createWriteStream('./jaronceller.png'))
+    let path = `./tmp/${fileID}`
+    bucket.openDownloadStream(fileID)
+    .pipe(fs.createWriteStream(path))
     .on('error', () => console.log("Lortet virker ikke >:c"))
     .on('finish', () => console.log("SUCCess"));
-
+    return path;
 }
 
 async function turnInAssignment(userID, assignmentID, fileID){

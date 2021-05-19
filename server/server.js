@@ -284,6 +284,16 @@ exports.saveFile = async function saveFile(filename){
     });
 }
 
+exports.getFile = async function getFile(fileID){
+    let bucket = new GridFSBucket(database);
+    let path = `./tmp/${fileID}`
+    bucket.openDownloadStream(fileID)
+    .pipe(fs.createWriteStream(path))
+    .on('error', () => console.log("Lortet virker ikke >:c"))
+    .on('finish', () => console.log("SUCCess"));
+    return path;
+}
+
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
     next();
