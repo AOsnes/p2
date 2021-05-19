@@ -232,12 +232,12 @@ exports.getAssignments = async function getAssignments(user, date) {
     }
 }
 
-exports.createAssignment = async function createAssignment(teacherID, lessonID, subject, description, dueDate, optionalFile){
+exports.createAssignment = async function createAssignment(teacherID, lessonID, subject, description, className, dueDate, optionalFile){
     return new Promise ((resolve, reject) => {
         try {
             const database = connection.db('P2');
             const doc = database.collection("assignments");
-            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "dueDate": dueDate, "fileID": optionalFile, })
+            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileID": optionalFile, })
             .then(result => resolve(new Promise( resolve, reject)))
             .catch(error => reject(error));
 

@@ -20,7 +20,7 @@ router.route('/').post((req, res) => {
     let classDescription = req.body.classDescription;
     let assignmentDescription = req.body.assignmentDescription;
     let assignmentToggle = req.body.assignmentToggle;
-    let dueDate = req.body.dueDate;
+    let dueDate = new Date(req.body.dueDate);
     let dueTime = req.body.dueTime.split(":");;
     let files = req.body.files;
     let classFileId = null;
@@ -51,7 +51,7 @@ router.route('/').post((req, res) => {
             createLesson(teacherId, className, subject, startTime, endTime, classDescription, classFileId, 1, 0)
             .then( result => {
                 if(assignmentToggle){
-                    createAssignment(teacherId, result.id, subject, assignmentDescription, dueDate, assignmentFileId)
+                    createAssignment(teacherId, result.id, subject, assignmentDescription, className, dueDate, assignmentFileId)
                     .then(result =>{
                         res.status(200).json(result);
                         res.end();
