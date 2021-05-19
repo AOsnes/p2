@@ -44,7 +44,7 @@ export default class SkemabrikForm extends Component{
         } else {
             switch (key) {
                 case "advanced": case "klasser": case "didSubmit": case "classFile": case "assignmentFile": case "fileSelected":
-                case "classDescription": case "assignmentDescription":
+                case "assignmentDescription":
                     return undefined;
                 default: return val;
             }

@@ -6,8 +6,8 @@ router.route('/:id/:date').get((req, res) =>{
     let date = new Date(req.params.date);
 
     getUserinfo(id).then( user =>{
-        getAssignments(user, date).then( Assignments =>{
-            res.status(200).json(Assignments);
+        getAssignments(user, date).then(assignments =>{
+            res.status(200).json(assignments);
             res.end();
         })
         .catch(error => {
