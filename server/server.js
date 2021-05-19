@@ -282,13 +282,14 @@ exports.saveFile = async function saveFile(filename){
 }
 
 exports.getFile = async function getFile(fileID){
-    let bucket = new GridFSBucket(database);
-    let path = `./tmp/${fileID}`
-    bucket.openDownloadStream(fileID)
-    .pipe(fs.createWriteStream(path))
-    .on('error', () => console.log("Lortet virker ikke >:c"))
-    .on('finish', () => console.log("SUCCess"));
-    return path;
+    return new Promise((resolve, reject) => {
+        let bucket = new GridFSBucket(database);
+        let path = `./tmp/${fileID}`
+        bucket.openDownloadStream(fileID)
+        .pipe(fs.createWriteStream(path))
+        .on('error', () => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
+        .on('finish', () => resolve(path));
+    });
 }
 
 let logger = (req, res, next) => {
