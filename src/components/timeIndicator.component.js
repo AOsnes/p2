@@ -54,11 +54,14 @@ export default class TimeIndicator extends Component {
         //Styles component
         const style = {
             top: calculatePosition(new Date(this.state.time), 0),
-            opacity: this.state.show
         }
-        
-        return(
-            <div data-testid="timeIndicator" className="timeIndicator" style={style}></div>
-        )
+        if(this.state.show){
+            return(
+                <div data-testid="timeIndicator" className="timeIndicator" style={style}></div>
+            )
+        }
+        else {
+            return null;
+        }
     }
 }
