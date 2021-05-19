@@ -52,7 +52,7 @@ router.route('/').post((req, res) => {
             createLesson(teacherId, className, subject, startTime, endTime, classDescription, classFileId, 1, 0)
             .then( result => {
                 if(assignmentToggle){
-                    createAssignment(teacherId, result.id, subject, assignmentDescription, dueDate, assignmentFileId)
+                    createAssignment(teacherId, result.id, subject, assignmentDescription, className, dueDate, assignmentFileId)
                     .then(result =>{
                         res.status(200).json(result);
                         res.end();

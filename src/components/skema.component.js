@@ -202,7 +202,7 @@ export default class Skema extends Component{
                                 else
                                     return null;
                             }) 
-                            : {}
+                            : null
                         }
                     </div>
                 </div>
