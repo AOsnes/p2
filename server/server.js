@@ -232,7 +232,7 @@ exports.createAssignment = async function createAssignment(teacherID, lessonID, 
         try {
             const doc = database.collection("assignments");
             doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileID": optionalFile, })
-            .then(result => resolve(new Promise( resolve, reject)))
+            .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
 
         } finally {
@@ -266,6 +266,19 @@ exports.deleteAssignment = async function deleteAssignment(id){
             .finally(() => { resolve(); });
         } catch (error) {
             throw reject(error);
+        }
+    });
+}
+
+exports.turnInAssignment = async function turnInAssignment(assignmentId, studentId, fileId){
+    return new Promise ((resolve, reject) => {
+        try {
+            const doc = database.collection("assignments");
+            doc.insertOne({ "assigmentId": assignmentId, "studentId" : studentId, "fileId": fileId})
+            .then(result => resolve(result.insertedCount))
+            .catch(error => reject(error));
+        } catch(error) {
+            reject(error);
         }
     });
 }
