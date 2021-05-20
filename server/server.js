@@ -240,7 +240,7 @@ exports.createAssignment = async function createAssignment(teacherID, lessonID, 
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("assignments");
-            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileID": optionalFile, })
+            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileId": optionalFile, })
             .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
 
