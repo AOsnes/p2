@@ -4,26 +4,19 @@ import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
 import isValidDate from '../utils/isValidDate';
 import EditLessonModal from './editLessonModal.component';
+import DownloadFile from './downloadFile.component';
 
 export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {fileSelected: false, fileName: undefined, fileType: undefined, showEditLessonModal: false}
+        this.state = {fileSelected: false, showEditLessonModal: false}
 
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
         this.editLessonClick = this.editLessonClick.bind(this);
-        this.getFileInfo = this.getFileInfo.bind(this);
-    }
-
-    componentDidMount(){
-        console.log(this.props.skemabrikContext.fileId);
-        if(this.props.skemabrikContext.fileId !== null && this.props.skemabrikContext.fileId !== undefined){
-            this.getFileInfo(this.props.skemabrikContext.fileId);
-        }
     }
 
     handleClick(event){
@@ -66,24 +59,12 @@ export default class SkemabrikModal extends Component{
         }));
     }
 
-    getFileInfo(fileId){
-        fetch(`http://localhost:5000/download/${fileId}`,{
-            method:'GET',
-        })
-        .then(response => {
-            let fileName = response.headers.get('content-disposition').split('filename=')[1];
-            let fileType = response.headers.get('content-type').split(';')[0];
-            this.setState({fileName: fileName, fileType: fileType}, () => {
-                console.log(this.state.fileType);
-            });
-        });
-    }
-
     render(){
         const user = this.context;
         const details = this.props.skemabrikContext.description;
         const classes = this.props.skemabrikContext.class;
         const subject = this.props.skemabrikContext.subject;
+        const fileId = this.props.skemabrikContext.fileId;
         const startTime = new Date(this.props.skemabrikContext.startTime);
         const endTime = new Date(this.props.skemabrikContext.endTime);
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
@@ -111,7 +92,7 @@ export default class SkemabrikModal extends Component{
                             </div>
                         : null
                     }
-                    {this.state.fileType !== undefined ? <a href={"http://localhost:5000/download/"+this.props.skemabrikContext.fileId} type={this.state.fileType} download>{this.state.fileName}</a> : null}
+                    {fileId !== null? <DownloadFile fileId={fileId}/>: null}
                 </div>,
                 document.getElementById('root')
             )
