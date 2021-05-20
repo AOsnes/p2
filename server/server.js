@@ -303,8 +303,8 @@ exports.getFile = async function getFile(fileID, filename){
 
 exports.getFilename = async function getFilename(fileID){
     const doc = database.collection("fs.files");
-    let filename = await doc.findOne({"_id": ObjectId.createFromHexString(fileID)}, {projection: {_id: 0, filename: 1}});
-    return filename;
+    let result = await doc.findOne({"_id": fileID}, {projection: {_id: 0, filename: 1}});
+    return result.filename;
 }
 
 
