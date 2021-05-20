@@ -281,15 +281,23 @@ exports.saveFile = async function saveFile(filename){
     });
 }
 
-exports.getFile = async function getFile(fileID){
-    let bucket = new GridFSBucket(database);
-    let path = `./tmp/${fileID}`
-    bucket.openDownloadStream(fileID)
-    .pipe(fs.createWriteStream(path))
-    .on('error', () => console.log("Lortet virker ikke >:c"))
-    .on('finish', () => console.log("SUCCess"));
-    return path;
+exports.getFile = async function getFile(fileID, filename){
+    return new Promise((resolve, reject) => {
+        let bucket = new GridFSBucket(database);
+        let path = `./tmp/${filename}`;
+        bucket.openDownloadStream(fileID)
+        .pipe(fs.createWriteStream(path))
+        .on('error', () => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
+        .on('finish', () => resolve(path));
+    });
 }
+
+exports.getFilename = async function getFilename(fileID){
+    const doc = database.collection("fs.files");
+    let filename = await doc.findOne({"_id": ObjectId.createFromHexString(fileID)}, {projection: {_id: 0, filename: 1}});
+    return filename;
+}
+
 
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
