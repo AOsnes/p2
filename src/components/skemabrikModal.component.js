@@ -9,22 +9,23 @@ export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {fileSelected: false, file: null, showEditLessonModal: false}
+        this.state = {fileSelected: false, fileName: undefined, fileType: undefined, showEditLessonModal: false}
 
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
         this.editLessonClick = this.editLessonClick.bind(this);
-        this.getFile = this.getFile.bind(this);
+        this.getFileInfo = this.getFileInfo.bind(this);
     }
 
     componentDidMount(){
-        if(this.props.skemabrikContext.fileId !== null){
-            this.getFile(this.props.skemabrikContext.fileId);
+        console.log(this.props.skemabrikContext.fileId);
+        if(this.props.skemabrikContext.fileId !== null && this.props.skemabrikContext.fileId !== undefined){
+            this.getFileInfo(this.props.skemabrikContext.fileId);
         }
-
     }
+
     handleClick(event){
         event.preventDefault();
         this.props.disableModal();
@@ -65,14 +66,16 @@ export default class SkemabrikModal extends Component{
         }));
     }
 
-    getFile(fileId){
+    getFileInfo(fileId){
         fetch(`http://localhost:5000/download/${fileId}`,{
             method:'GET',
         })
         .then(response => {
-            let file = response.headers.get('content-disposition').split('"')[1];
-            this.setState({file: file});
-            console.log(file);
+            let fileName = response.headers.get('content-disposition').split('filename=')[1];
+            let fileType = response.headers.get('content-type').split(';')[0];
+            this.setState({fileName: fileName, fileType: fileType}, () => {
+                console.log(this.state.fileType);
+            });
         });
     }
 
@@ -109,7 +112,7 @@ export default class SkemabrikModal extends Component{
                             </div>
                         : null
                     }
-                    {this.state.file !== null ? <a href={this.state.file} download>Download file</a> : null}
+                    {this.state.fileType !== undefined ? <a href={"http://localhost:5000/download/"+this.props.skemabrikContext.fileId} type={this.state.fileType} download>{this.state.fileName}</a> : null}
                 </div>,
                 document.getElementById('root')
             )
