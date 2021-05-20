@@ -89,7 +89,7 @@ export default class SkemabrikModal extends Component{
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
         return([
             <div key="EditModal">
-                {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal}/> : null}
+                {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal} type={this.props.type}/> : null}
             </div>,
             ReactDOM.createPortal(
                 <div key="showModal" className={`detailsModal ${subject}`}>
@@ -99,9 +99,8 @@ export default class SkemabrikModal extends Component{
                     {user.role === "teacher"
                         ? [<p key="klasse" className="skemabrikModalText textLeft">Klasse: {classes}</p>,
                           <div key="editLesson" className="editLessonButton">
-                              <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
-                          </div>,
-                        ]
+                              <input type="button" name="editLessonButton" onClick={this.editLessonClick} value={`${this.props.type === 'schedule' ? 'Rediger lektion' : 'Rediger aflevering'}`}/>
+                          </div>]
                         : this.props.type === "assignments" 
                             ? <div>
                                 <p className="skemabrikModalText textLeft">Aflever:</p>
