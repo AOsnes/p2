@@ -236,13 +236,13 @@ async function createLesson(id, className, subject, start, end, description, rec
 }
 
 async function updateLesson(id, changes){
+    await client.connect();
     return new Promise ((resolve, reject) => {
         try {
             const database = client.db('P2');
             const doc = database.collection("lessons");
-            //const result = await doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes});
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
-            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log("Modifiedcount: " + result.modifiedCount + "\nMatchedcount: " + result.matchedCount) } })
             .catch(console.dir)
             .finally(() => {resolve();});
         } catch(error) {
@@ -381,10 +381,12 @@ async function addFeedback(turnedInID, fileID){
     });
 }
 
-saveFile("Pog", "60608f0389177a0bb0679e79", "6094ff5ab402ab19a8417a1e").then(console.log("Pog")).catch(console.dir);
-//getFile().then(console.log("Pog"));
 
-//updateLesson("6082ab7a6151ce1530d207ba", {"subject": "CS"}).catch(console.dir);
+
+//saveFile("Pog", "60608f0389177a0bb0679e79", "6094ff5ab402ab19a8417a1e").then(console.log("Pog")).catch(console.dir);
+//getFile().then(console.log("Pog"));
+let changes = {"description": "123123jesus", "startTime": new Date(2021, 4, 20, 12, 00, 00), "endTime": new Date(2021, 4, 20, 12, 45, 00)};
+updateLesson("60a4fc3dea0b2b0ecc2939f3", changes).then(console.log("Pog")).catch(console.dir);
 //deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
 //login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "N/T", new Date(2021, 4, 5, 12, 45, 0), new Date(2021, 4, 5, 13, 30, 0), "I hate jews so much it's unreal. Love from Kazakhstan", 1, 7)).catch(console.dir);
 
