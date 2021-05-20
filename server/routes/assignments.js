@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getUserinfo, getAssignments, turnInAssignment} = require('../server');
+const {getUserinfo, getAssignments, turnInAssignment, getTurnedInAssignments} = require('../server');
 
 router.route('/:id/:date').get((req, res) =>{
     let id = req.params.id;
@@ -31,6 +31,12 @@ router.route('/turnIn').post((req, res) =>{
     }).catch(reason => {
         res.status(400).send(reason.toString());
         res.end();
+    })
+})
+
+router.route('/turnedIn/:id/:assignmentId').get((req, res) =>{
+    getTurnedInAssignments(req.params.id, req.params.assignmentId).then(result =>{
+        res.status(200).json(result).end()
     })
 })
 

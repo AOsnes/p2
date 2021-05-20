@@ -42,7 +42,7 @@ exports.authenticate = async function authenticate(username, password){
 
 /* If we already have the ID, we can use this function to get the information about the user
 information returned here MUST NOT be confidential! maybe very cursed :)*/
-exports.getUserinfo = async function getUserinfo(id){
+let getUserinfo = exports.getUserinfo = async function getUserinfo(id){
     try {
         const doc = database.collection("users");
         const result = await doc.findOne({"_id": ObjectId(id)}, {projection: {name: 1, role: 1, class: 1}});
@@ -283,9 +283,43 @@ exports.turnInAssignment = async function turnInAssignment(assignmentId, student
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("turnedInAssignments");
-            doc.insertOne({ "assigmentId": ObjectId(assignmentId), "studentId" : ObjectId(studentId), "fileId": ObjectId(fileId), "timeStamp": new Date(), "feedbackFile": null})
+            doc.insertOne({ "assignmentId": ObjectId(assignmentId), "studentId" : ObjectId(studentId), "fileId": ObjectId(fileId), "timeStamp": new Date(), "feedbackFile": null, "reaction": null})
             .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
+        } catch(error) {
+            reject(error);
+        }
+    });
+}
+
+exports.getTurnedInAssignments = async function getTurnedInAssignments(userId, assignmentId){
+    return new Promise ((resolve, reject) => {
+        try {
+            getUserinfo(userId).then(user =>{
+                const doc = database.collection("turnedInAssignments");
+                if(user.role === "teacher"){
+                    let cursor = doc.find({"assignmentId": ObjectId(assignmentId)})
+                    cursor.toArray().then(result =>{
+                        let promises = []
+                        cursor.close();
+                        result.forEach(result => {
+                            promises.push(
+                                getUserinfo(result.studentId).then(user => {
+                                result.name = user.name;
+                                return result;
+                            }))
+                        });
+                        Promise.all(promises).then((result) =>{
+                            resolve(result)
+                        })
+                    })
+
+                } else{
+                    doc.doc.findOne({"studentId": ObjectId(user._id)})
+                    .then(result => resolve(result))
+                    .catch(error => reject(error));
+                }
+            })
         } catch(error) {
             reject(error);
         }

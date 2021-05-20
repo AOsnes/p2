@@ -1,0 +1,40 @@
+.turnedInassignmentsTable{
+    display: grid;
+    grid-template-rows: 50% 50%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.tableHead{
+    border: 1px solid black;
+}
+
+.tableBody{
+    border: 1px solid black;
+    margin-top: 0.5em;
+}
+
+.textLeft{
+    text-align: left;
+}
+
+.textLight{
+    font-weight: normal;
+}
+
+.reactions{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.reactions .happy {
+    color:green
+}
+.reactions .neutral {
+    color:yellow
+}
+.reactions .sad {
+    color:red
+}
