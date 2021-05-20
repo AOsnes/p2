@@ -167,7 +167,7 @@ export default class SkemabrikForm extends Component{
         
         return(
             <form className="formContainer" data-testid="formContainer" onSubmit={this.handleSubmit}>
-                <fieldset className="opretSkemabrik">
+                <fieldset className="skemabrikForm">
                     <label className="inputText" htmlFor="date">Vælg dag</label>
                     <input type="date" name="date" data-testid="date" value={this.state.date} onChange={this.handleChange}></input>
                     <label className="inputText" htmlFor="startTime">Start tidspunkt</label>
