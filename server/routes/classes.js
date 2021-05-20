@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const {ObjectId} = require('mongodb');
-const util = require('util')
 const {createLesson, getUserinfo, createAssignment, deleteLesson, updateLesson} = require('../server'); 
 
 router.route('/:id').get((req, res) =>{
