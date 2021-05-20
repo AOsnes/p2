@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {ObjectId} = require('mongodb');
-const {createLesson, getUserinfo, createAssignment} = require('../server'); 
+const util = require('util')
+const {createLesson, getUserinfo, createAssignment, deleteLesson, updateLesson} = require('../server'); 
 
 router.route('/:id').get((req, res) =>{
     let id = req.params.id;
@@ -34,7 +35,7 @@ router.route('/').post((req, res) => {
         files.forEach(file => {
             if(ObjectId.isValid(file.fileId)){
                 file.fileId = ObjectId.createFromHexString(file.fileId);
-                if(file.filefor === "classFile"){
+                if(file.fileFor === "classFile"){
                     classFileId = file.fileId
                 } else {
                     assignmentFileId = file.fileId
@@ -73,7 +74,33 @@ router.route('/').post((req, res) => {
         res.status(400).send({error: error.toString()});
         res.end()
     })
-    
 });
+
+router.route('/:id').delete((req, res) => {
+    deleteLesson(req.params.id).then(result =>{
+        res.status(200).send(result.toString()).end();
+    }).catch(reason =>{
+        res.status(404).send(reason.toString()).end();
+    })
+})
+
+router.route('/:id').patch((req, res) => {
+    let changes = {}
+    if(req.body.classDescription){
+        changes.description = req.body.classDescription
+    }
+    if(req.body.startTime){
+        changes.startTime = new Date(req.body.startTime)
+    }
+    if(req.body.endTime){
+        changes.endTime = new Date(req.body.endTime)
+    }
+
+    updateLesson(req.params.id, changes).then(result =>{
+        res.status(200).send(result.toString()).end();
+    }).catch(reason =>{
+        res.status(404).send(reason.toString()).end();
+    })
+})
 
 module.exports = router;

@@ -1,14 +1,15 @@
 /* TODO: Maybe change absolute position? 
 This just makes the form be in the middle for now */
-.opretSkemabrik{
+.skemabrikForm{
     position: absolute;
     display: grid;
-    width: 20%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     grid-template-columns: auto auto;
+    z-index: 1;
 }
+
 
 .legend{
     font-size: 2em;
@@ -41,7 +42,22 @@ textarea{
     text-align: right;
 }
 
+.submitButton{
+    cursor: pointer;
+}
+
 .submitButton:disabled{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.deleteButton{
+    margin-top: 1em;
+    font-weight: 800;
+    color:#E7183E;
+    cursor: pointer;
+}
+.deleteButton:disabled{
     opacity: 0.5;
     pointer-events: none;
 }
