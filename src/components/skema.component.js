@@ -156,8 +156,8 @@ export default class Skema extends Component{
                             <Dagsvisning dayView = {this.state.view} handleClick = {this.handleClick}/>
                         </div> : 
                         <div className={`assignmentsContainerHeader ${(this.context.role === "teacher") ? "assignmentsContainerHeaderTeacherColour" : "assignmentsContainerHeaderPupilColour"}`}>
-                        <h1 className="textCenter assignmentsContainerHeaderText">Afleveringer</h1>
-                        <ChangeWeekButton changeWeekClick={this.changeWeekClick}/>
+                            <h1 className="textCenter assignmentsContainerHeaderText">Afleveringer</h1>
+                            <ChangeWeekButton changeWeekClick={this.changeWeekClick}/>
                         </div>
                     }
                     <div className="weekContainerFiveDay">
