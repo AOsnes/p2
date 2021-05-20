@@ -254,9 +254,9 @@ exports.createAssignment = async function createAssignment(teacherID, lessonID, 
 exports.updateAssignment = async function updateAssignment(id, changes){
     return new Promise ((resolve, reject) => {
         try {
-            const doc = database.collection("assigments");
+            const doc = database.collection("assignments");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
-            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
+            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result.modifiedCount) } })
             .catch(console.dir)
             .finally(() => {resolve();});
         } catch(error) {
@@ -268,7 +268,7 @@ exports.updateAssignment = async function updateAssignment(id, changes){
 exports.deleteAssignment = async function deleteAssignment(id){
     return new Promise((resolve, reject) => {
         try {
-            const doc = database.collection("assigments");
+            const doc = database.collection("assignments");
             doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
             .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { reject(new Error("No such lesson"))}})
             .catch(console.dir)
