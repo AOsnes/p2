@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
 import isValidDate from '../utils/isValidDate';
-import EditLessonModal from './editLesson.component';
+import EditLessonModal from './editLessonModal.component';
 
 export default class SkemabrikModal extends Component{
     static contextType = UserContext;
@@ -67,17 +67,17 @@ export default class SkemabrikModal extends Component{
         const endTime = new Date(this.props.skemabrikContext.endTime);
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
         return([
-            <div key="modal">
+            <div key="EditModal">
                 {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal}/> : null}
             </div>,
             ReactDOM.createPortal(
-                <div className={`detailsModal ${subject}`}>
+                <div key="showModal" className={`detailsModal ${subject}`}>
                     <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
-                    <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) :  `${toHHMM(startTime)} - ${toHHMM(endTime)}`}</div>
+                    <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) : `${toHHMM(startTime)} - ${toHHMM(endTime)}`}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     {user.role === "teacher"
-                        ? [<p className="skemabrikModalText textLeft">Klasse: {classes}</p>,
-                          <div className="editLessonButton">
+                        ? [<p key="klasse" className="skemabrikModalText textLeft">Klasse: {classes}</p>,
+                          <div key="editLesson" className="editLessonButton">
                               <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
                           </div>,
                           this.props.file !== null ? <a href={this.props.file} download>Klik her</a> : null

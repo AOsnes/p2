@@ -173,11 +173,15 @@ exports.updateLesson = async function updateLesson(id, changes){
         try {
             const doc = database.collection("lessons");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
-            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
-            .catch(console.dir)
-            .finally(() => {resolve();});
+            .then(result =>{
+                if(result === null){
+                    reject(new Error("No such lesson"))
+                } else {
+                    resolve(result)
+                }})
+            .catch(reason => reject(reason))
         } catch(error) {
-            throw error;
+            reject(error)
         }
     });
 }
@@ -186,12 +190,17 @@ exports.deleteLesson = async function deleteLesson(id){
     return new Promise((resolve, reject) => {
         try {
             const doc = database.collection("lessons");
-            doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
-            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
-            .catch(console.dir)
-            .finally(() => { resolve(); });
+            doc.deleteOne({ "_id": ObjectId.createFromHexString(id)})
+            .then(result => {
+                if (result.deletedCount === 0){
+                    reject(new Error("No such lesson")) 
+                } else {
+                    resolve(result.deletedCount)
+                }
+            })
+            .catch(error => reject(error))
         } catch (error) {
-            throw error;
+            reject(error)
         }
     });
 }
@@ -281,16 +290,23 @@ exports.saveFile = async function saveFile(filename){
     });
 }
 
-exports.getFile = async function getFile(fileID){
+exports.getFile = async function getFile(fileID, filename){
     return new Promise((resolve, reject) => {
         let bucket = new GridFSBucket(database);
-        let path = `./tmp/${fileID}`
+        let path = `./tmp/${filename}`;
         bucket.openDownloadStream(fileID)
         .pipe(fs.createWriteStream(path))
         .on('error', () => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
         .on('finish', () => resolve(path));
     });
 }
+
+exports.getFilename = async function getFilename(fileID){
+    const doc = database.collection("fs.files");
+    let filename = await doc.findOne({"_id": ObjectId.createFromHexString(fileID)}, {projection: {_id: 0, filename: 1}});
+    return filename;
+}
+
 
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
