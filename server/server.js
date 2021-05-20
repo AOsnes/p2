@@ -240,7 +240,7 @@ exports.createAssignment = async function createAssignment(teacherID, lessonID, 
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("assignments");
-            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileID": optionalFile, })
+            doc.insertOne({ "teacherID": teacherID, "lessonID" : lessonID, "subject": subject, "description": description, "class": className,"dueDate": dueDate, "fileId": optionalFile, })
             .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
 
@@ -316,8 +316,8 @@ exports.getFile = async function getFile(fileID, filename){
 
 exports.getFilename = async function getFilename(fileID){
     const doc = database.collection("fs.files");
-    let filename = await doc.findOne({"_id": ObjectId.createFromHexString(fileID)}, {projection: {_id: 0, filename: 1}});
-    return filename;
+    let result = await doc.findOne({"_id": fileID}, {projection: {_id: 0, filename: 1}});
+    return result.filename;
 }
 
 
@@ -344,9 +344,11 @@ const userinfoRouter = require('./routes/userinfo');
 const scheduleRouter = require('./routes/schedule');
 const assignmentsRouter = require('./routes/assignments');
 const uploadRouter = require('./routes/upload');
+const downloadRouter = require('./routes/download');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
 app.use('/schedule', scheduleRouter);
 app.use('/assignments', assignmentsRouter);
 app.use('/upload', uploadRouter);
+app.use('/download', downloadRouter);
