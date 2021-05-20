@@ -279,6 +279,19 @@ exports.deleteAssignment = async function deleteAssignment(id){
     });
 }
 
+exports.turnInAssignment = async function turnInAssignment(assignmentId, studentId, fileId){
+    return new Promise ((resolve, reject) => {
+        try {
+            const doc = database.collection("assignments");
+            doc.insertOne({ "assigmentId": assignmentId, "studentId" : studentId, "fileId": fileId})
+            .then(result => resolve(result.insertedCount))
+            .catch(error => reject(error));
+        } catch(error) {
+            reject(error);
+        }
+    });
+}
+
 exports.saveFile = async function saveFile(filename){
     return new Promise ((resolve, reject) => {
         let bucket = new GridFSBucket(database);
