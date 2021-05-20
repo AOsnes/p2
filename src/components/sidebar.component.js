@@ -47,7 +47,6 @@ export default class Sidebar extends Component {
                             }
                         }}
                     </UserContext.Consumer>
-
                 </div>
             </ul>
         );
