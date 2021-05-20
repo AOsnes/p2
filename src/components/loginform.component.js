@@ -47,7 +47,6 @@ export default class LoginForm extends Component {
                 })
                 window.location.reload(false);
             } else {
-                console.log(response);
                 alert("Forkert brugernavn eller adgangskode");
                 document.getElementsByClassName("loginInput")[0].classList.add("loginInputWrong");
                 document.getElementsByClassName("loginInput")[1].classList.add("loginInputWrong");

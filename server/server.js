@@ -117,7 +117,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
 
         //Determines the role of the user as each role needs a different query to find the correct lessons.
         if (user.role === "teacher") {
-            cursor = await collection.find({ "teacherID": user._id.toString(), $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
+            cursor = await collection.find({ "teacherID": user._id, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } }); 
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
         }
@@ -173,11 +173,15 @@ exports.updateLesson = async function updateLesson(id, changes){
         try {
             const doc = database.collection("lessons");
             doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
-            .then(result => { if (result === null){ throw new Error("No such lesson"); } else { console.log(result) } })
-            .catch(console.dir)
-            .finally(() => {resolve();});
+            .then(result =>{
+                if(result === null){
+                    reject(new Error("No such lesson"))
+                } else {
+                    resolve(result)
+                }})
+            .catch(reason => reject(reason))
         } catch(error) {
-            throw error;
+            reject(error)
         }
     });
 }
@@ -186,12 +190,17 @@ exports.deleteLesson = async function deleteLesson(id){
     return new Promise((resolve, reject) => {
         try {
             const doc = database.collection("lessons");
-            doc.deleteOne({ "_id": ObjectId.createFromHexString(id) })
-            .then(result => { console.log(result.deletedCount); if (result.deletedCount === 0) { throw new Error("No such lesson") } })
-            .catch(console.dir)
-            .finally(() => { resolve(); });
+            doc.deleteOne({ "_id": ObjectId.createFromHexString(id)})
+            .then(result => {
+                if (result.deletedCount === 0){
+                    reject(new Error("No such lesson")) 
+                } else {
+                    resolve(result.deletedCount)
+                }
+            })
+            .catch(error => reject(error))
         } catch (error) {
-            throw error;
+            reject(error)
         }
     });
 }
