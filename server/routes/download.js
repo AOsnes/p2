@@ -9,9 +9,11 @@ router.route('/:id').get((req, res) => {
     .then((fileName) => {
         getFile(fileId, fileName)
         .then( path => {
+            res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
             res.status(200).download(path, fileName, error => {
                 if(error){
-                    console.log(error)
+                    console.log(error);
+                    return
                 }
                 res.end();
             });

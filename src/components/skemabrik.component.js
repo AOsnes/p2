@@ -14,7 +14,6 @@ export default class Skemabrik extends Component {
             showSkemabrikModal: false,
             isLoaded: false,
             read: false,
-            file: null
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
@@ -26,22 +25,8 @@ export default class Skemabrik extends Component {
                 isLoaded: true,
             })
         }
-        if(this.props.skemabrik.fileId !== null){
-           /*  console.log(this.props.skemabrik.subject);
-            console.log(this.props.skemabrik.fileId); */
-            this.getFile(this.props.skemabrik.fileId);
-        }
     }
 
-    getFile(fileId){
-        fetch(`http://localhost:5000/download/${fileId}`,{
-            method:'GET',
-        })
-        .then(response => {
-            this.setState({file: response});
-            console.log(response);
-        });
-    }
 
     /* Called from the child component */
     disableModal(){
@@ -81,7 +66,7 @@ export default class Skemabrik extends Component {
         if(this.state.isLoaded){
             return([
                 <div key="modal">
-                    {this.state.showSkemabrikModal ? <SkemabrikModal type={this.props.type} disableModal={this.disableModal} skemabrikContext={this.props.skemabrik} file={this.state.file}/> : null}
+                    {this.state.showSkemabrikModal ? <SkemabrikModal type={this.props.type} disableModal={this.disableModal} skemabrikContext={this.props.skemabrik}/> : null}
                 </div>,
                 ReactDOM.createPortal(
                     <div key={"brik"} style={style} className={`skemabrik ${subject}`} onClick={this.onSkemaClick}>

@@ -16,8 +16,15 @@ export default class SkemabrikModal extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
         this.editLessonClick = this.editLessonClick.bind(this);
+        this.getFile = this.getFile.bind(this);
     }
 
+    componentDidMount(){
+        if(this.props.skemabrikContext.fileId !== null){
+            this.getFile(this.props.skemabrikContext.fileId);
+        }
+
+    }
     handleClick(event){
         event.preventDefault();
         this.props.disableModal();
@@ -58,6 +65,17 @@ export default class SkemabrikModal extends Component{
         }));
     }
 
+    getFile(fileId){
+        fetch(`http://localhost:5000/download/${fileId}`,{
+            method:'GET',
+        })
+        .then(response => {
+            let file = response.headers.get('content-disposition').split('"')[1];
+            this.setState({file: file});
+            console.log(file);
+        });
+    }
+
     render(){
         const user = this.context;
         const details = this.props.skemabrikContext.description;
@@ -80,7 +98,6 @@ export default class SkemabrikModal extends Component{
                           <div key="editLesson" className="editLessonButton">
                               <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
                           </div>,
-                          this.props.file !== null ? <a href={this.props.file} download>Klik her</a> : null
                         ]
                         : this.props.type === "assignments" 
                             ? <div>
@@ -92,6 +109,7 @@ export default class SkemabrikModal extends Component{
                             </div>
                         : null
                     }
+                    {this.state.file !== null ? <a href={this.state.file} download>Download file</a> : null}
                 </div>,
                 document.getElementById('root')
             )
