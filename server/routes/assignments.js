@@ -20,7 +20,10 @@ router.route('/:id/:date').get((req, res) =>{
     });
 });
 
-router.route('/').post( (req, res) =>{
+router.route('/turnIn').post((req, res) =>{
+    let assignmentId = req.body.assignmentId
+    let studentId = req.body.studentId
+    let fileId = req.body.fileId
 })
 
 module.exports = router;
