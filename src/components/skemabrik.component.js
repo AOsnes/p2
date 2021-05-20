@@ -37,8 +37,10 @@ export default class Skemabrik extends Component {
         fetch(`http://localhost:5000/download/${fileId}`,{
             method:'GET',
         })
-        .then(response => response.json())
-        .then(response => this.setState({file: response}));
+        .then(response => {
+            this.setState({file: response});
+            console.log(response);
+        });
     }
 
     /* Called from the child component */

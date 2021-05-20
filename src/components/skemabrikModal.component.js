@@ -80,7 +80,7 @@ export default class SkemabrikModal extends Component{
                           <div className="editLessonButton">
                               <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
                           </div>,
-                          this.props.file !== null ? <a href={this.props.file}>Download File</a> : null
+                          this.props.file !== null ? <a href={this.props.file} download>Klik her</a> : null
                         ]
                         : this.props.type === "assignments" 
                             ? <div>
