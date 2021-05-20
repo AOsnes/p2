@@ -282,8 +282,8 @@ exports.deleteAssignment = async function deleteAssignment(id){
 exports.turnInAssignment = async function turnInAssignment(assignmentId, studentId, fileId){
     return new Promise ((resolve, reject) => {
         try {
-            const doc = database.collection("assignments");
-            doc.insertOne({ "assigmentId": assignmentId, "studentId" : studentId, "fileId": fileId})
+            const doc = database.collection("turnedInAssignments");
+            doc.insertOne({ "assigmentId": ObjectId(assignmentId), "studentId" : ObjectId(studentId), "fileId": ObjectId(fileId), "timeStamp": new Date(), "feedbackFile": null})
             .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
         } catch(error) {
@@ -309,7 +309,7 @@ exports.getFile = async function getFile(fileID, filename){
         let path = `./tmp/${filename}`;
         bucket.openDownloadStream(fileID)
         .pipe(fs.createWriteStream(path))
-        .on('error', () => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
+        .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
         .on('finish', () => resolve(path));
     });
 }

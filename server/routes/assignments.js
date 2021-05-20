@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getUserinfo, getAssignments} = require('../server');
+const {getUserinfo, getAssignments, turnInAssignment} = require('../server');
 
 router.route('/:id/:date').get((req, res) =>{
     let id = req.params.id;
@@ -21,9 +21,17 @@ router.route('/:id/:date').get((req, res) =>{
 });
 
 router.route('/turnIn').post((req, res) =>{
-    let assignmentId = req.body.assignmentId
-    let studentId = req.body.studentId
-    let fileId = req.body.fileId
+    let assignmentId = req.body.assignmentId;
+    let studentId = req.body.studentId;
+    let fileId = req.body.fileId;
+    
+    turnInAssignment(assignmentId, studentId, fileId).then(result =>{
+        res.status(200).send(result.toString());
+        res.end();
+    }).catch(reason => {
+        res.status(400).send(reason.toString());
+        res.end();
+    })
 })
 
 module.exports = router;

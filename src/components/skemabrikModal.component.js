@@ -45,17 +45,16 @@ export default class SkemabrikModal extends Component{
             })
             .then(response => response.json())
             .then(response =>{
-                console.log(response[0].fileId)
-                formData.delete("fileCount");
-                formData.delete("file");
-                formData.append("studentId", this.context.id);
-                formData.append("assignmentId", this.props.skemabrikContext._id);
-                formData.append("fileId", response[0].fileId);
+                let requestBody = {
+                    assignmentId: this.props.skemabrikContext._id,
+                    studentId: this.context.id,
+                    fileId: response[0].fileId,
+                }
                 fetch("http://localhost:5000/assignments/turnIn",{
                     method:'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: formData,
-                }).then(this.handleClick())
+                    body: JSON.stringify(requestBody),
+                }).then(this.props.disableModal())
             })
         }
     }

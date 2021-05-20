@@ -30,7 +30,8 @@ export default class Skemabrik extends Component {
     /* Called from the child component */
     disableModal(){
         this.setState({
-            showSkemabrikModal: false
+            showSkemabrikModal: false,
+            read: true,
         }, () => {
             document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.remove('blur-filter')
         })
@@ -73,7 +74,7 @@ export default class Skemabrik extends Component {
                             <img src={`schedulePictograms/${subject}.png`} className="skemabrikIcon" alt={`${subject} Logo `}/>
                             {subject}
                         </p>
-                        {description ? <DescriptionAlert/> : null}
+                        {description && !this.state.read ? <DescriptionAlert/> : null}
                 </div>,
                 document.getElementById(`${this.props.weekday}`))]
             )
