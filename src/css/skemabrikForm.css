@@ -1,6 +1,7 @@
 /* TODO: Maybe change absolute position? 
 This just makes the form be in the middle for now */
 .skemabrikForm{
+    background: white;
     position: absolute;
     display: grid;
     top: 50%;

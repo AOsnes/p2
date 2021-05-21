@@ -176,7 +176,7 @@ export default class Skema extends Component{
                         {this.scheduleBorders("Onsdag", 1)}
                         {this.scheduleBorders("Torsdag", 1)}
                         {this.scheduleBorders("Fredag", 1)}
-                        {this.state.skema.map((skemabrik) => { 
+                        {this.state.skema.map((skemabrik) => {
                             return <Skemabrik key={skemabrik._id} skemabrik={skemabrik} weekday={getWeekday(new Date(this.props.type === 'schedule' ? skemabrik.startTime : skemabrik.dueDate).getDay())} type={this.props.type}/>
                         })}
                     </div>

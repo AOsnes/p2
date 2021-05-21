@@ -29,6 +29,7 @@ export default class Skemabrik extends Component {
         }
     }
 
+
     /* Called from the child component */
     disableModal(){
         this.setState({

@@ -95,8 +95,8 @@
 
 /* Blur schedule when modal is clicked */
 .blur-filter{
-    -webkit-filter: blur(2px);
-    filter: blur(2px);
+    -webkit-filter: blur(2px) !important; 
+    filter: blur(2px) !important;
 }
 
 .modalBackdrop {
