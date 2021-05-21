@@ -313,8 +313,7 @@ exports.getTurnedInAssignments = async function getTurnedInAssignments(userId, a
                             resolve(result)
                         })
                     })
-
-                } else{
+                } else {
                     doc.doc.findOne({"studentId": ObjectId(user._id)})
                     .then(result => resolve(result))
                     .catch(error => reject(error));

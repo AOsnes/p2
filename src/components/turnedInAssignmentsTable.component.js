@@ -7,6 +7,8 @@ export default class TurnedInAssignmentsTable extends Component{
     constructor(props){
         super(props);
         this.state = {didLoad: false, turnedInAssignments: {}}
+
+        this.handleClick = this.handleClick.bind(this);
     } 
 
     componentDidMount(){
@@ -15,11 +17,14 @@ export default class TurnedInAssignmentsTable extends Component{
         })
         .then(response => response.json())
         .then(response => {
-            console.log(response)
             this.setState({
                 turnedInAssignments: response,
                 didload: true,
-            },() => console.log(this.state))})
+            })})
+    }
+
+    handleClick(event){
+
     }
 
     render(){
@@ -38,6 +43,7 @@ export default class TurnedInAssignmentsTable extends Component{
                     {this.state.didload ? this.state.turnedInAssignments.map((assignment) => {
                         return <TurnedInAssignment key={assignment._id} assignment={assignment}/>
                     }): null}
+                <button onClick={this.handleClick}>Send svar</button>
                 </tbody>
             </table>
         );

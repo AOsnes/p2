@@ -36,7 +36,7 @@ router.route('/turnIn').post((req, res) =>{
 
 router.route('/turnedIn/:id/:assignmentId').get((req, res) =>{
     getTurnedInAssignments(req.params.id, req.params.assignmentId).then(result =>{
-        res.status(200).json(result).end()
+        res.status(200).json(result).end();
     })
 })
 

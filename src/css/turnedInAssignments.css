@@ -38,3 +38,7 @@
 .reactions .sad {
     color:red
 }
+
+.selected{
+    background-color: black;
+}
