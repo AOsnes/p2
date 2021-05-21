@@ -283,7 +283,7 @@ exports.turnInAssignment = async function turnInAssignment(assignmentId, student
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("turnedInAssignments");
-            doc.insertOne({ "assignmentId": ObjectId(assignmentId), "studentId" : ObjectId(studentId), "fileId": ObjectId(fileId), "timeStamp": new Date(), "feedbackFile": null, "reaction": null})
+            doc.insertOne({ "assignmentId": ObjectId(assignmentId), "studentId" : ObjectId(studentId), "fileId": ObjectId(fileId), "timeStamp": new Date(), "feedbackFileId": null, "reaction": null})
             .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
         } catch(error) {
@@ -319,6 +319,21 @@ exports.getTurnedInAssignments = async function getTurnedInAssignments(userId, a
                     .catch(error => reject(error));
                 }
             })
+        } catch(error) {
+            reject(error);
+        }
+    });
+}
+
+exports.updateTurnedInAssignment = async function updateTurnedInAssignment(id, changes){
+    return new Promise ((resolve, reject) => {
+        try {
+            const doc = database.collection("turnedInAssignments");
+            doc.updateOne({"_id": ObjectId.createFromHexString(id)}, {$set: changes})
+            .then(result => {
+                resolve(result.modifiedCount)
+            })
+            .catch(error => reject(error));
         } catch(error) {
             reject(error);
         }
@@ -378,6 +393,7 @@ const scheduleRouter = require('./routes/schedule');
 const assignmentsRouter = require('./routes/assignments');
 const uploadRouter = require('./routes/upload');
 const downloadRouter = require('./routes/download');
+const feedbackRouter = require('./routes/feedback');
 app.use('/classes', classesRouter);
 app.use('/login', loginRouter);
 app.use('/userinfo', userinfoRouter);
@@ -385,3 +401,4 @@ app.use('/schedule', scheduleRouter);
 app.use('/assignments', assignmentsRouter);
 app.use('/upload', uploadRouter);
 app.use('/download', downloadRouter);
+app.use('/feedback', feedbackRouter);

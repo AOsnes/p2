@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getUserinfo, getAssignments, turnInAssignment, getTurnedInAssignments} = require('../server');
+const {getUserinfo, getAssignments, turnInAssignment, getTurnedInAssignments, updateAssignment, deleteAssignment} = require('../server');
 
 router.route('/:id/:date').get((req, res) =>{
     let id = req.params.id;

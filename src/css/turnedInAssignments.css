@@ -25,8 +25,17 @@
 }
 
 .reactions{
+    margin-left: 20px;
+    margin-right: 20px;
     display: grid;
     grid-template-columns: auto auto auto;
+    user-select: none;
+    cursor: pointer;
+}
+.reactions p{
+    margin-left: 2px;
+    margin-right: 2px;
+
 }
 
 .reactions .happy {
@@ -41,4 +50,11 @@
 
 .selected{
     background-color: black;
+}
+
+.didGiveFeedback{
+    position:relative;
+    background-color: green;
+    height: 1em;
+    width: 1em;
 }
