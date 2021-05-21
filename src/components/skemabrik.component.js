@@ -13,7 +13,7 @@ export default class Skemabrik extends Component {
         this.state = {
             showSkemabrikModal: false,
             isLoaded: false,
-            read: false,
+            read: false
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
@@ -22,7 +22,7 @@ export default class Skemabrik extends Component {
     componentDidMount(){
         if(document.getElementsByClassName('gridContainerFiveDay') || document.getElementsByClassName('gridContainerOneDay')){
             this.setState({
-                isLoaded: true,
+                isLoaded: true
             })
         }
     }
@@ -40,7 +40,7 @@ export default class Skemabrik extends Component {
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
         this.setState(prevState => ({
-            showSkemabrikModal: !prevState.showSkemabrikModal,
+            showSkemabrikModal: !prevState.showSkemabrikModal
         }), () => {
             this.state.showSkemabrikModal ? document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
@@ -51,9 +51,9 @@ export default class Skemabrik extends Component {
         const endTime = new Date(this.props.skemabrik.endTime);
         const description = this.props.skemabrik.description;
         let startTime;
-        let offset = this.props.type === "assignments" ? 1 : 0
+        let offset = this.props.type === "assignments" ? 1 : 0;
         if(this.props.type === "schedule"){
-            startTime = new Date(this.props.skemabrik.startTime)
+            startTime = new Date(this.props.skemabrik.startTime);
         } else if(this.props.type === "assignments"){
             startTime =  new Date(this.props.skemabrik.dueDate);
         }
@@ -61,7 +61,7 @@ export default class Skemabrik extends Component {
         const style = {
             height: this.props.type === "schedule" ? calculateHeight(startTime, endTime) : "81.25px",
             position: 'absolute',
-            top: calculatePosition(startTime, offset),
+            top: calculatePosition(startTime, offset)
         }
         if(this.state.isLoaded){
             return([
