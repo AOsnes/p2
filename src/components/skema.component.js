@@ -37,7 +37,7 @@ export default class Skema extends Component{
 
     getSchedule(requestString){
         fetch(`http://localhost:5000/${requestString}`,{
-            method:'GET',
+            method:'GET'
         })
         .then(response => response.json())
         .then(response => {
@@ -55,7 +55,7 @@ export default class Skema extends Component{
         }        
         this.setState({
             date: addDays(this.state.date, change),
-            isLoaded: false,
+            isLoaded: false
         }, () =>{
             let requestString = `${this.props.type}/${this.state.id}/${this.state.date.toISOString()}`
             this.props.type === 'assignments' ? requestString += '': requestString += '/5';
@@ -66,7 +66,7 @@ export default class Skema extends Component{
     handleClick(){
         this.setState({
             date: this.state.view === 5 ? new Date() : this.state.date,
-            view: this.state.view === 5 ? 1 : 5,
+            view: this.state.view === 5 ? 1 : 5
         }, () =>{
             let requestString = `${this.props.type}/${this.state.id}/${this.state.date.toISOString()}`
             this.props.type === 'assignments' ? requestString += '': requestString += '/5';
@@ -142,7 +142,7 @@ export default class Skema extends Component{
         if(!this.state.isLoaded){
             return(
                 <div className="textCenter">
-                    <p>Der opstod en fejl ved indlæsning af dit skema</p>
+                    <p>Der opstod en fejl ved indlæsning af {this.props.type === 'schedule' ? 'dit skema' : 'dine afleveringer'}</p>
                 </div>
             );
         }
