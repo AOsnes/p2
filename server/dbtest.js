@@ -191,7 +191,7 @@ function fiveDayInterval(date){
 }
 
 
-async function createLesson(id, className, subject, start, end, description, recurrences, interval){
+function createLesson(id, className, subject, start, end, description, fileId, recurrences, interval){
     return new Promise ((resolve, reject) => {
         try {
             //await client.connect();
@@ -223,7 +223,7 @@ async function createLesson(id, className, subject, start, end, description, rec
     
             } else {
                 //result = await doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,});
-                doc.insertOne({"subject": subject, "class": className, "teacherID": id.toString(), "description": description, "startTime": start, "endTime": end,})
+                doc.insertOne({"subject": subject, "class": className, "teacherID": id, "description": description, "fileId": fileId, "startTime": start, "endTime": end,})
                 .then(result => console.log(result.insertedCount))
                 .catch(console.dir)
                 .finally(() => {resolve();});
@@ -385,10 +385,10 @@ async function addFeedback(turnedInID, fileID){
 
 //saveFile("Pog", "60608f0389177a0bb0679e79", "6094ff5ab402ab19a8417a1e").then(console.log("Pog")).catch(console.dir);
 //getFile().then(console.log("Pog"));
-let changes = {"description": "123123jesus", "startTime": new Date(2021, 4, 20, 12, 00, 00), "endTime": new Date(2021, 4, 20, 12, 45, 00)};
-updateLesson("60a4fc3dea0b2b0ecc2939f3", changes).then(console.log("Pog")).catch(console.dir);
+//let changes = {"description": "123123jesus", "startTime": new Date(2021, 4, 20, 12, 00, 00), "endTime": new Date(2021, 4, 20, 12, 45, 00)};
+//updateLesson("60a4fc3dea0b2b0ecc2939f3", changes).then(console.log("Pog")).catch(console.dir);
 //deleteLesson("6082ab7a6151ce1530d207bd").catch(console.dir);
-//login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "N/T", new Date(2021, 4, 5, 12, 45, 0), new Date(2021, 4, 5, 13, 30, 0), "I hate jews so much it's unreal. Love from Kazakhstan", 1, 7)).catch(console.dir);
+login("test", "test").then(result => createLesson(result._id, "sw2b2-20", "N/T", new Date(2021, 4, 21, 12, 45, 0), new Date(2021, 4, 21, 13, 30, 0), "Tæl hvor mange græsstrå der er i jeres have :)", null, 1, 7).then(console.log("pog"))).catch(console.dir);
 
 
 
