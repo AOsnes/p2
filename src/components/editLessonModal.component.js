@@ -16,8 +16,6 @@ export default class EditLessonModal extends Component{
             startTime: new Date(this.props.skemabrikContext.startTime),
             endTime: new Date(this.props.skemabrikContext.endTime),
             dueTime: new Date(this.props.skemabrikContext.dueDate),
-            originalDate: '',
-            date: '',
             didDelete: false
         }
         this.handleClick = this.handleClick.bind(this);
@@ -109,7 +107,7 @@ export default class EditLessonModal extends Component{
                     case "startTime": if(new Date(val).toString() !== originalStartTime) return val; break;
                     case "endTime": if(new Date(val).toString() !== originalEndTime) return val; break;
                     case "dueTime": if(new Date(val).toString() !== originalDueTime) return val; break;
-                    case "originalStartTime": case "originalEndTime": case "originalDueTime": case "didDelete": case "originalDate": case "date": case "dueDate": return undefined;
+                    case "originalStartTime": case "originalEndTime": case "originalDueTime": case "didDelete": case "dueDate": return undefined;
                     default: return val;
                 }
             })
@@ -128,13 +126,6 @@ export default class EditLessonModal extends Component{
             new Date(this.state.startTime).toString() !== new Date(this.state.originalStartTime).toString() ||
             new Date(this.state.endTime).toString() !== new Date(this.state.originalEndTime).toString() ||
             new Date(this.state.dueTime).toString() !== new Date(this.state.originalDueTime).toString())
-    }
-
-    componentDidMount(){
-        this.setState({
-            originalDate: formatDate(this.state.originalStartTime.getFullYear(), this.state.originalStartTime.getMonth() + 1, this.state.originalStartTime.getDate()),
-            date: formatDate(this.state.originalStartTime.getFullYear(), this.state.originalStartTime.getMonth() + 1, this.state.originalStartTime.getDate()),
-        })
     }
 
     render(){
