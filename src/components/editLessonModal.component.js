@@ -71,11 +71,11 @@ export default class EditLessonModal extends Component{
         } else if (this.props.type === 'schedule'){
             this.setState({
                 startTime: startTime,
-                endTime: endTime,
+                endTime: endTime
             });
         } else if (this.props.type === 'assignments'){
             this.setState({
-                dueTime: dueTime,
+                dueTime: dueTime
             });
         }
     }
@@ -91,7 +91,7 @@ export default class EditLessonModal extends Component{
                 method: 'DELETE',
             }).then(response =>{
                 this.setState({
-                    didDelete: true,
+                    didDelete: true
                 },() =>{
                     window.location.reload(false);
                 })
@@ -145,14 +145,14 @@ export default class EditLessonModal extends Component{
                             <input type="date" className="inputText" name={this.props.type === 'schedule' ? "date" : "dueDate"} data-testid="date" defaultValue={date} onChange={this.handleChange}></input>
                             {this.props.type === 'schedule' ?
                             [
-                            <p key="number1" className="inputText">Start</p>,
-                            <input key="number2" type="time" className="inputText" name="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
-                            <p key="number3" className="inputText">Slut</p>,
-                            <input key="number4" type="time" className="inputText" name="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
+                            <p key="startText" className="inputText">Start</p>,
+                            <input key="startInput" type="time" className="inputText" name="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
+                            <p key="endText" className="inputText">Slut</p>,
+                            <input key="EndInput" type="time" className="inputText" name="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
                             ] : 
                             [
-                            <p key="number5" className="inputText">Afleveres</p>,
-                            <input key="number6" type="time" className="inputText" name="dueTime" defaultValue={toHHMM(dueTime)} onChange={this.handleChange}></input> 
+                            <p key="dueText" className="inputText">Afleveres</p>,
+                            <input key="dueInput" type="time" className="inputText" name="dueTime" defaultValue={toHHMM(dueTime)} onChange={this.handleChange}></input> 
                             ]
                             }
                             <textarea className="twoColumnWide" name="classDescription" data-testid="classDescription" defaultValue={details} maxLength="512" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>
