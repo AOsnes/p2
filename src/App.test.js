@@ -108,7 +108,7 @@ describe('app renders correctly based on path', () => {
         let headerElement = screen.getByTestId("header");
         let sidebarElement = screen.getByTestId("sidebar");
         /* Skemaet render fejlmeddelelse, da der ikke kan oprettes forbindelse til server */
-        let assignmentsElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema");
+        let assignmentsElement = screen.getByText("Der opstod en fejl ved indlæsning af dine afleveringer");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
@@ -125,7 +125,7 @@ describe('app renders correctly based on path', () => {
         pageElement = screen.getByTestId("afleveringerPage");
         headerElement = screen.getByTestId("header");
         sidebarElement = screen.getByTestId("sidebar");
-        assignmentsElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema");
+        assignmentsElement = screen.getByText("Der opstod en fejl ved indlæsning af dine afleveringer");
         expect(pageElement).toBeInTheDocument();
         expect(pageElement).toContainElement(headerElement);
         expect(pageElement).toContainElement(sidebarElement);
