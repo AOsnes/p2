@@ -151,20 +151,20 @@ export default class EditLessonModal extends Component{
                     <form className="formContainer" onSubmit={this.handleSubmit}>
                         <fieldset className='skemabrikForm'>
                             <p className="inputText">Dato</p>
-                            <input type="date" className="inputText" name={this.props.type === 'schedule' ? "date" : "dueDate"} defaultValue={date} onChange={this.handleChange}></input>
+                            <input type="date" className="inputText" name={this.props.type === 'schedule' ? "date" : "dueDate"} data-testid="date" defaultValue={date} onChange={this.handleChange}></input>
                             {this.props.type === 'schedule' ?
                             [
                             <p className="inputText">Start</p>,
-                            <input type="time" className="inputText" name="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
+                            <input type="time" className="inputText" name="startTime" data-testid="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
                             <p className="inputText">Slut</p>,
-                            <input type="time" className="inputText" name="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
+                            <input type="time" className="inputText" name="endTime" data-testid="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
                             ] : 
                             [
                             <p className="inputText">Afleveres</p>,
                             <input type="time" className="inputText" name="dueTime" defaultValue={toHHMM(dueTime)} onChange={this.handleChange}></input> 
                             ]
                             }
-                            <textarea className="twoColumnWide" name="classDescription" defaultValue={details} maxLength="512" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>
+                            <textarea className="twoColumnWide" name="classDescription" data-testid="classDescription" defaultValue={details} maxLength="512" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>
                             <input disabled={this.validateAny() ? null : 'disabled'} className="twoColumnWide submitButton" type="submit" name="change" data-testid="submit" value="Gem"></input>
                             <input className="twoColumnWide deleteButton" type="submit" name="delete" value="SLET"></input>
                         </fieldset>

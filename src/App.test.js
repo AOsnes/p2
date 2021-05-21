@@ -12,6 +12,8 @@ import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import React from 'react';
+import EditLessonModal from './components/editLessonModal.component';
+import SkemabrikModal from './components/skemabrikModal.component';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup)
@@ -492,11 +494,71 @@ describe('Skemabrik tests', () =>{
     });
 })
 
+describe('editLessonModal renders correctly for teacher',() => {
+    const signedInTeacher = {id: "", role: "teacher", name: ""};
+    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: null}
+    beforeEach(() => {
+        render(
+            <UserContext.Provider value={signedInTeacher}>
+                <div key="root" id="root" data-testid="root"/>,
+                <div key="container" className="scheduleContainer"/>,
+                <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+                <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
+            </UserContext.Provider>
+        )
+    })
+    
+    test("editLessonModal opens when button is clicked", () => {
+        const rootElement = screen.getByTestId("root")
+        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+        fireEvent.click(skemabrikElement)
+        const modalElement = document.getElementsByClassName("detailsModal")[0];
+        const EditLessonButton = screen.getByText("Rediger lektion");
+        expect(modalElement).toContainElement(EditLessonButton);
+
+        fireEvent.click(EditLessonButton);
+        const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
+        const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        expect(rootElement).toContainElement(editLessonElement);
+        expect(editLessonElement).toContainElement(editLessonForm);
+        expect(editLessonForm).toHaveFormValues({
+            date: "",
+            startTime: "",
+            endTime: "",
+            classDescription: ""
+        });
+    });
+
+    test("Form values change correctly", () => {
+        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+        fireEvent.click(skemabrikElement)
+        const EditLessonButton = screen.getByText("Rediger lektion");
+        fireEvent.click(EditLessonButton);
+        const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        const dateElement = screen.getByTestId("date");
+        const startTimeElement = screen.getByTestId("startTime");
+        const endTimeElement = screen.getByTestId("endTime");
+        const classDescriptionElement = screen.getByTestId("classDescription");
+
+        fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
+        fireEvent.change(startTimeElement,             {target: {value: "12:00:00"}})
+        fireEvent.change(endTimeElement,               {target: {value: "13:00:00"}})
+        fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+
+        expect(editLessonForm).toHaveFormValues({
+            date: "2021-05-11",
+            startTime: "12:00:00",
+            endTime: "13:00:00",
+            classDescription: "Vi skal bare blast fucking meget kode! WICKED"
+        });
+    })
+});
+
 test('timeIndicator renders on the correct percentage on the schedule', () =>{
     jest.useFakeTimers()
     let testNr = 0;
     let testCases =
-    [/* Opacity before, Position before, Opacity after, Position after , Time before, Time after */
+    [/* Position before, Position after , Time before, Time after */
         [-0.21, 0.83 , new Date("2021-05-11T07:59:00"), new Date("2021-05-11T08:04:00")],
         [0    , 1.04 , new Date("2021-05-11T08:00:00"), new Date("2021-05-11T08:05:00")],
         [12.5 , 13.5 , new Date("2021-05-11T09:00:00"), new Date("2021-05-11T09:05:00")],
@@ -601,6 +663,7 @@ describe('skemabrikForm tests', () =>{
             subject: '',
             class: '',
             classDescription: '',
+            classFile: '',
         });
     })
     test('form has correct values when user changes values', () =>{
@@ -628,6 +691,7 @@ describe('skemabrikForm tests', () =>{
             subject: '',
             class: '',
             classDescription: 'Vi skal bare blast fucking meget kode! WICKED',
+            classFile: ''
         });
         subjectOptionElements.forEach(subjectElement => {
             classOptionElements.forEach(classElement =>{
