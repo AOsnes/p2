@@ -146,9 +146,9 @@ export default class EditLessonModal extends Component{
                             {this.props.type === 'schedule' ?
                             [
                             <p key="number1" className="inputText">Start</p>,
-                            <input key="number2" type="time" className="inputText" name="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
+                            <input key="number2" type="time" className="inputText" name="startTime" data-testid="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
                             <p key="number3" className="inputText">Slut</p>,
-                            <input key="number4" type="time" className="inputText" name="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
+                            <input key="number4" type="time" className="inputText" name="endTime" data-testid="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
                             ] : 
                             [
                             <p key="number5" className="inputText">Afleveres</p>,
