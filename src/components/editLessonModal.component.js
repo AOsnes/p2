@@ -16,8 +16,6 @@ export default class EditLessonModal extends Component{
             startTime: new Date(this.props.skemabrikContext.startTime),
             endTime: new Date(this.props.skemabrikContext.endTime),
             dueTime: new Date(this.props.skemabrikContext.dueDate),
-            originalDate: '',
-            date: '',
             didDelete: false
         }
         this.handleClick = this.handleClick.bind(this);
@@ -109,7 +107,7 @@ export default class EditLessonModal extends Component{
                     case "startTime": if(new Date(val).toString() !== originalStartTime) return val; break;
                     case "endTime": if(new Date(val).toString() !== originalEndTime) return val; break;
                     case "dueTime": if(new Date(val).toString() !== originalDueTime) return val; break;
-                    case "originalStartTime": case "originalEndTime": case "originalDueTime": case "didDelete": case "originalDate": case "date": case "dueDate": return undefined;
+                    case "originalStartTime": case "originalEndTime": case "originalDueTime": case "didDelete": case "dueDate": return undefined;
                     default: return val;
                 }
             })
@@ -130,13 +128,6 @@ export default class EditLessonModal extends Component{
             new Date(this.state.dueTime).toString() !== new Date(this.state.originalDueTime).toString())
     }
 
-    componentDidMount(){
-        this.setState({
-            originalDate: formatDate(this.state.originalStartTime.getFullYear(), this.state.originalStartTime.getMonth() + 1, this.state.originalStartTime.getDate()),
-            date: formatDate(this.state.originalStartTime.getFullYear(), this.state.originalStartTime.getMonth() + 1, this.state.originalStartTime.getDate()),
-        })
-    }
-
     render(){
         const details = this.props.skemabrikContext.description;
         const subject = this.props.skemabrikContext.subject;
@@ -154,14 +145,14 @@ export default class EditLessonModal extends Component{
                             <input type="date" className="inputText" name={this.props.type === 'schedule' ? "date" : "dueDate"} data-testid="date" defaultValue={date} onChange={this.handleChange}></input>
                             {this.props.type === 'schedule' ?
                             [
-                            <p className="inputText">Start</p>,
-                            <input type="time" className="inputText" name="startTime" data-testid="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
-                            <p className="inputText">Slut</p>,
-                            <input type="time" className="inputText" name="endTime" data-testid="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
+                            <p key="number1" className="inputText">Start</p>,
+                            <input key="number2" type="time" className="inputText" name="startTime" defaultValue={toHHMM(startTime)} onChange={this.handleChange}></input>,
+                            <p key="number3" className="inputText">Slut</p>,
+                            <input key="number4" type="time" className="inputText" name="endTime" defaultValue={toHHMM(endTime)} onChange={this.handleChange}></input>
                             ] : 
                             [
-                            <p className="inputText">Afleveres</p>,
-                            <input type="time" className="inputText" name="dueTime" defaultValue={toHHMM(dueTime)} onChange={this.handleChange}></input> 
+                            <p key="number5" className="inputText">Afleveres</p>,
+                            <input key="number6" type="time" className="inputText" name="dueTime" defaultValue={toHHMM(dueTime)} onChange={this.handleChange}></input> 
                             ]
                             }
                             <textarea className="twoColumnWide" name="classDescription" data-testid="classDescription" defaultValue={details} maxLength="512" placeholder="Beskrivelse af time" onChange={this.handleChange}></textarea>

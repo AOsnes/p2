@@ -309,7 +309,7 @@ exports.getFile = async function getFile(fileID, filename){
         let path = `./tmp/${filename}`;
         bucket.openDownloadStream(fileID)
         .pipe(fs.createWriteStream(path))
-        .on('error', () => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
+        .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
         .on('finish', () => resolve(path));
     });
 }
