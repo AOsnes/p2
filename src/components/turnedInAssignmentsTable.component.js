@@ -94,7 +94,13 @@ export default class TurnedInAssignmentsTable extends Component{
                 } ))
             })
         } else {
-            let requestBody = JSON.stringify(this.state.reactions)
+            let requestBody = JSON.stringify(this.state.reactions, (key, val) =>{
+                if(key === "index"){
+                    return undefined
+                } else {
+                    return val
+                }
+            })
             this.submitFeedback(requestBody)
         }
     }
@@ -113,12 +119,13 @@ export default class TurnedInAssignmentsTable extends Component{
     }
 
     submitFeedback(requestBody){
-        fetch("http://localhost:5000/feedback",{
+        console.log(requestBody)
+        /* fetch("http://localhost:5000/feedback",{
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: requestBody
         })
-        .then(response => console.log(response))
+        .then(response => console.log(response)) */
     }
 
     render(){
