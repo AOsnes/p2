@@ -29,7 +29,7 @@ export default class Skema extends Component{
             date: new Date(),
             viewText: weekday
         }, () =>{
-            let requestString = `${this.props.type}/${this.state.id}/${this.state.date.toISOString()}`
+            let requestString = `${this.props.type === 'assignments' ? 'assignments/getAll': 'schedule'}/${this.state.id}/${this.state.date.toISOString()}`
             this.props.type === 'assignments' ? requestString += '': requestString += '/5';
             this.getSchedule(requestString)
         })

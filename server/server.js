@@ -92,7 +92,7 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 }
 
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
- let fiveDayInterval = exports.fiveDayInterval = function (date){
+let fiveDayInterval = exports.fiveDayInterval = function (date){
     let start = new Date(date.getTime());
     start.setDate(start.getDate() - (start.getDay() - 1));
     start.setHours(0, 0, 0);
@@ -236,6 +236,19 @@ exports.getAssignments = async function getAssignments(user, date) {
     }
 }
 
+let getAssignmentInfo = exports.getAssignmentInfo = async function(assignmentId){
+    return new Promise((resolve, reject) =>{
+        try{
+            const doc = database.collection("assignments");
+            doc.findOne({"_id": assignmentId}, {projection: {subject: 1, description: 1}})
+            .then(result => resolve(result))
+            .catch(error => reject(error))
+        } catch(error) {
+            reject(error)
+        }
+    })
+}
+
 exports.createAssignment = async function createAssignment(teacherID, lessonID, subject, description, className, dueDate, optionalFile){
     return new Promise ((resolve, reject) => {
         try {
@@ -292,15 +305,16 @@ exports.turnInAssignment = async function turnInAssignment(assignmentId, student
     });
 }
 
+/* If userId is that of a teacher, assignmentId cannot be undefined */
 exports.getTurnedInAssignments = async function getTurnedInAssignments(userId, assignmentId){
     return new Promise ((resolve, reject) => {
         try {
             getUserinfo(userId).then(user =>{
                 const doc = database.collection("turnedInAssignments");
+                let promises = [];
                 if(user.role === "teacher"){
-                    let cursor = doc.find({"assignmentId": ObjectId(assignmentId)})
+                    let cursor = doc.find({"assignmentId": ObjectId(assignmentId)});
                     cursor.toArray().then(result =>{
-                        let promises = []
                         cursor.close();
                         result.forEach(result => {
                             promises.push(
@@ -314,9 +328,21 @@ exports.getTurnedInAssignments = async function getTurnedInAssignments(userId, a
                         })
                     })
                 } else {
-                    doc.doc.findOne({"studentId": ObjectId(user._id)})
-                    .then(result => resolve(result))
-                    .catch(error => reject(error));
+                    let cursor = doc.find({"studentId": ObjectId(userId)})
+                    cursor.toArray().then(result =>{
+                        cursor.close();
+                        result.forEach(result => {
+                            promises.push(
+                                getAssignmentInfo(result.assignmentId).then(assignment => {
+                                result.subject = assignment.subject;
+                                result.description = assignment.description;
+                                return result;
+                            }))
+                        });
+                        Promise.all(promises).then((result) =>{
+                            resolve(result)
+                        })
+                    })
                 }
             })
         } catch(error) {

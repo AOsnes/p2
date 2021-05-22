@@ -1,10 +1,9 @@
 const router = require('express').Router();
 const {getUserinfo, getAssignments, turnInAssignment, getTurnedInAssignments, updateAssignment, deleteAssignment} = require('../server');
 
-router.route('/:id/:date').get((req, res) =>{
+router.route('/getAll/:id/:date').get((req, res) =>{
     let id = req.params.id;
     let date = new Date(req.params.date);
-
     getUserinfo(id).then( user =>{
         getAssignments(user, date).then(assignments =>{
             res.status(200).json(assignments);
@@ -24,7 +23,7 @@ router.route('/turnIn').post((req, res) =>{
     let assignmentId = req.body.assignmentId;
     let studentId = req.body.studentId;
     let fileId = req.body.fileId;
-    
+
     turnInAssignment(assignmentId, studentId, fileId).then(result =>{
         res.status(200).send(result.toString());
         res.end();
@@ -34,8 +33,10 @@ router.route('/turnIn').post((req, res) =>{
     })
 })
 
-router.route('/turnedIn/:id/:assignmentId').get((req, res) =>{
-    getTurnedInAssignments(req.params.id, req.params.assignmentId).then(result =>{
+/* assignmentId can only be undefined if id is that of a student. DO NOT
+use this route on a teachers id without any assignmentId specified */
+router.route('/turnedIn/:id/:assignmentId?').get((req, res) =>{
+        getTurnedInAssignments(req.params.id, req.params.assignmentId).then(result =>{
         res.status(200).json(result).end();
     })
 })
