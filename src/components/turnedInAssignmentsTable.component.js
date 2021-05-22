@@ -119,13 +119,12 @@ export default class TurnedInAssignmentsTable extends Component{
     }
 
     submitFeedback(requestBody){
-        console.log(requestBody)
-        /* fetch("http://localhost:5000/feedback",{
+        fetch("http://localhost:5000/feedback",{
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: requestBody
         })
-        .then(response => console.log(response)) */
+        .then(response => console.log(response))
     }
 
     render(){
