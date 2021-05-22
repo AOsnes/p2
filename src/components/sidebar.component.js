@@ -41,6 +41,20 @@ export default class Sidebar extends Component {
                                         <Link className="sideButton" to="/redigerSkema"> <BiEdit className="sideIcon" />Opret Skemabrik</Link>
                                     </li>
                                 )
+                            } else {
+                                return (
+                                    <li key="redigerSkema" className="sideItem" data-testid="redigerSkema">
+                                        <Link className="sideButton" data-testid="sideButton" to="/feedback">
+                                        <svg width="44" height="54" viewBox="0 0 44 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="44" height="54" rx="10" fill="white"/>
+                                            <rect x="5" y="11" width="32" height="3" rx="4" fill="black"/>
+                                            <rect x="5" y="26" width="32" height="3" rx="4" fill="black"/>
+                                            <rect x="5" y="41" width="16" height="3" rx="4" fill="#0075FF"/>
+                                        </svg>
+                                            <p id="sideItemicon">Feedback</p>
+                                        </Link>
+                                    </li>
+                                )
                             }
                         }}
                     </UserContext.Consumer>
