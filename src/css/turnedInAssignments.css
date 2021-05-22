@@ -1,0 +1,60 @@
+.turnedInassignmentsTable{
+    display: grid;
+    grid-template-rows: 50% 50%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.tableHead{
+    border: 1px solid black;
+}
+
+.tableBody{
+    border: 1px solid black;
+    margin-top: 0.5em;
+}
+
+.textLeft{
+    text-align: left;
+}
+
+.textLight{
+    font-weight: normal;
+}
+
+.reactions{
+    margin-left: 20px;
+    margin-right: 20px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    user-select: none;
+    cursor: pointer;
+}
+.reactions p{
+    margin-left: 2px;
+    margin-right: 2px;
+
+}
+
+.reactions .happy {
+    color:green
+}
+.reactions .neutral {
+    color:yellow
+}
+.reactions .sad {
+    color:red
+}
+
+.selected{
+    background-color: black;
+}
+
+.didGiveFeedback{
+    position:relative;
+    background-color: green;
+    height: 1em;
+    width: 1em;
+}

@@ -14,6 +14,7 @@ import './css/skemabrikForm.css';
 import './css/toggleknap.css';
 import './css/timeIndicator.css';
 import './css/changeWeek.css';
+import './css/turnedInAssignments.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
@@ -22,6 +23,7 @@ import NoMatchError from "./components/noMatchError.component";
 import SkemabrikForm from "./components/skemabrikForm.component";
 import Skema from "./components/skema.component";
 import LogoutModal from "./components/logoutModal.component";
+import TurnedInAssignmentsTable from './components/turnedInAssignmentsTable.component';
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -37,7 +39,16 @@ class App extends React.Component{
                         <Route path="/afleveringer">
                             <Afleveringerpage/>
                         </Route>
-                        {signedInUser.role === 'teacher' ? <Route path="/redigerSkema"><RedigerSkema/></Route> : null}
+                        {signedInUser.role === 'teacher' ? 
+                            <Route path="/redigerSkema">
+                                <RedigerSkema/>
+                            </Route> 
+                        : null}
+                        {signedInUser.role === 'teacher' ?
+                            <Route path="/afleveret" render={(props) => 
+                                <TurnedInAssignmentsPage {...props}/>}>
+                            </Route>
+                        : null}
                         <Route exact path="/">
                             <Login/>
                         </Route>
@@ -89,6 +100,17 @@ function RedigerSkema(){
             <Header linkTo="/skema"/>
             <Sidebar/>
             <SkemabrikForm/>
+            <LogoutModal/>
+        </div>
+    )
+}
+
+function TurnedInAssignmentsPage(props){
+    return(
+        <div data-testid="afleveretPage">
+            <Header linkTo="/skema"/>
+            <Sidebar/>
+            <TurnedInAssignmentsTable assignment={props.location.state.assignment}/>
             <LogoutModal/>
         </div>
     )

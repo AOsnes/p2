@@ -36,13 +36,26 @@ export default class SkemabrikModal extends Component{
     handleSubmit(event) {
         event.preventDefault();
         let formData = new FormData();
-        formData.append("file", this.state.file)
-        formData.append("id", this.context.id)
-        formData.append("assignmentID", this.props.skemabrikContext._id)
+        formData.append("fileCount", 1);
+        formData.append("file", this.state.file);
+
         if(this.state.fileSelected){
             fetch("http://localhost:5000/upload",{
                 method: 'POST',
                 body: formData
+            })
+            .then(response => response.json())
+            .then(response =>{
+                let requestBody = {
+                    assignmentId: this.props.skemabrikContext._id,
+                    studentId: this.context.id,
+                    fileId: response[0].fileId,
+                }
+                fetch("http://localhost:5000/assignments/turnIn",{
+                    method:'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestBody),
+                }).then(this.props.disableModal())
             })
         }
     }
