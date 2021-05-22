@@ -12,8 +12,6 @@ import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import React from 'react';
-import EditLessonModal from './components/editLessonModal.component';
-import SkemabrikModal from './components/skemabrikModal.component';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup)
@@ -523,7 +521,9 @@ describe('editLessonModal renders correctly for teacher',() => {
         fireEvent.click(EditLessonButton);
         const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
         const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        const deleteLessonElement = screen.getByText("SLET");
         expect(rootElement).toContainElement(editLessonElement);
+        expect(editLessonElement).toContainElement(deleteLessonElement);
         expect(editLessonElement).toContainElement(editLessonForm);
         expect(editLessonForm).toHaveFormValues({
             date: "",
