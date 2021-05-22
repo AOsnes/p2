@@ -10,7 +10,7 @@ export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {fileSelected: false, showEditLessonModal: false}
+        this.state = {fileSelected: false, showEditLessonModal: false};
 
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -25,7 +25,7 @@ export default class SkemabrikModal extends Component{
     }
 
     handleChange(event){
-        let file = event.target.files[0]
+        let file = event.target.files[0];
         
         this.setState({
             fileSelected: true,
@@ -42,7 +42,7 @@ export default class SkemabrikModal extends Component{
         if(this.state.fileSelected){
             fetch("http://localhost:5000/upload",{
                 method: 'POST',
-                body: formData,
+                body: formData
             })
             .then(response => response.json())
             .then(response =>{
@@ -68,7 +68,7 @@ export default class SkemabrikModal extends Component{
     
     editLessonClick(){
         this.setState(({
-            showEditLessonModal: true,
+            showEditLessonModal: true
         }));
     }
 

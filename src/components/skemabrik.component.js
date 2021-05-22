@@ -24,7 +24,7 @@ export default class Skemabrik extends Component {
     componentDidMount(){
         if(document.getElementsByClassName('gridContainerFiveDay') || document.getElementsByClassName('gridContainerOneDay')){
             this.setState({
-                isLoaded: true,
+                isLoaded: true
             })
         }
     }
@@ -48,7 +48,7 @@ export default class Skemabrik extends Component {
             })
         }
         this.setState(prevState => ({
-            showSkemabrikModal: !prevState.showSkemabrikModal,
+            showSkemabrikModal: !prevState.showSkemabrikModal
         }), () => {
             this.state.showSkemabrikModal ? document.getElementsByClassName(this.props.type === "schedule" ? 'scheduleContainer' : 'assignmentsContainer')[0].classList.add('blur-filter') : document.getElementsByClassName('scheduleContainer')[0].classList.remove('blur-filter')
         });
@@ -72,9 +72,9 @@ export default class Skemabrik extends Component {
         }
 
         let startTime;
-        let offset = this.props.type === "assignments" ? 1 : 0
+        let offset = this.props.type === "assignments" ? 1 : 0;
         if(this.props.type === "schedule"){
-            startTime = new Date(this.props.skemabrik.startTime)
+            startTime = new Date(this.props.skemabrik.startTime);
         } else if(this.props.type === "assignments"){
             startTime =  new Date(this.props.skemabrik.dueDate);
         }
@@ -82,7 +82,7 @@ export default class Skemabrik extends Component {
         const style = {
             height: this.props.type === "schedule" ? calculateHeight(startTime, endTime) : "81.25px",
             position: 'absolute',
-            top: calculatePosition(startTime, offset),
+            top: calculatePosition(startTime, offset)
         }
         if(this.state.isLoaded){
             return([

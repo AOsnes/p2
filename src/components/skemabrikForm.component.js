@@ -33,7 +33,7 @@ export default class SkemabrikForm extends Component{
     }
 
     /* Makes sure that only needed information is sent via fetch. 
-    If we have not chosen an assignment, we will not send the those fields */
+    If we have not chosen an assignment, we will not send those fields */
     jsonfilter(key, val){
         if(this.state.assignmentToggle){
             switch (key){
@@ -76,6 +76,7 @@ export default class SkemabrikForm extends Component{
             let requestBody = JSON.stringify(this.state, this.jsonfilter);
             this.uploadClass(requestBody);
         }
+        this.setState({didSubmit: true});
         
     }
 
