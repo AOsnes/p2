@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getUserinfo, getAssignments, updateAssignment, deleteAssignment} = require('../server');
+const {getUserinfo, getAssignments, turnInAssignment, getTurnedInAssignments, updateAssignment, deleteAssignment} = require('../server');
 
 router.route('/:id/:date').get((req, res) =>{
     let id = req.params.id;
@@ -20,7 +20,24 @@ router.route('/:id/:date').get((req, res) =>{
     });
 });
 
-router.route('/').post( (req, res) =>{
+router.route('/turnIn').post((req, res) =>{
+    let assignmentId = req.body.assignmentId;
+    let studentId = req.body.studentId;
+    let fileId = req.body.fileId;
+    
+    turnInAssignment(assignmentId, studentId, fileId).then(result =>{
+        res.status(200).send(result.toString());
+        res.end();
+    }).catch(reason => {
+        res.status(400).send(reason.toString());
+        res.end();
+    })
+})
+
+router.route('/turnedIn/:id/:assignmentId').get((req, res) =>{
+    getTurnedInAssignments(req.params.id, req.params.assignmentId).then(result =>{
+        res.status(200).json(result).end();
+    })
 })
 
 router.route('/:id').delete((req, res) => {

@@ -67,14 +67,14 @@ export default class SkemabrikForm extends Component{
                 fileCount: fileCount
             })
             let formData = new FormData();
-            formData.append("fileCount", fileCount)
-            formData.append("classFile", this.state.classFile)
-            formData.append("assignmentFile", this.state.assignmentFile)
-            this.uploadClassWithFiles(formData, fileCount)
+            formData.append("fileCount", fileCount);
+            formData.append("classFile", this.state.classFile);
+            formData.append("assignmentFile", this.state.assignmentFile);
+            this.uploadClassWithFiles(formData);
         } else{
             /* We dont have any files, just upload the class & optional assignment */
-            let requestBody = JSON.stringify(this.state, this.jsonfilter)
-            this.uploadClass(requestBody)
+            let requestBody = JSON.stringify(this.state, this.jsonfilter);
+            this.uploadClass(requestBody);
         }
         this.setState({didSubmit: true});
         
