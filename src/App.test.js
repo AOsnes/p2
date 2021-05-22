@@ -414,7 +414,7 @@ test('skema component renders correctly', () => {
 
 /* Tests for skemabrik */
 describe('Skemabrik tests', () =>{
-    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: null}
+    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: "127372173"}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: '', fileId: null}
     beforeEach(() =>{
         render([
@@ -478,7 +478,9 @@ describe('Skemabrik tests', () =>{
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
             fireEvent.click(skemabrikElement)
             const modalElement = document.getElementsByClassName("detailsModal")[0];
+            const downloadElement = screen.getByText("Hent fil");
             expect(rootElement).toContainElement(modalElement);
+            expect(modalElement).toContainElement(downloadElement);
         })
         test('modal closes when X is clicked', () =>{
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
@@ -499,18 +501,20 @@ describe('editLessonModal renders correctly for teacher',() => {
     beforeEach(() => {
         render(
             <UserContext.Provider value={signedInTeacher}>
-                <div key="root" id="root" data-testid="root"/>,
-                <div key="container1" className="scheduleContainer"/>,
-                <div key="container2" className="assignmentsContainer"/>,
-                <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-                <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
-                <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
-                <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+                <MemoryRouter initialEntries={["/afleveringer"]}>
+                    <div key="root" id="root" data-testid="root"/>,
+                    <div key="container1" className="scheduleContainer"/>,
+                    <div key="container2" className="assignmentsContainer"/>,
+                    <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+                    <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+                    <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
+                    <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+                </MemoryRouter>
             </UserContext.Provider>
         )
     })
     
-    test("editLessonModal opens when button is clicked", () => {
+    test("editLessonModal opens correctly when button is clicked", () => {
         const rootElement = screen.getByTestId("root")
         const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
         fireEvent.click(skemabrikElement);
