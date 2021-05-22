@@ -12,8 +12,6 @@ import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import React from 'react';
-import EditLessonModal from './components/editLessonModal.component';
-import SkemabrikModal from './components/skemabrikModal.component';
 
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup)
@@ -416,7 +414,7 @@ test('skema component renders correctly', () => {
 
 /* Tests for skemabrik */
 describe('Skemabrik tests', () =>{
-    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: null}
+    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: "127372173"}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: '', fileId: null}
     beforeEach(() =>{
         render([
@@ -480,7 +478,9 @@ describe('Skemabrik tests', () =>{
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
             fireEvent.click(skemabrikElement)
             const modalElement = document.getElementsByClassName("detailsModal")[0];
+            const downloadElement = screen.getByText("Hent fil");
             expect(rootElement).toContainElement(modalElement);
+            expect(modalElement).toContainElement(downloadElement);
         })
         test('modal closes when X is clicked', () =>{
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
@@ -494,86 +494,102 @@ describe('Skemabrik tests', () =>{
     });
 })
 
-describe('editLessonModal renders correctly for teacher',() => {
+describe('teacher features operates correctly',() => {
     const signedInTeacher = {id: "", role: "teacher", name: ""};
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: null}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', dueDate: '', fileId: null}
     beforeEach(() => {
         render(
             <UserContext.Provider value={signedInTeacher}>
-                <div key="root" id="root" data-testid="root"/>,
-                <div key="container1" className="scheduleContainer"/>,
-                <div key="container2" className="assignmentsContainer"/>,
-                <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-                <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
-                <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
-                <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+                <MemoryRouter initialEntries={["/afleveringer"]}>
+                    <div key="root" id="root" data-testid="root"/>,
+                    <div key="container1" className="scheduleContainer"/>,
+                    <div key="container2" className="assignmentsContainer"/>,
+                    <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+                    <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+                    <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
+                    <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+                </MemoryRouter>
             </UserContext.Provider>
         )
     })
     
-    test("editLessonModal opens when button is clicked", () => {
-        const rootElement = screen.getByTestId("root")
-        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-        fireEvent.click(skemabrikElement);
+    describe('editLessonModal renders correctly for teacher',() => {
+        test("editLessonModal opens correctly when button is clicked", () => {
+            const rootElement = screen.getByTestId("root")
+            const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+            fireEvent.click(skemabrikElement);
+            const modalElement = document.getElementsByClassName("detailsModal")[0];
+            const EditLessonButton = screen.getByText("Rediger lektion");
+            expect(modalElement).toContainElement(EditLessonButton);
+
+            fireEvent.click(EditLessonButton);
+            const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
+            const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+            const deleteLessonElement = screen.getByText("SLET");
+            expect(rootElement).toContainElement(editLessonElement);
+            expect(editLessonElement).toContainElement(deleteLessonElement);
+            expect(editLessonElement).toContainElement(editLessonForm);
+            expect(editLessonForm).toHaveFormValues({
+                date: "",
+                startTime: "",
+                endTime: "",
+                classDescription: ""
+            });
+        });
+
+        test("Form values change correctly", () => {
+            let skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+            fireEvent.click(skemabrikElement)
+            let EditLessonButton = screen.getByText("Rediger lektion");
+            fireEvent.click(EditLessonButton);
+            let editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+            let dateElement = screen.getByTestId("dateschedule");
+            let startTimeElement = screen.getByTestId("startTime");
+            let endTimeElement = screen.getByTestId("endTime");
+            let classDescriptionElement = screen.getByTestId("classDescriptionschedule");
+
+            fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
+            fireEvent.change(startTimeElement,             {target: {value: "12:00:00"}})
+            fireEvent.change(endTimeElement,               {target: {value: "13:00:00"}})
+            fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+
+            expect(editLessonForm).toHaveFormValues({
+                date: "2021-05-11",
+                startTime: "12:00:00",
+                endTime: "13:00:00",
+                classDescription: "Vi skal bare blast fucking meget kode! WICKED"
+            });
+
+            skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
+            fireEvent.click(skemabrikElement)
+            EditLessonButton = screen.getByText("Rediger aflevering");
+            fireEvent.click(EditLessonButton);
+            editLessonForm = document.getElementsByClassName("skemabrikForm")[1];
+            dateElement = screen.getByTestId("dateassignments");
+            const dueTimeElement =  screen.getByTestId("dueTime")
+            classDescriptionElement = screen.getByTestId("classDescriptionassignments");
+
+            fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
+            fireEvent.change(dueTimeElement,               {target: {value: "12:00:00"}})
+            fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode!"}})
+
+            expect(editLessonForm).toHaveFormValues({
+                dueDate: "2021-05-11",
+                dueTime: "12:00:00",
+                classDescription: "Vi skal bare blast fucking meget kode!"
+            });
+        })
+    })
+
+    test("Redirects correctly to turnedInAssigments with button click", () => {
+        const skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
+        fireEvent.click(skemabrikElement)
         const modalElement = document.getElementsByClassName("detailsModal")[0];
-        const EditLessonButton = screen.getByText("Rediger lektion");
-        expect(modalElement).toContainElement(EditLessonButton);
-
-        fireEvent.click(EditLessonButton);
-        const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
-        const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
-        expect(rootElement).toContainElement(editLessonElement);
-        expect(editLessonElement).toContainElement(editLessonForm);
-        expect(editLessonForm).toHaveFormValues({
-            date: "",
-            startTime: "",
-            endTime: "",
-            classDescription: ""
-        });
-    });
-
-    test("Form values change correctly", () => {
-        let skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-        fireEvent.click(skemabrikElement)
-        let EditLessonButton = screen.getByText("Rediger lektion");
-        fireEvent.click(EditLessonButton);
-        let editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
-        let dateElement = screen.getByTestId("dateschedule");
-        let startTimeElement = screen.getByTestId("startTime");
-        let endTimeElement = screen.getByTestId("endTime");
-        let classDescriptionElement = screen.getByTestId("classDescriptionschedule");
-
-        fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
-        fireEvent.change(startTimeElement,             {target: {value: "12:00:00"}})
-        fireEvent.change(endTimeElement,               {target: {value: "13:00:00"}})
-        fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
-
-        expect(editLessonForm).toHaveFormValues({
-            date: "2021-05-11",
-            startTime: "12:00:00",
-            endTime: "13:00:00",
-            classDescription: "Vi skal bare blast fucking meget kode! WICKED"
-        });
-
-        skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
-        fireEvent.click(skemabrikElement)
-        EditLessonButton = screen.getByText("Rediger aflevering");
-        fireEvent.click(EditLessonButton);
-        editLessonForm = document.getElementsByClassName("skemabrikForm")[1];
-        dateElement = screen.getByTestId("dateassignments");
-        const dueTimeElement =  screen.getByTestId("dueTime")
-        classDescriptionElement = screen.getByTestId("classDescriptionassignments");
-
-        fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
-        fireEvent.change(dueTimeElement,               {target: {value: "12:00:00"}})
-        fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode!"}})
-
-        expect(editLessonForm).toHaveFormValues({
-            dueDate: "2021-05-11",
-            dueTime: "12:00:00",
-            classDescription: "Vi skal bare blast fucking meget kode!"
-        });
+        const feedbackButton = screen.getByText("Giv feedback");
+        expect(modalElement).toContainElement(feedbackButton);
+        fireEvent.click(feedbackButton);
+        /* Ahhhh redirect virker ikke */  
     })
 });
 
