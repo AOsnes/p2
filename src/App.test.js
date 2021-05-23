@@ -503,7 +503,7 @@ describe('teacher features operates correctly',() => {
     beforeEach(() => {
         render(
             <UserContext.Provider value={signedInTeacher}>
-                <MemoryRouter initialEntries={["/afleveringer"]>
+                <MemoryRouter initialEntries={["/afleveringer"]}>
                     <Switch>
                         <Route path="/afleveret">
                         <TurnedInAssignmentsTable assignment={{
@@ -527,7 +527,7 @@ describe('teacher features operates correctly',() => {
             </UserContext.Provider>
         )
     })
-    afterEach(cleanup);
+    afterEach(cleanup)
     test("editLessonModal opens correctly when button is clicked", () => {
         const rootElement = screen.getByTestId("root")
         const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
