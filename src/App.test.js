@@ -12,8 +12,6 @@ import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import React from 'react';
-import EditLessonModal from './components/editLessonModal.component';
-import SkemabrikModal from './components/skemabrikModal.component';
 import TurnedInAssignmentsTable from './components/turnedInAssignmentsTable.component';
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup)
@@ -416,19 +414,23 @@ test('skema component renders correctly', () => {
 
 /* Tests for skemabrik */
 describe('Skemabrik tests', () =>{
+    const signedInStudent = {id: "", role: "student", name: ""};
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: "127372173"}
-    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: '', fileId: null}
+    const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', dueTime: '', fileId: null}
     beforeEach(() =>{
         render([
-            <div key="root" id="root" data-testid="root"/>,
-            <div key="container" className="scheduleContainer"/>,
-            <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-            <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
-            <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
-            <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
-            <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
-            <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
-            <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="schedule"/>
+            <UserContext.Provider key="context" value={signedInStudent}>
+                <div key="root" id="root" data-testid="root"/>,
+                <div key="container1" className="scheduleContainer"/>,
+                <div key="container2" className="assignmentsContainer"/>,
+                <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+                <div key="Tirsdag" id="Tirsdag" data-testid="Tirsdag"/>,
+                <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+                <div key="Torsdag" id="Torsdag" data-testid="Torsdag"/>,
+                <div key="Fredag" id="Fredag" data-testid="Fredag"/>,
+                <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
+                <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+            </UserContext.Provider>
         ])
     })
     test('skemabrik component portals to  correct day', () => {    
@@ -492,6 +494,17 @@ describe('Skemabrik tests', () =>{
             fireEvent.click(modalXElement)
             expect(modalXElement).not.toBeInTheDocument()
             expect(skemabrikElement).toBeInTheDocument()
+        })
+        test('assignment modal allows for submit of assignment', () => {
+            const rootElement = screen.getByTestId("root")
+            const skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
+            fireEvent.click(skemabrikElement)
+            const modalElement = document.getElementsByClassName("detailsModal")[0];
+            const handInAssignmentElement = screen.getByTestId("handInAssignmentFile");
+            const submitElement = screen.getByText("Aflever");
+            expect(rootElement).toContainElement(modalElement);
+            expect(modalElement).toContainElement(handInAssignmentElement);
+            expect(modalElement).toContainElement(submitElement);
         })
     });
 })
