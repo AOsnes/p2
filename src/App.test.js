@@ -612,7 +612,7 @@ describe('teacher features operates correctly',() => {
         )})
         let skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
         fireEvent.click(skemabrikElement)
-        let seeAllHandedinButton = screen.getByText("Vis alle afleverede");
+        let seeAllHandedinButton = screen.getByText("Giv feedback");
         fireEvent.click(seeAllHandedinButton);
         let turnedInAssignmentsTable = screen.getByTestId("turnedInassignmentsTable")
         let tableBody = screen.getByTestId("tableBody");

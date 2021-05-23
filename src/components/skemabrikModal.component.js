@@ -126,7 +126,7 @@ export default class SkemabrikModal extends Component{
                               {this.props.type === 'schedule' ?
                                 <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
                               :[<input key="edit" type="button" name="editAssignmentButton" onClick={this.editLessonClick} value="Rediger aflevering"/>,
-                              <input key="redirect" type="button" name="showAssignmentButton" onClick={this.showAssignmentClick} value="Vis alle afleverede"/>]
+                              <input key="redirect" type="button" name="showAssignmentButton" onClick={this.showAssignmentClick} value="Giv feedback"/>]
                               }
                               
                           </div>]
@@ -140,13 +140,7 @@ export default class SkemabrikModal extends Component{
                             </div>
                         : null
                     }
-                    {user.role === "teacher" && this.props.type === "assignments" ? 
-                        <div key="feedback" className="editLessonButton">
-                            <input type="button" name="feedbackButton" onClick={this.handleFeedbackClick} value="Giv feedback"/>
-                        </div>
-                        : null
-                    }
-                    {fileId !== null? <DownloadFile fileId={fileId}/>: null}
+                    {fileId ? <DownloadFile fileId={fileId}/>: null}
                 </div>,
                 document.getElementById('root')
             )
