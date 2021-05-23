@@ -50,7 +50,6 @@ export default class Skemabrik extends Component {
         const subject = this.props.skemabrik.subject;
         const description = this.props.skemabrik.description;
         const endTime = new Date(this.props.skemabrik.endTime);
-
         let startTime;
         let offset = this.props.type === "assignments" ? 1 : 0;
         if(this.props.type === "schedule"){

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
 import isValidDate from '../utils/isValidDate';
@@ -19,6 +19,7 @@ export default class SkemabrikModal extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
         this.editLessonClick = this.editLessonClick.bind(this);
+        this.showAssignmentClick = this.showAssignmentClick.bind(this);
     }
 
     handleDisableClick(event){
@@ -82,6 +83,11 @@ export default class SkemabrikModal extends Component{
             showEditLessonModal: true
         }));
     }
+    showAssignmentClick(){
+        this.setState({
+            redirect: '/afleveret',
+        })
+    }
 
     render(){
         const user = this.context;
@@ -93,7 +99,6 @@ export default class SkemabrikModal extends Component{
         const startTime = new Date(this.props.skemabrikContext.startTime);
         const endTime = new Date(this.props.skemabrikContext.endTime);
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
-
         if(this.state.redirect){
             let assignment = {
                 id: id,
@@ -105,7 +110,7 @@ export default class SkemabrikModal extends Component{
                 state: {assignment: assignment}
             }}/>
         }
-
+        
         return([
             <div key="EditModal">
                 {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal} type={this.props.type}/> : null}
@@ -118,7 +123,12 @@ export default class SkemabrikModal extends Component{
                     {user.role === "teacher"
                         ? [<p key="klasse" className="skemabrikModalText textLeft">Klasse: {classes}</p>,
                           <div key="editLesson" className="editLessonButton">
-                              <input type="button" name="editLessonButton" onClick={this.editLessonClick} value={`${this.props.type === 'schedule' ? 'Rediger lektion' : 'Rediger aflevering'}`}/>
+                              {this.props.type === 'schedule' ?
+                                <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
+                              :[<input key="edit" type="button" name="editAssignmentButton" onClick={this.editLessonClick} value="Rediger aflevering"/>,
+                              <input key="redirect" type="button" name="showAssignmentButton" onClick={this.showAssignmentClick} value="Giv feedback"/>]
+                              }
+                              
                           </div>]
                         : this.props.type === "assignments" 
                             ? <div>
@@ -130,13 +140,7 @@ export default class SkemabrikModal extends Component{
                             </div>
                         : null
                     }
-                    {user.role === "teacher" && this.props.type === "assignments" ? 
-                        <div key="feedback" className="editLessonButton">
-                            <input type="button" name="feedbackButton" onClick={this.handleFeedbackClick} value="Giv feedback"/>
-                        </div>
-                        : null
-                    }
-                    {fileId !== null? <DownloadFile fileId={fileId}/>: null}
+                    {fileId ? <DownloadFile fileId={fileId}/>: null}
                 </div>,
                 document.getElementById('root')
             )

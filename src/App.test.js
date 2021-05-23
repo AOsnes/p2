@@ -1,6 +1,6 @@
 import {render, fireEvent, screen, cleanup} from '@testing-library/react';
-import {BrowserRouter as Router} from "react-router-dom";
-import {MemoryRouter} from 'react-router';
+import {MemoryRouter} from 'react-router'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import App from './App';
 import Skemabrik from './components/skemabrik.component';
 import Header from './components/header.component';
@@ -12,7 +12,9 @@ import TimeIndicator from './components/timeIndicator.component';
 import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import React from 'react';
-
+import EditLessonModal from './components/editLessonModal.component';
+import SkemabrikModal from './components/skemabrikModal.component';
+import TurnedInAssignmentsTable from './components/turnedInAssignmentsTable.component';
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup)
 
@@ -502,94 +504,122 @@ describe('teacher features operates correctly',() => {
         render(
             <UserContext.Provider value={signedInTeacher}>
                 <MemoryRouter initialEntries={["/afleveringer"]}>
-                    <div key="root" id="root" data-testid="root"/>,
-                    <div key="container1" className="scheduleContainer"/>,
-                    <div key="container2" className="assignmentsContainer"/>,
-                    <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
-                    <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
-                    <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
-                    <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+                    <Switch>
+                        <Route path="/afleveret">
+                        <TurnedInAssignmentsTable assignment={{
+                            subject: 'Matematik',
+                            class: '',
+                            description: '1 + 1 = ?',
+                            fileId: null,
+                        }}/>
+                        </Route>
+                        <Route path="*">
+                            <div key="root" id="root" data-testid="root"/>,
+                            <div key="container1" className="scheduleContainer"/>,
+                            <div key="container2" className="assignmentsContainer"/>,
+                            <div key="Mandag" id="Mandag" data-testid="Mandag"/>,
+                            <div key="Onsdag" id="Onsdag" data-testid="Onsdag"/>,
+                            <Skemabrik key="skemabrik1" skemabrik={skemabrikDansk} dayView={1} weekday="Mandag" type="schedule"/>,
+                            <Skemabrik key="skemabrik2" skemabrik={skemabrikMatematik} dayView={5} weekday="Onsdag" type="assignments"/>
+                        </Route>
+                    </Switch>
                 </MemoryRouter>
             </UserContext.Provider>
         )
     })
-    
-    describe('editLessonModal renders correctly for teacher',() => {
-        test("editLessonModal opens correctly when button is clicked", () => {
-            const rootElement = screen.getByTestId("root")
-            const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-            fireEvent.click(skemabrikElement);
-            const modalElement = document.getElementsByClassName("detailsModal")[0];
-            const EditLessonButton = screen.getByText("Rediger lektion");
-            expect(modalElement).toContainElement(EditLessonButton);
-
-            fireEvent.click(EditLessonButton);
-            const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
-            const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
-            const deleteLessonElement = screen.getByText("SLET");
-            expect(rootElement).toContainElement(editLessonElement);
-            expect(editLessonElement).toContainElement(deleteLessonElement);
-            expect(editLessonElement).toContainElement(editLessonForm);
-            expect(editLessonForm).toHaveFormValues({
-                date: "",
-                startTime: "",
-                endTime: "",
-                classDescription: ""
-            });
-        });
-
-        test("Form values change correctly", () => {
-            let skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
-            fireEvent.click(skemabrikElement)
-            let EditLessonButton = screen.getByText("Rediger lektion");
-            fireEvent.click(EditLessonButton);
-            let editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
-            let dateElement = screen.getByTestId("dateschedule");
-            let startTimeElement = screen.getByTestId("startTime");
-            let endTimeElement = screen.getByTestId("endTime");
-            let classDescriptionElement = screen.getByTestId("classDescriptionschedule");
-
-            fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
-            fireEvent.change(startTimeElement,             {target: {value: "12:00:00"}})
-            fireEvent.change(endTimeElement,               {target: {value: "13:00:00"}})
-            fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
-
-            expect(editLessonForm).toHaveFormValues({
-                date: "2021-05-11",
-                startTime: "12:00:00",
-                endTime: "13:00:00",
-                classDescription: "Vi skal bare blast fucking meget kode! WICKED"
-            });
-
-            skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
-            fireEvent.click(skemabrikElement)
-            EditLessonButton = screen.getByText("Rediger aflevering");
-            fireEvent.click(EditLessonButton);
-            editLessonForm = document.getElementsByClassName("skemabrikForm")[1];
-            dateElement = screen.getByTestId("dateassignments");
-            const dueTimeElement =  screen.getByTestId("dueTime")
-            classDescriptionElement = screen.getByTestId("classDescriptionassignments");
-
-            fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
-            fireEvent.change(dueTimeElement,               {target: {value: "12:00:00"}})
-            fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode!"}})
-
-            expect(editLessonForm).toHaveFormValues({
-                dueDate: "2021-05-11",
-                dueTime: "12:00:00",
-                classDescription: "Vi skal bare blast fucking meget kode!"
-            });
-        })
-    })
-
-    test("Redirects correctly to turnedInAssigments with button click", () => {
-        const skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
-        fireEvent.click(skemabrikElement)
+    afterEach(cleanup)
+    test("editLessonModal opens correctly when button is clicked", () => {
+        const rootElement = screen.getByTestId("root")
+        const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+        fireEvent.click(skemabrikElement);
         const modalElement = document.getElementsByClassName("detailsModal")[0];
-        const feedbackButton = screen.getByText("Giv feedback");
-        expect(modalElement).toContainElement(feedbackButton);
-        fireEvent.click(feedbackButton);
-        /* Ahhhh redirect virker ikke */  
+        const EditLessonButton = screen.getByText("Rediger lektion");
+        expect(modalElement).toContainElement(EditLessonButton);
+
+        fireEvent.click(EditLessonButton);
+        const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
+        const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        const deleteLessonElement = screen.getByText("SLET");
+        expect(rootElement).toContainElement(editLessonElement);
+        expect(editLessonElement).toContainElement(deleteLessonElement);
+        expect(editLessonElement).toContainElement(editLessonForm);
+        expect(editLessonForm).toHaveFormValues({
+            date: "",
+            startTime: "",
+            endTime: "",
+            classDescription: ""
+        });
+    });
+
+    test("Form values change correctly for lessons", () => {
+        let skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
+        fireEvent.click(skemabrikElement)
+        let EditLessonButton = screen.getByText("Rediger lektion");
+        fireEvent.click(EditLessonButton);
+        let editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        let dateElement = screen.getByTestId("dateschedule");
+        let startTimeElement = screen.getByTestId("startTime");
+        let endTimeElement = screen.getByTestId("endTime");
+        let classDescriptionElement = screen.getByTestId("classDescriptionschedule");
+
+        fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
+        fireEvent.change(startTimeElement,             {target: {value: "12:00:00"}})
+        fireEvent.change(endTimeElement,               {target: {value: "13:00:00"}})
+        fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode! WICKED"}})
+
+        expect(editLessonForm).toHaveFormValues({
+            date: "2021-05-11",
+            startTime: "12:00:00",
+            endTime: "13:00:00",
+            classDescription: "Vi skal bare blast fucking meget kode! WICKED"
+        });
+    })
+    test("Form values change correctly for assignments", () =>{
+        let skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
+        fireEvent.click(skemabrikElement)
+        let EditLessonButton = screen.getByText("Rediger aflevering");
+        fireEvent.click(EditLessonButton);
+        let editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        let dateElement = screen.getByTestId("dateassignments");
+        const dueTimeElement =  screen.getByTestId("dueTime")
+        let classDescriptionElement = screen.getByTestId("classDescriptionassignments");
+
+        fireEvent.change(dateElement,                  {target: {value: "2021-05-11"}})
+        fireEvent.change(dueTimeElement,               {target: {value: "12:00:00"}})
+        fireEvent.change(classDescriptionElement,      {target: {value: "Vi skal bare blast fucking meget kode!"}})
+
+        expect(editLessonForm).toHaveFormValues({
+            dueDate: "2021-05-11",
+            dueTime: "12:00:00",
+            classDescription: "Vi skal bare blast fucking meget kode!"
+        });
+    })
+    test('assignment redirects to its overview of all handed in assignments', () =>{
+        global.fetch = jest.fn(() => {
+            return( 
+            Promise.resolve({
+                json: () => Promise.resolve([{
+                    "_id":"60a94c6c6f69f32300a63ae2",
+                    "assignmentId":"60a94c576f69f32300a63adf",
+                    "studentId":"60608f0389177a0bb0679e79",
+                    "fileId":"60a94c6c6f69f32300a63ae0",
+                    "timeStamp":"2021-05-22T18:24:44.332Z",
+                    "feedbackFileId":"60a94c836f69f32300a63ae3",
+                    "reaction":3,
+                    "name":"Arthur"
+                }])
+            })
+        )})
+        let skemabrikElement = document.getElementsByClassName("skemabrik Matematik")[0];
+        fireEvent.click(skemabrikElement)
+        let seeAllHandedinButton = screen.getByText("Giv feedback");
+        fireEvent.click(seeAllHandedinButton);
+        let turnedInAssignmentsTable = screen.getByTestId("turnedInassignmentsTable")
+        let tableBody = screen.getByTestId("tableBody");
+        expect(turnedInAssignmentsTable).toBeInTheDocument();
+        /* let assignmentNameArthur = screen.getByText("Arthur")
+        expect(tableBody).not.toContainElement(assignmentNameArthur);
+        */
     })
 });
 

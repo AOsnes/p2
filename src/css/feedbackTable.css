@@ -1,0 +1,36 @@
+.tableTitle{
+    display: block;
+}
+
+.tableItem{
+    border: 1px solid black;
+}
+
+.reaction{
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.tableItem .happy {
+    background-color:green;
+}
+
+.tableItem .neutral {
+    background-color:yellow;
+}
+
+.tableItem .sad {
+    background-color:red;
+}
+
+.downloadFeedbackFile{
+    color:black;
+}
+
+.rowTitle{
+    font-size: 1.5em;
+}

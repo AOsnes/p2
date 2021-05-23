@@ -15,6 +15,7 @@ import './css/toggleknap.css';
 import './css/timeIndicator.css';
 import './css/changeWeek.css';
 import './css/turnedInAssignments.css';
+import './css/feedbackTable.css';
 
 import Header from "./components/header.component";
 import LoginForm from "./components/loginform.component";
@@ -24,6 +25,7 @@ import SkemabrikForm from "./components/skemabrikForm.component";
 import Skema from "./components/skema.component";
 import LogoutModal from "./components/logoutModal.component";
 import TurnedInAssignmentsTable from './components/turnedInAssignmentsTable.component';
+import FeedbackTable from './components/feedbackTable.component';
 
 class App extends React.Component{
     static contextType = UserContext;
@@ -37,7 +39,10 @@ class App extends React.Component{
                             <Skemapage/>
                         </Route>
                         <Route path="/afleveringer">
-                            <Afleveringerpage/>
+                            <AfleveringerPage/>
+                        </Route>
+                        <Route exact path="/feedback">
+                            <FeedbackTablePage/>
                         </Route>
                         {signedInUser.role === 'teacher' ? 
                             <Route path="/redigerSkema">
@@ -83,12 +88,23 @@ function Skemapage(){
     )
 }
 
-function Afleveringerpage(){
+function AfleveringerPage(){
     return(
         <div data-testid="afleveringerPage">
             <Header linkTo="/skema"/>
             <Sidebar/>
             <Skema type="assignments"/>
+            <LogoutModal/>
+        </div>
+    )
+}
+
+function FeedbackTablePage(){
+    return(
+        <div data-testid="afleveringerPage">
+            <Header linkTo="/skema"/>
+            <Sidebar/>
+            <FeedbackTable/>
             <LogoutModal/>
         </div>
     )

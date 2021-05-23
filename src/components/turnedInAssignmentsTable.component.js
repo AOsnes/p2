@@ -129,7 +129,7 @@ export default class TurnedInAssignmentsTable extends Component{
 
     render(){
         return( 
-            <table className="turnedInassignmentsTable">
+            <table className="turnedInassignmentsTable" data-testid="turnedInassignmentsTable">
                 <thead className="textLeft tableHead">
                     <tr>
                         <th className="textLight"><b>Fag: </b>{this.props.assignment.subject}</th>
@@ -138,7 +138,7 @@ export default class TurnedInAssignmentsTable extends Component{
                         <th className="textLight"><b>Beskrivelse: </b>{this.props.assignment.description}</th>
                     </tr>
                 </thead>
-                <tbody className="tableBody">
+                <tbody className="tableBody" data-testid="tableBody">
                     {this.state.didLoad ? this.state.turnedInAssignments.map((assignment, index) => {
                         return <TurnedInAssignment key={assignment._id} assignment={assignment} index={index} sendState={this.handleState}/>
                     }): null}

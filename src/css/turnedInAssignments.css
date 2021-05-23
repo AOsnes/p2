@@ -5,7 +5,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -133%);
 }
 .tableHead{
     border: 1px solid black;
@@ -41,9 +41,11 @@
 .reactions .happy {
     color:green
 }
+
 .reactions .neutral {
     color:yellow
 }
+
 .reactions .sad {
     color:red
 }
