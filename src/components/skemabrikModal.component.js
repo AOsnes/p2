@@ -13,7 +13,8 @@ export default class SkemabrikModal extends Component{
         super(props)
         this.state = {fileSelected: false, showEditLessonModal: false, redirect: false};
 
-        this.handleClick = this.handleClick.bind(this);
+        this.handleDisableClick = this.handleDisableClick.bind(this);
+        this.handleFeedbackClick = this.handleFeedbackClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
@@ -21,9 +22,18 @@ export default class SkemabrikModal extends Component{
         this.showAssignmentClick = this.showAssignmentClick.bind(this);
     }
 
-    handleClick(event){
+    handleDisableClick(event){
         event.preventDefault();
         this.props.disableModal();
+    }
+
+    handleFeedbackClick(event){
+        event.preventDefault();
+        if(this.props.type === "assignments" && this.context.role === "teacher"){
+            this.setState({
+                redirect: '/afleveret',
+            })
+        }
     }
 
     handleChange(event){
@@ -100,13 +110,14 @@ export default class SkemabrikModal extends Component{
                 state: {assignment: assignment}
             }}/>
         }
+        
         return([
             <div key="EditModal">
                 {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal} type={this.props.type}/> : null}
             </div>,
             ReactDOM.createPortal(
                 <div key="showModal" className={`detailsModal ${subject}`}>
-                    <div onClick={this.handleClick} data-testid="Xelement" className="close">&#10006;</div>
+                    <div onClick={this.handleDisableClick} data-testid="Xelement" className="close">&#10006;</div>
                     <div className="skemabrikModalText textCenter">{isValidDate(dueDate) ? toHHMM(dueDate) : `${toHHMM(startTime)} - ${toHHMM(endTime)}`}</div>
                     <div className="skemabrikModalText detailsText textLeft">{details}</div>
                     {user.role === "teacher"
@@ -127,6 +138,12 @@ export default class SkemabrikModal extends Component{
                                     <input name="submitButton" value="Aflever" type="submit"></input>
                                 </form>
                             </div>
+                        : null
+                    }
+                    {user.role === "teacher" && this.props.type === "assignments" ? 
+                        <div key="feedback" className="editLessonButton">
+                            <input type="button" name="feedbackButton" onClick={this.handleFeedbackClick} value="Giv feedback"/>
+                        </div>
                         : null
                     }
                     {fileId !== null? <DownloadFile fileId={fileId}/>: null}

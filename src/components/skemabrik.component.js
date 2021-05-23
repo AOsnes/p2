@@ -14,7 +14,6 @@ export default class Skemabrik extends Component {
             showSkemabrikModal: false,
             isLoaded: false,
             read: false,
-            redirect: false,
         };
         this.onSkemaClick = this.onSkemaClick.bind(this);
         this.disableModal = this.disableModal.bind(this);
@@ -27,7 +26,6 @@ export default class Skemabrik extends Component {
             })
         }
     }
-
 
     /* Called from the child component */
     disableModal(){

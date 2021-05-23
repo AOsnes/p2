@@ -416,7 +416,7 @@ test('skema component renders correctly', () => {
 
 /* Tests for skemabrik */
 describe('Skemabrik tests', () =>{
-    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: null}
+    const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: "127372173"}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', startTime: '', endTime: '', fileId: null}
     beforeEach(() =>{
         render([
@@ -480,7 +480,9 @@ describe('Skemabrik tests', () =>{
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
             fireEvent.click(skemabrikElement)
             const modalElement = document.getElementsByClassName("detailsModal")[0];
+            const downloadElement = screen.getByText("Hent fil");
             expect(rootElement).toContainElement(modalElement);
+            expect(modalElement).toContainElement(downloadElement);
         })
         test('modal closes when X is clicked', () =>{
             const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
@@ -494,14 +496,14 @@ describe('Skemabrik tests', () =>{
     });
 })
 
-describe('editLessonModal renders correctly for teacher',() => {
+describe('teacher features operates correctly',() => {
     const signedInTeacher = {id: "", role: "teacher", name: ""};
     const skemabrikDansk = {subject: 'Dansk', class: '', description: '', startTime: '', endTime: '', fileId: null}
     const skemabrikMatematik = {subject: 'Matematik', class: '', description: '1 + 1 = ?', dueDate: '', fileId: null}
     beforeEach(() => {
         render(
             <UserContext.Provider value={signedInTeacher}>
-                <MemoryRouter>
+                <MemoryRouter initialEntries={["/afleveringer"]>
                     <Switch>
                         <Route path="/afleveret">
                         <TurnedInAssignmentsTable assignment={{
@@ -525,9 +527,8 @@ describe('editLessonModal renders correctly for teacher',() => {
             </UserContext.Provider>
         )
     })
-    afterEach(cleanup)
-    
-    test("editLessonModal opens when button is clicked", () => {
+    afterEach(cleanup);
+    test("editLessonModal opens correctly when button is clicked", () => {
         const rootElement = screen.getByTestId("root")
         const skemabrikElement = document.getElementsByClassName("skemabrik Dansk")[0];
         fireEvent.click(skemabrikElement);
@@ -538,7 +539,9 @@ describe('editLessonModal renders correctly for teacher',() => {
         fireEvent.click(EditLessonButton);
         const  editLessonElement = document.getElementsByClassName("editLessonModal Dansk")[0];
         const editLessonForm = document.getElementsByClassName("skemabrikForm")[0];
+        const deleteLessonElement = screen.getByText("SLET");
         expect(rootElement).toContainElement(editLessonElement);
+        expect(editLessonElement).toContainElement(deleteLessonElement);
         expect(editLessonElement).toContainElement(editLessonForm);
         expect(editLessonForm).toHaveFormValues({
             date: "",
@@ -622,45 +625,46 @@ describe('editLessonModal renders correctly for teacher',() => {
 
 test('timeIndicator renders on the correct percentage on the schedule', () =>{
     jest.useFakeTimers()
-    let testNr = 0;
+    let edgeCase = [99.79, 100.8, new Date("2021-05-11T15:59:00"), new Date("2021-05-11T16:04:00")]
     let testCases =
     [/* Position before, Position after , Time before, Time after */
-        [-0.21, 0.83 , new Date("2021-05-11T07:59:00"), new Date("2021-05-11T08:04:00")],
         [0    , 1.04 , new Date("2021-05-11T08:00:00"), new Date("2021-05-11T08:05:00")],
         [12.5 , 13.5 , new Date("2021-05-11T09:00:00"), new Date("2021-05-11T09:05:00")],
         [50   , 51.0 , new Date("2021-05-11T12:00:00"), new Date("2021-05-11T12:05:00")],
-        [99.79, 100.8, new Date("2021-05-11T15:59:00"), new Date("2021-05-11T16:04:00")]
     ]
     testCases.forEach(testCase =>{
         global.Date = jest.fn()
         Date.now = jest.fn(() => testCase[4])
         jest.spyOn(global, 'Date').mockImplementation(() => testCase[2])
         render(<TimeIndicator/>)
-        let linkElement;
-        if(testNr!==0){
-            linkElement = screen.getByTestId("timeIndicator")
-            const linkElementTopBefore = parseFloat(linkElement.style._values.top);
-            expect(linkElementTopBefore).toBeCloseTo(testCase[0], 2)
-        }
+        const linkElement = screen.getByTestId("timeIndicator")
+        const linkElementTopBefore = parseFloat(linkElement.style._values.top);
+        expect(linkElementTopBefore).toBeCloseTo(testCase[0], 2)
         
         /* Time is now advanced 5 minutes */
         jest.spyOn(global, 'Date').mockImplementation(() => testCase[3])
         jest.advanceTimersByTime(1000*60*5)
-        if(testNr === 0){
-            linkElement = screen.getByTestId("timeIndicator");
-        }
-        if(testNr !== 4){
-            const linkElementTopAfter = parseFloat(linkElement.style._values.top);
-            expect(linkElementTopAfter).toBeCloseTo(testCase[1], 1)
-        }
-        else{
-            expect(linkElement).not.toBeInTheDocument();
-        }
-        testNr++;
+        const linkElementTopAfter = parseFloat(linkElement.style._values.top);
+        expect(linkElementTopAfter).toBeCloseTo(testCase[1], 1)
         cleanup();
     })
-    /* A total of 6 calls to clear interval will be made, please count :) */
-    expect(clearInterval).toHaveBeenCalledTimes(6)
+
+    /* Test that timeIndicator does not render when outside 8-16 */
+    global.Date = jest.fn()
+    Date.now = jest.fn(() => edgeCase[4])
+    jest.spyOn(global, 'Date').mockImplementation(() => edgeCase[2])
+    render(<TimeIndicator/>)
+    const linkElement = screen.getByTestId("timeIndicator")
+    const linkElementTopBefore = parseFloat(linkElement.style._values.top);
+    expect(linkElementTopBefore).toBeCloseTo(edgeCase[0], 2)
+    
+    /* Time is now advanced 5 minutes */
+    jest.spyOn(global, 'Date').mockImplementation(() => edgeCase[3])
+    jest.advanceTimersByTime(1000*60*5)
+    expect(linkElement).not.toBeInTheDocument();
+
+    /* A total of 4 calls to clear interval will be made, please count :) */
+    expect(clearInterval).toHaveBeenCalledTimes(4)
     jest.useRealTimers();
     global.Date.mockClear()
     Date.now.mockClear()
