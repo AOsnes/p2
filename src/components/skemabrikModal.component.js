@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
+import { Redirect } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import toHHMM from '../utils/toHHMM';
 import isValidDate from '../utils/isValidDate';
@@ -10,13 +11,14 @@ export default class SkemabrikModal extends Component{
     static contextType = UserContext;
     constructor(props){
         super(props)
-        this.state = {fileSelected: false, showEditLessonModal: false};
+        this.state = {fileSelected: false, showEditLessonModal: false, redirect: false};
 
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.disableEditLessonModal = this.disableEditLessonModal.bind(this);
         this.editLessonClick = this.editLessonClick.bind(this);
+        this.showAssignmentClick = this.showAssignmentClick.bind(this);
     }
 
     handleClick(event){
@@ -71,9 +73,15 @@ export default class SkemabrikModal extends Component{
             showEditLessonModal: true
         }));
     }
+    showAssignmentClick(){
+        this.setState({
+            redirect: '/afleveret',
+        })
+    }
 
     render(){
         const user = this.context;
+        const id = this.props.skemabrikContext._id;
         const details = this.props.skemabrikContext.description;
         const classes = this.props.skemabrikContext.class;
         const subject = this.props.skemabrikContext.subject;
@@ -81,6 +89,17 @@ export default class SkemabrikModal extends Component{
         const startTime = new Date(this.props.skemabrikContext.startTime);
         const endTime = new Date(this.props.skemabrikContext.endTime);
         const dueDate = new Date(this.props.skemabrikContext.dueDate);
+        if(this.state.redirect){
+            let assignment = {
+                id: id,
+                description: details,
+                subject: subject,
+            }
+            return <Redirect push to={{
+                pathname: this.state.redirect,
+                state: {assignment: assignment}
+            }}/>
+        }
         return([
             <div key="EditModal">
                 {this.state.showEditLessonModal ? <EditLessonModal skemabrikContext={this.props.skemabrikContext} disableEditLessonModal={this.disableEditLessonModal} type={this.props.type}/> : null}
@@ -93,7 +112,12 @@ export default class SkemabrikModal extends Component{
                     {user.role === "teacher"
                         ? [<p key="klasse" className="skemabrikModalText textLeft">Klasse: {classes}</p>,
                           <div key="editLesson" className="editLessonButton">
-                              <input type="button" name="editLessonButton" onClick={this.editLessonClick} value={`${this.props.type === 'schedule' ? 'Rediger lektion' : 'Rediger aflevering'}`}/>
+                              {this.props.type === 'schedule' ?
+                                <input type="button" name="editLessonButton" onClick={this.editLessonClick} value="Rediger lektion"/>
+                              :[<input key="edit" type="button" name="editAssignmentButton" onClick={this.editLessonClick} value="Rediger aflevering"/>,
+                              <input key="redirect" type="button" name="showAssignmentButton" onClick={this.showAssignmentClick} value="Vis alle afleverede"/>]
+                              }
+                              
                           </div>]
                         : this.props.type === "assignments" 
                             ? <div>

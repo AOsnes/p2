@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Redirect } from 'react-router';
 import { UserContext } from '../UserContext';
 import SkemabrikModal from './skemabrikModal.component';
 import DescriptionAlert from './descriptionAlert.component';
@@ -42,11 +41,6 @@ export default class Skemabrik extends Component {
 
     /* Whenever the skemabrik is pressed, reverse the state */
     onSkemaClick(e){
-        if(this.props.type === "assignments" && this.context.role === "teacher"){
-            this.setState({
-                redirect: '/afleveret',
-            })
-        }
         this.setState(prevState => ({
             showSkemabrikModal: !prevState.showSkemabrikModal
         }), () => {
@@ -55,22 +49,9 @@ export default class Skemabrik extends Component {
     }
 
     render(){
-        const id = this.props.skemabrik._id;
         const subject = this.props.skemabrik.subject;
         const description = this.props.skemabrik.description;
         const endTime = new Date(this.props.skemabrik.endTime);
-        if(this.state.redirect){
-            let assignment = {
-                id: id,
-                description: description,
-                subject: subject,
-            }
-            return <Redirect push to={{
-                pathname: this.state.redirect,
-                state: {assignment: assignment}
-            }}/>
-        }
-
         let startTime;
         let offset = this.props.type === "assignments" ? 1 : 0;
         if(this.props.type === "schedule"){
