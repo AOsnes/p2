@@ -595,45 +595,46 @@ describe('teacher features operates correctly',() => {
 
 test('timeIndicator renders on the correct percentage on the schedule', () =>{
     jest.useFakeTimers()
-    let testNr = 0;
+    let edgeCase = [99.79, 100.8, new Date("2021-05-11T15:59:00"), new Date("2021-05-11T16:04:00")]
     let testCases =
     [/* Position before, Position after , Time before, Time after */
-        [-0.21, 0.83 , new Date("2021-05-11T07:59:00"), new Date("2021-05-11T08:04:00")],
         [0    , 1.04 , new Date("2021-05-11T08:00:00"), new Date("2021-05-11T08:05:00")],
         [12.5 , 13.5 , new Date("2021-05-11T09:00:00"), new Date("2021-05-11T09:05:00")],
         [50   , 51.0 , new Date("2021-05-11T12:00:00"), new Date("2021-05-11T12:05:00")],
-        [99.79, 100.8, new Date("2021-05-11T15:59:00"), new Date("2021-05-11T16:04:00")]
     ]
     testCases.forEach(testCase =>{
         global.Date = jest.fn()
         Date.now = jest.fn(() => testCase[4])
         jest.spyOn(global, 'Date').mockImplementation(() => testCase[2])
         render(<TimeIndicator/>)
-        let linkElement;
-        if(testNr!==0){
-            linkElement = screen.getByTestId("timeIndicator")
-            const linkElementTopBefore = parseFloat(linkElement.style._values.top);
-            expect(linkElementTopBefore).toBeCloseTo(testCase[0], 2)
-        }
+        const linkElement = screen.getByTestId("timeIndicator")
+        const linkElementTopBefore = parseFloat(linkElement.style._values.top);
+        expect(linkElementTopBefore).toBeCloseTo(testCase[0], 2)
         
         /* Time is now advanced 5 minutes */
         jest.spyOn(global, 'Date').mockImplementation(() => testCase[3])
         jest.advanceTimersByTime(1000*60*5)
-        if(testNr === 0){
-            linkElement = screen.getByTestId("timeIndicator");
-        }
-        if(testNr !== 4){
-            const linkElementTopAfter = parseFloat(linkElement.style._values.top);
-            expect(linkElementTopAfter).toBeCloseTo(testCase[1], 1)
-        }
-        else{
-            expect(linkElement).not.toBeInTheDocument();
-        }
-        testNr++;
+        const linkElementTopAfter = parseFloat(linkElement.style._values.top);
+        expect(linkElementTopAfter).toBeCloseTo(testCase[1], 1)
         cleanup();
     })
-    /* A total of 6 calls to clear interval will be made, please count :) */
-    expect(clearInterval).toHaveBeenCalledTimes(6)
+
+    /* Test that timeIndicator does not render when outside 8-16 */
+    global.Date = jest.fn()
+    Date.now = jest.fn(() => edgeCase[4])
+    jest.spyOn(global, 'Date').mockImplementation(() => edgeCase[2])
+    render(<TimeIndicator/>)
+    const linkElement = screen.getByTestId("timeIndicator")
+    const linkElementTopBefore = parseFloat(linkElement.style._values.top);
+    expect(linkElementTopBefore).toBeCloseTo(edgeCase[0], 2)
+    
+    /* Time is now advanced 5 minutes */
+    jest.spyOn(global, 'Date').mockImplementation(() => edgeCase[3])
+    jest.advanceTimersByTime(1000*60*5)
+    expect(linkElement).not.toBeInTheDocument();
+
+    /* A total of 4 calls to clear interval will be made, please count :) */
+    expect(clearInterval).toHaveBeenCalledTimes(4)
     jest.useRealTimers();
     global.Date.mockClear()
     Date.now.mockClear()
