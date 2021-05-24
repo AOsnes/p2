@@ -139,7 +139,7 @@ export default class TurnedInAssignmentsTable extends Component{
                     </tr>
                 </thead>
                 <tbody className="tableBody" data-testid="tableBody">
-                    {this.state.didLoad ? this.state.turnedInAssignments.map((assignment, index) => {
+                    {this.state.didLoad > 0 ? this.state.turnedInAssignments.map((assignment, index) => {
                         return <TurnedInAssignment key={assignment._id} assignment={assignment} index={index} sendState={this.handleState}/>
                     }): null}
                     <tr>
