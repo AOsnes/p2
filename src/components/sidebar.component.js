@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { BiEdit } from 'react-icons/bi';
 import { UserContext } from '../UserContext';
 import { Redirect } from 'react-router';
 import { updateIdValue, updateNameValue, updateRoleValue } from '../UserContext';
