@@ -31,9 +31,6 @@ router.route('/').post( (req, res) =>  {
             })
         })
     })
-    req.busboy.on('finish', () => {
-        
-    })
 });
 
 module.exports = router;

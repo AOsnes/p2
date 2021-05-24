@@ -15,7 +15,7 @@ export default class TurnedInAssignmentsTable extends Component{
     } 
 
     componentDidMount(){
-        fetch(`http://localhost:5000/assignments/turnedIn/${this.context.id}/${this.props.assignment.id}`,{
+        fetch(`http://localhost:5000/assignments/${this.context.id}/${this.props.assignment.id}/turnedIn`,{
             method: 'GET'
         })
         .then(response => response.json())

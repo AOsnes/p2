@@ -63,7 +63,7 @@ export default class SkemabrikModal extends Component{
                     studentId: this.context.id,
                     fileId: response[0].fileId,
                 }
-                fetch("http://localhost:5000/assignments/turnIn",{
+                fetch("http://localhost:5000/assignments",{
                     method:'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(requestBody),
