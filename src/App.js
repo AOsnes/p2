@@ -41,9 +41,11 @@ class App extends React.Component{
                         <Route path="/afleveringer">
                             <AfleveringerPage/>
                         </Route>
-                        <Route exact path="/feedback">
-                            <FeedbackTablePage/>
-                        </Route>
+                        {signedInUser.role === 'student' ? 
+                            <Route exact path="/feedback">
+                                <FeedbackTablePage/>
+                            </Route>
+                        : null}
                         {signedInUser.role === 'teacher' ? 
                             <Route path="/redigerSkema">
                                 <RedigerSkema/>
