@@ -13,6 +13,7 @@ import SkemabrikForm from './components/skemabrikForm.component';
 import {UserContext, updateIdValue, updateRoleValue, updateNameValue} from './UserContext';
 import React from 'react';
 import TurnedInAssignmentsTable from './components/turnedInAssignmentsTable.component';
+import FeedbackTable from './components/feedbackTable.component';
 /* Make sure that everything that has been rendered is teared down so a new render is ready after the test case */
 afterEach(cleanup)
 
@@ -164,6 +165,24 @@ describe('app renders correctly based on path', () => {
         expect(noMatchPageElement).toContainElement(sidebarElement);
         expect(noMatchPageElement).not.toContainElement(redigerSkemaFormElement);
         expect(noMatchPageElement).toContainElement(noMatchElement);
+    });
+
+    test('app renders FeedbackTablePage() correctly', () => {
+        render(
+            <UserContext.Provider value={signedInStudent}>
+                <MemoryRouter initialEntries={['/feedback']}>
+                    <App />
+                </MemoryRouter>
+            </UserContext.Provider>
+        );
+        const feedbackPageElement = screen.getByTestId("afleveringerPage");
+        const feedbackTableElement = screen.getByTestId("turnedInTable");
+        const headerElement = screen.getByTestId("header");
+        const sidebarElement = screen.getByTestId("sidebar");
+        expect(feedbackPageElement).toBeInTheDocument();
+        expect(feedbackPageElement).toContainElement(feedbackTableElement);
+        expect(feedbackPageElement).toContainElement(headerElement);
+        expect(feedbackPageElement).toContainElement(sidebarElement);
     });
 
     test('app renders noMatch() correctly', () => { 
@@ -850,4 +869,27 @@ describe('skemabrikForm tests', () =>{
         expect(submitElement).not.toHaveAttribute("disabled");
         fireEvent.click(submitElement)
     })
+})
+
+test('student can access feedback table', () => {
+    let signedInStudent = {id: "12381283821", role: "student", name: ""};
+    const assignment = {subject: 'Matematik', class: '', description: '1 + 1 = ?', dueDate: '', fileId: null, reaction: 1, feedbackFileId: "12381812"}
+
+    global.fetch = jest.fn(() => {
+        return( 
+        Promise.resolve({
+            json: () => Promise.resolve([assignment])
+        })
+    )})
+    render(
+        <UserContext.Provider value={signedInStudent}>
+            <FeedbackTable/>
+        </UserContext.Provider>
+    )
+    const tableElement = document.getElementsByClassName('turnedInassignmentsTable')[0];
+    const headerElement = document.getElementsByClassName('tableHead')[0];
+    const bodyElement = screen.getByText('Loading')
+    expect(tableElement).toBeInTheDocument();
+    expect(tableElement).toContainElement(headerElement);
+    expect(tableElement).toContainElement(bodyElement);
 })

@@ -30,7 +30,7 @@ export default class FeedbackTable extends Component {
 
     render(){
         return(
-            <table className="turnedInassignmentsTable">
+            <table data-testid="turnedInTable" className="turnedInassignmentsTable">
                 <thead>
                     <tr className="tableTitle"><th className="tableTitle"><h1 className="tableTitle">Afleverede afleveringer</h1></th></tr>
                 </thead>
