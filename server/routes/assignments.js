@@ -36,7 +36,11 @@ router.route('/').post((req, res) =>{
 /* assignmentId can only be undefined if id is that of a student. DO NOT
 use this route on a teachers id without any assignmentId specified */
 router.route('/:id/:assignmentId?/turnedIn').get((req, res) =>{
-        getTurnedInAssignments(req.params.id, req.params.assignmentId).then(result =>{
+    let assignmentId = req.params.assignmentId
+    if(assignmentId === "0"){
+        assignmentId = undefined
+    }    
+    getTurnedInAssignments(req.params.id, assignmentId).then(result =>{
         res.status(200).json(result).end();
     })
 })
