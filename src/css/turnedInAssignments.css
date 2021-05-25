@@ -1,11 +1,13 @@
 .turnedInassignmentsTable{
     display: grid;
-    grid-template-rows: 50% 50%;
+    grid-template-rows: auto auto;
+    top: 300px;
     margin: 0;
+    padding: 0;
     position: absolute;
-    top: 50%;
+    width: 50%;
     left: 50%;
-    transform: translate(-50%, -133%);
+    transform: translate(-50%, -50%);
 }
 .tableHead{
     border: 1px solid black;
