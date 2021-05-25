@@ -40,7 +40,7 @@ export default class FeedbackTable extends Component {
                         <th className="tableItem rowTitle">Feedback</th>
                         <th className="tableItem rowTitle">Fil</th>
                     </tr>   
-                    {this.state.didLoad && this.state.turnedInAssignments.length > 0 ? this.state.turnedInAssignments.map((assignment) => {
+                    {this.state.didLoad ? this.state.turnedInAssignments.map((assignment) => {
                         return(
                             <tr key={assignment._id}>
                                 <th className="tableItem">{assignment.subject}:{assignment.description}</th>
