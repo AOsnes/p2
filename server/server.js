@@ -97,9 +97,9 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
  let fiveDayInterval = exports.fiveDayInterval = function (date){
     let start = new Date(date); //Makes a copy of the passed date object
-    /*JavaScript is the most illogical language ever to exist. Anything real gets turned upside down. All you know when coding in JavaScript is that you know nothing.  
+    /*JavaScript is the most illogical language known to man. Anything real gets turned upside down. All you know when coding in JavaScript is that you know nothing.  
     Nothing is what it appears to be. The only thing you can do is avoid swimming against the stream as it is surely the way to insanity. 
-    Going with the stream is a fate worse than death, becoming a web developer. You must survive in this turbolent environment, but will you be the same person even if you survive?
+    Going with the stream is a fate worse than death, becoming a web developer. You must survive in this turbulent environment, but will you be the same person even if you survive?
     Heed this warning before reading the next line, as it surely will destroy your mind!*/
     start.setDate(start.getDate() - (start.getDay() - 1)); //Sets the date to the current date and subtracts the weekday(0-6) - 1 as Sunday is 0 indexed. This results in Monday being set.
     start.setHours(0, 0, 0);
@@ -108,7 +108,6 @@ let oneDayInterval = exports.oneDayInterval = function (date){
     end.setHours(23, 59, 59);
     return {start, end} //Object is returned to return multiple values
 }
-
 
 //This function queries lessons for a given user at a given interval and date
 exports.getSchedule = async function getSchedule(user, date, days) {
