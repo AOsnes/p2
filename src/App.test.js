@@ -156,15 +156,15 @@ describe('app renders correctly based on path', () => {
                 </MemoryRouter>
             </UserContext.Provider>
         );
-        const noMatchPageElement = screen.getByTestId("noMatchPage");
-        const noMatchElement = screen.getByTestId("pageNotFoundContainer");
+        const skemaPageElement = screen.getByTestId("skemaPage");
+        const skemaElement = screen.getByText("Der opstod en fejl ved indlæsning af dit skema")
         headerElement = screen.getByTestId("header");
         sidebarElement = screen.getByTestId("sidebar");
         expect(redigerSkemaPageElement).not.toBeInTheDocument();
-        expect(noMatchPageElement).toContainElement(headerElement);
-        expect(noMatchPageElement).toContainElement(sidebarElement);
-        expect(noMatchPageElement).not.toContainElement(redigerSkemaFormElement);
-        expect(noMatchPageElement).toContainElement(noMatchElement);
+        expect(skemaPageElement).toContainElement(headerElement);
+        expect(skemaPageElement).toContainElement(sidebarElement);
+        expect(skemaPageElement).not.toContainElement(redigerSkemaFormElement);
+        expect(skemaPageElement).toContainElement(skemaElement);
     });
 
     test('app renders FeedbackTablePage() correctly', () => {
@@ -273,11 +273,12 @@ test('sidebar renders correctly with context', () => {
 
 /* Test for noMatchError */
 test('noMatchError renders correctly', () => {
-    let path = "/skemas";
+    const signedInTeacher = {id: "", role: "teacher", name: ""}
+    const path = "/skemas";
     render(
-        <div>
+        <UserContext.Provider value={signedInTeacher}>
             <NoMatchError location={path}/>
-        </div>
+        </UserContext.Provider>
     );
     const linkElement = screen.getByTestId('pageNotFoundContainer');
     const pElement = screen.getByTestId('pageNotFound');
