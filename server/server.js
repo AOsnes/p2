@@ -26,10 +26,12 @@ if (process.env.NODE_ENV !== 'test') {
     })
 }
 
+//Handles login and queries the user
 exports.authenticate = async function authenticate(username, password){
     try {
         const doc = database.collection("users");
-        const result = await doc.findOne({username, password}, {projection: {name: 1, role: 1, class: 1}});
+        //Queries the user using username and password. Uses a projection to ensure that the username and password are not returned from the query
+        const result = await doc.findOne({$and: [{"username": username}, {"password": password}]}, {projection: {name: 1, role: 1, class: 1}}); 
         if (result === null) {
             throw new Error("Invalid username or password");
         } else {
@@ -59,6 +61,7 @@ let getUserinfo = exports.getUserinfo = async function getUserinfo(id){
 //Cursed crusty code to get the schedule:
 //Finds the time interval for the one day view and one week view. Defaults to the next Monday if the date passed is a Saturday or Sunday
 let getDateInterval = exports.getDateInterval = function (date, days){
+    //Checks if the interval is one day. Anything else is assumed to be a request for five day interval.
     if (days === '1'){
         if (date.getDay() >= 1 && date.getDay() <= 5){
             let interval = oneDayInterval(date);
@@ -84,22 +87,22 @@ let getDateInterval = exports.getDateInterval = function (date, days){
 
 //Takes the passed date and creates an interval starting at 00:00:00 and ends at 23:59:59
 let oneDayInterval = exports.oneDayInterval = function (date){
-    let start = new Date(date.getTime());
+    let start = new Date(date); //Makes a copy of the passed date object
     start.setHours(0, 0, 0);
-    let end = new Date(date.getTime());
+    let end = new Date(date);
     end.setHours(23, 59, 59);
-    return {start, end};
+    return {start, end};//Object is returned to return multiple values
 }
 
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
-let fiveDayInterval = exports.fiveDayInterval = function (date){
-    let start = new Date(date.getTime());
-    start.setDate(start.getDate() - (start.getDay() - 1));
+ let fiveDayInterval = exports.fiveDayInterval = function (date){
+    let start = new Date(date); //Makes a copy of the passed date object
+    start.setDate(start.getDate() - (start.getDay() - 1)); //What even is JS? Sets the date to the current date and subtracts the weekday(0-6) - 1 as Sunday is 0 indexed. This results in Monday being set.
     start.setHours(0, 0, 0);
-    let end = new Date(date.getTime());
-    end.setDate(end.getDate() + (5 - end.getDay()));
+    let end = new Date(date);
+    end.setDate(end.getDate() + (5 - end.getDay())); //Sets the date to the current date and adds 5 - weekday(0-6) as Friday is index 5. This results in Friday being set. 
     end.setHours(23, 59, 59);
-    return {start, end}
+    return {start, end} //Object is returned to return multiple values
 }
 
 
@@ -121,6 +124,7 @@ exports.getSchedule = async function getSchedule(user, date, days) {
         } else {
             cursor = await collection.find({ "class": { $in: user.class }, $and: [{ "startTime": { $gte: start } }, { "endTime": { $lte: end } }] }, { sort: { startTime: 1 } });
         }
+        //Turns the cursor into an array and closes the cursor to free up DB resources and server resources before returning the array
         schedule = await cursor.toArray();
         await cursor.close();
         return schedule;
@@ -129,45 +133,22 @@ exports.getSchedule = async function getSchedule(user, date, days) {
     }
 }
 
-exports.createLesson = async function createLesson(id, className, subject, start, end, description, fileId, recurrences, interval){
+//Inserts a lesson document into the database with the relevant attributes. The promise resolves with the Id of the inserted document. 
+exports.createLesson = async function createLesson(id, className, subject, start, end, description, fileId){
     return new Promise ((resolve, reject) => {
         try {
             const doc = database.collection("lessons");
-            if (recurrences > 1){
-                let lessonInserts = [];
-    
-                for (let i = 0; i < recurrences; i++){
-                    let start1 = new Date(start);
-                    let end1 = new Date(end);
-                    start1.setDate(start1.getDate() + i * interval);
-                    end1.setDate(end1.getDate() + i * interval);
-    
-                    lessonInserts[i] = {
-                        "subject": subject,
-                        "class": className,
-                        "teacherID": id,
-                        "description": description,
-                        "fileId": fileId,
-                        "startTime": start1,
-                        "endTime": end1,
-                    }
-                }
-                //console.log(lessonInserts);
-                doc.insertMany(lessonInserts)
-                .then(result => resolve(result.insertedId))
-                .catch((error) => reject(new Error(error)));
-    
-            } else {
-                doc.insertOne({"subject": subject, "class": className, "teacherID": id, "description": description, "fileId": fileId, "startTime": start, "endTime": end,})
-                .then(result => resolve({id: result.insertedId}))
-                .catch((error) => reject(new Error(error)))
-            }
+            doc.insertOne({"subject": subject, "class": className, "teacherID": id, "description": description, "fileId": fileId, "startTime": start, "endTime": end,})
+            .then(result => resolve({id: result.insertedId}))
+            .catch((error) => reject(new Error(error)));
         } catch(error){
             reject(new Error(error))
         }
     });
 }
 
+//Updates a lesson by querying by the Primary Key and changes the attributes of the document specified in the changes object passed. 
+//Resolves with the changed result or rejects if no document exists with the passed Id
 exports.updateLesson = async function updateLesson(id, changes){
     return new Promise ((resolve, reject) => {
         try {
@@ -186,6 +167,7 @@ exports.updateLesson = async function updateLesson(id, changes){
     });
 }
 
+//Deletes a lesson by querying by the Priamary Key
 exports.deleteLesson = async function deleteLesson(id){
     return new Promise((resolve, reject) => {
         try {
@@ -220,15 +202,13 @@ exports.getAssignments = async function getAssignments(user, date) {
         //Determines the role of the user as each role needs a different query to the correct assignments.
         if (user.role === "teacher") {
             cursor = await collection.find({ "teacherID": user._id,  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } }); 
-            assignments = await cursor.toArray();
         } else {
             cursor = await collection.find({ "class": { $in: user.class },  $and: [{ "dueDate": { $gte: start } }, { "dueDate": { $lte: end } }] }, { sort: { dueDate: 1 } });
-            assignments = await cursor.toArray();
         }
 
-        //Checks if the query had any results. 
+        //Turns the cursor into an array and closes the cursor to free up DB resources and server resources before returning the array
+        assignments = await cursor.toArray();
         await cursor.close();
-        
         return assignments;
 
     } catch(error){
@@ -249,6 +229,7 @@ let getAssignmentInfo = exports.getAssignmentInfo = async function(assignmentId)
     })
 }
 
+//Inserts a document into the assignments collection with the passed attributes. Resolves with the inserted count.
 exports.createAssignment = async function createAssignment(teacherID, lessonID, subject, description, className, dueDate, optionalFile){
     return new Promise ((resolve, reject) => {
         try {
@@ -257,13 +238,14 @@ exports.createAssignment = async function createAssignment(teacherID, lessonID, 
             .then(result => resolve(result.insertedCount))
             .catch(error => reject(error));
 
-        } finally {
-            // Ensures that the connection will close when you finish/error
-            
+        } catch(error){
+            reject(error);
         }
     });
 }
 
+//Updates an assignment by querying by the Primary Key and changes the attributes of the document specified in the changes object passed. 
+//Resolves with the changed result or rejects if no document exists with the passed Id
 exports.updateAssignment = async function updateAssignment(id, changes){
     return new Promise ((resolve, reject) => {
         try {
@@ -273,11 +255,12 @@ exports.updateAssignment = async function updateAssignment(id, changes){
             .catch(console.dir)
             .finally(() => {resolve();});
         } catch(error) {
-            throw error;
+            reject(error);
         }
     });
 }
 
+//Deletes a lesson by querying by the Priamary Key
 exports.deleteAssignment = async function deleteAssignment(id){
     return new Promise((resolve, reject) => {
         try {
@@ -292,6 +275,7 @@ exports.deleteAssignment = async function deleteAssignment(id){
     });
 }
 
+//Turns in an assignment with the required attributes
 exports.turnInAssignment = async function turnInAssignment(assignmentId, studentId, fileId){
     return new Promise ((resolve, reject) => {
         try {
@@ -366,45 +350,50 @@ exports.updateTurnedInAssignment = async function updateTurnedInAssignment(id, c
     });
 }
 
+//Saves a file in the database. Resolves with the id of the document in the fs.files collection.
 exports.saveFile = async function saveFile(filename){
     return new Promise ((resolve, reject) => {
-        let bucket = new GridFSBucket(database);
-        let fileID = new ObjectId();
-        fs.createReadStream(`${__dirname}/tmp/${filename}`)
-        .pipe(bucket.openUploadStreamWithId(fileID, filename))
+        let bucket = new GridFSBucket(database); 
+        let fileId = new ObjectId(); //Generates an ObjectId for the document instead of letting the database generate it. This makes it easier to return to other functions as GridFS does not provide an easy way to get the _id after uploading. 
+        fs.createReadStream(`${__dirname}/tmp/${filename}`) //Reads the file that has to be uploaded from the tmp directory
+        .pipe(bucket.openUploadStreamWithId(fileId, filename)) //Uploads the file to MongoDB with the generated id and filename.
         .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
-        .on('finish', () => resolve(fileID));
+        .on('finish', () => resolve(fileId));
     });
 }
 
-exports.getFile = async function getFile(fileID, filename){
+//Downloads a file from the database. Resolves with the path of the file in the tmp directory.
+exports.getFile = async function getFile(fileId, filename){
     return new Promise((resolve, reject) => {
         let bucket = new GridFSBucket(database);
         let path = `./tmp/${filename}`;
-        bucket.openDownloadStream(fileID)
-        .pipe(fs.createWriteStream(path))
+        bucket.openDownloadStream(fileId) //Downloads the file with the passed id
+        .pipe(fs.createWriteStream(path)) //Writes the file in the tmp directory with the correct file name and file extension.
         .on('error', (error) => reject(new Error(`Lortet virker ikke (╯°□°)╯︵ ┻━┻ ${error}`)))
-        .on('finish', () => resolve(path));
+        .on('finish', () => resolve(path)); 
     });
 }
 
+//Queries the filename from the Primary Key of the collection.
 exports.getFilename = async function getFilename(fileID){
     const doc = database.collection("fs.files");
     let result = await doc.findOne({"_id": fileID}, {projection: {_id: 0, filename: 1}});
     return result.filename;
 }
 
-
+//Logs the request method, the request, and time of the request.
 let logger = (req, res, next) => {
     console.log(`GOT: ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} TIME: ${req.requestTime}`);
     next();
 }
 
+//Gets the current time
 let requestTime = (req, res, next) => {
     req.requestTime = Date.now();
     next();
 }
 
+//Sigurd, det kunne være rimelig pog hvis du kommenterede det her
 app.use(bodyParser.json());
 app.use(cors());
 app.use(busboy());
