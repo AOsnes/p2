@@ -97,7 +97,11 @@ let oneDayInterval = exports.oneDayInterval = function (date){
 //Takes the passed date and creates an interval starting at the Monday at 00:00:00 in that week and ends at Friday at 23:59:59 in the same week
  let fiveDayInterval = exports.fiveDayInterval = function (date){
     let start = new Date(date); //Makes a copy of the passed date object
-    start.setDate(start.getDate() - (start.getDay() - 1)); //What even is JS? Sets the date to the current date and subtracts the weekday(0-6) - 1 as Sunday is 0 indexed. This results in Monday being set.
+    /*JavaScript is the most illogical language ever to exist. Anything real gets turned upside down. All you know when coding in JavaScript is that you know nothing.  
+    Nothing is what it appears to be. The only thing you can do is avoid swimming against the stream as it is surely the way to insanity. 
+    Going with the stream is a fate worse than death, becoming a web developer. You must survive in this turbolent environment, but will you be the same person even if you survive?
+    Heed this warning before reading the next line, as it surely will destroy your mind!*/
+    start.setDate(start.getDate() - (start.getDay() - 1)); //Sets the date to the current date and subtracts the weekday(0-6) - 1 as Sunday is 0 indexed. This results in Monday being set.
     start.setHours(0, 0, 0);
     let end = new Date(date);
     end.setDate(end.getDate() + (5 - end.getDay())); //Sets the date to the current date and adds 5 - weekday(0-6) as Friday is index 5. This results in Friday being set. 
@@ -393,7 +397,7 @@ let requestTime = (req, res, next) => {
     next();
 }
 
-//Sigurd, det kunne være rimelig pog hvis du kommenterede det her
+//Sigurd siger det er middleware
 app.use(bodyParser.json());
 app.use(cors());
 app.use(busboy());
