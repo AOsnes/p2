@@ -12,8 +12,8 @@ export default class LogoutModal extends Component{
     }
 
     logoutHandler(){
-        var cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
           deleteCookie(cookies[i].split("=")[0]);
         }
         window.location.reload(false);
