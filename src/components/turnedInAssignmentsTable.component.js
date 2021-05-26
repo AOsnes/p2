@@ -42,7 +42,7 @@ export default class TurnedInAssignmentsTable extends Component{
             * Consider reactions = ["Happy", "Sad", "Neutral"], childIndex = 1
             * and childValue = "Hi"
             * The first slice will result in the reactions: ["Happy", "Sad"] 
-            * We then copy the reactions[1] resulting in: ["Happy", "Hi"]
+            * We then copy the childvalue into reactions[1]: ["Happy", "Hi"]
             * Then we insert the rest of the reaction array resulting in:
             * ["Happy", "Hi", "Neutral"], this is the state that is set
             */
