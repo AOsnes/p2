@@ -19,6 +19,7 @@ export default class FeedbackTable extends Component {
             })
         })
     }
+    
     mapReaction(reaction){
         switch (reaction) {
             case 1: return "reaction happy"

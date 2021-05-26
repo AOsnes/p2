@@ -27,6 +27,7 @@ export default class SkemabrikModal extends Component{
         this.props.disableModal();
     }
 
+    /* Makes sure that only teachers gets redirected to /afleveret */
     handleFeedbackClick(event){
         event.preventDefault();
         if(this.props.type === "assignments" && this.context.role === "teacher"){
@@ -104,7 +105,10 @@ export default class SkemabrikModal extends Component{
                 id: id,
                 description: details,
                 subject: subject,
-            }
+            } 
+            /* This sends the user to /afleveret where the 
+            component that will be rendered has the prop assignment to 
+            be able to fetch for its information */
             return <Redirect push to={{
                 pathname: this.state.redirect,
                 state: {assignment: assignment}
@@ -128,7 +132,6 @@ export default class SkemabrikModal extends Component{
                               :[<input key="edit" type="button" name="editAssignmentButton" onClick={this.editLessonClick} value="Rediger aflevering"/>,
                               <input key="redirect" type="button" name="showAssignmentButton" onClick={this.showAssignmentClick} value="Giv feedback"/>]
                               }
-                              
                           </div>]
                         : this.props.type === "assignments" 
                             ? <div>

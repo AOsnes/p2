@@ -35,8 +35,17 @@ export default class TurnedInAssignmentsTable extends Component{
         });
     }
 
+    /* This function is called by the child components */
     handleState(childIndex, childValue, target){
         if(target === "file"){
+            /* 
+            * Consider reactions = ["Happy", "Sad", "Neutral"], childIndex = 1
+            * and childValue = "Hi"
+            * The first slice will result in the reactions: ["Happy", "Sad"] 
+            * We then copy the reactions[1] resulting in: ["Happy", "Hi"]
+            * Then we insert the rest of the reaction array resulting in:
+            * ["Happy", "Hi", "Neutral"], this is the state that is set
+            */
             this.setState(previousState => ({
                 reactions: [
                     ...previousState.reactions.slice(0, childIndex),
@@ -76,7 +85,7 @@ export default class TurnedInAssignmentsTable extends Component{
         formData.append("fileCount", fileCount);
         if(fileCount){
             this.uploadFiles(formData).then(response => {
-                /* Copy the reactions so avoid mutating the state directly. 
+                /* Copy the reactions to avoid mutating the state directly. 
                 Then iterate over the response array and put the fileId
                 into the requestBody object index that correspond to the 
                 fileFor integer */

@@ -2,24 +2,23 @@ import React, { Component } from 'react';
 import calculatePosition from '../utils/calculatePosition';
 
 export default class TimeIndicator extends Component {
-    //Initialises states
     constructor(props){
         super(props)
         this.state = {time: Date.now(), show: 1}
         this.controlIndicaterDisplay = this.controlIndicaterDisplay.bind(this);
     }
 
-    //Before rendering we want find out if we should show the indicator or not
+    /* Before rendering we want find out if we should show the indicator or not */
     componentDidMount(){
-        //Calls helper function
         this.controlIndicaterDisplay();
-        //Update time state every minute
+        /* Update the state every minute */
         this.interval = setInterval(() =>{
             this.controlIndicaterDisplay();
         }, 1000*60);
     }
 
-    //Helper function used in interval
+    /* Helper function used in interval, this function checks if the time is 
+    within the 08:00-15:59 */
     controlIndicaterDisplay(){
         let currentTime = new Date();
         //Won't show before 08:00
@@ -28,14 +27,12 @@ export default class TimeIndicator extends Component {
                 show: 0,
             });
         }
-        //Won't show after 15:00
         else if (currentTime.getHours() > 15){
             clearInterval(this.interval);
             this.setState({
                 show: 0,
             });
         }
-        //Will show if between 08:00 and 15:00
         else {
             this.setState({
                 time: currentTime,
@@ -44,14 +41,12 @@ export default class TimeIndicator extends Component {
         }
     }
     
-    // Make sure to stop the timer to avoid memory leakage
+    /* Make sure to stop the timer to avoid memory leakage */
     componentWillUnmount(){
         clearInterval(this.interval)
     }
 
-    //Renders the component
     render(){
-        //Styles component
         const style = {
             top: calculatePosition(new Date(this.state.time), 0),
         }

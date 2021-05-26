@@ -6,6 +6,7 @@ import { updateIdValue, updateNameValue, updateRoleValue } from '../UserContext'
 
 export default class Sidebar extends Component {
     static contextType = UserContext;
+    
     render() {
         /* Determines identity colour depending on if user is pupil or teacher */
         let identityColour = "#fff";

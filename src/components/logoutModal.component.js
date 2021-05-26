@@ -10,6 +10,7 @@ export default class LogoutModal extends Component{
         
         this.toggleDisplay = this.toggleDisplay.bind(this);
     }
+
     logoutHandler(){
         var cookies = document.cookie.split(";");
         for (var i = 0; i < cookies.length; i++) {
@@ -17,6 +18,7 @@ export default class LogoutModal extends Component{
         }
         window.location.reload(false);
     }
+    
     toggleDisplay(event){
         event.preventDefault()
         this.setState(prevState => ({
