@@ -48,7 +48,7 @@ router.route('/').post((req, res) => {
     }
     getUserinfo(teacherId).then(user =>{
         if(user.role === "teacher"){
-            createLesson(teacherId, className, subject, startTime, endTime, classDescription, classFileId, 1, 0)
+            createLesson(teacherId, className, subject, startTime, endTime, classDescription, classFileId)
             .then( result => {
                 if(assignmentToggle){
                     createAssignment(teacherId, result.id, subject, assignmentDescription, className, dueDate, assignmentFileId)
