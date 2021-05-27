@@ -66,6 +66,7 @@ export default class SkemabrikForm extends Component{
             this.setState({
                 fileCount: fileCount
             })
+            /* FormData makes the request body multipart */
             let formData = new FormData();
             formData.append("fileCount", fileCount);
             formData.append("classFile", this.state.classFile);

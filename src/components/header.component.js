@@ -9,19 +9,19 @@ export default class Header extends Component {
         this.standby = this.standby.bind(this);
         
     }
+
     standby() {
         document.getElementById("headerProfilePicture").src="placeholderProfilePicture.png";
     }  
 
     render(){
-        /* Determines identity colour depending on if user is pupil or teacher */
+        /* Determine identity colour depending on if user is pupil or teacher */
         let identityColour1 = "#fff";
         let identityColour2 = "#fff";
         if (this.context.role) {
             identityColour1 = this.context.role === "teacher" ? "#00CC00" : "#0075FF";
             identityColour2 = this.context.role === "teacher" ? "#73E173" : "#00ADFF";
         }
-        
         return (
             <ul className="header" data-testid="header">
                 <div className="headerContainer">

@@ -100,7 +100,8 @@ export default class EditLessonModal extends Component{
             let originalStartTime = new Date(this.state.originalStartTime).toString();
             let originalEndTime = new Date(this.state.originalEndTime).toString();
             let originalDueTime = new Date(this.state.originalDueDate).toString();
-            
+
+            /* The replacer function checks dates have been changed from the origional dates */
             let requestBody = JSON.stringify(this.state, (key, val) =>{
                 switch (key) {
                     case "classDescription": if(val !== originalDescription) return val; break;
@@ -121,6 +122,7 @@ export default class EditLessonModal extends Component{
         }
     }
 
+    /* Checks if any change has been made */
     validateAny(){
         return(this.state.classDescription !== this.props.skemabrikContext.description ||
             new Date(this.state.startTime).toString() !== new Date(this.state.originalStartTime).toString() ||
