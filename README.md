@@ -28,7 +28,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 ## The server
 To run the server run `node server.js` in the server folder. Make sure to include a uri to a mongoDB server either in a .env file or inserted in the following line in the server.js file.
-```
+```JavaScript
 const uri = process.env.URI
 ```
 ## Available flowcharts
