@@ -26,6 +26,11 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
+## The server
+To run the server run `node server.js` in the server folder. Make sure to include a uri to a mongoDB server either in a .env file or inserted in the following line in the server.js file.
+```
+const uri = process.env.URI
+```
 ## Available flowcharts
 The following is a flowchart of how some of the endpoints function
 ![endpoints diagram](https://user-images.githubusercontent.com/24461644/119781662-91483880-becb-11eb-979f-3c37a70787ad.png)
